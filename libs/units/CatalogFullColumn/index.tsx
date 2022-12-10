@@ -1,4 +1,5 @@
-import { Box, Grid, FlexProps, Text, GridItem } from '@chakra-ui/react'
+import { FlexProps, Grid, GridItem, Text } from '@chakra-ui/react'
+import BlockContainer from '@elements/BlockContainer'
 import FormSubmitButton from '@elements/FormSubmit'
 
 interface CatalogColumnProps extends FlexProps {
@@ -16,33 +17,23 @@ interface CatalogColumnProps extends FlexProps {
 
 const CatalogFullColumn = ( {title, price, currency, href, color, borderColor, bgColor, children, ...rest}: CatalogColumnProps ) => {
     return (
-        <Box
-            bgColor='black'
-            paddingTop='1px'
-            paddingLeft='1px'
-            paddingRight='2px'
-            paddingBottom='4px'
-        >
-            <Box
-                p='2rem'
-                bgColor={bgColor ?? 'white'}
-                {...rest}
-            >
-                <Grid templateColumns='1fr 1fr'>
-                    <GridItem>
-                        <Text>{title}</Text>
-                        <Text>{currency} {price}</Text>
-                        {children}
-                        <FormSubmitButton
-                            href={href}
+        <BlockContainer {...rest}>
+            <Grid templateColumns='1fr 1fr'>
+                <GridItem>
+                    <Text fontSize={28} mb={4}>{title}</Text>
+                    <Text mb={3}>{currency} {price}</Text>
+                    {children}
+                    <FormSubmitButton
+                        href={href}
                         >
-                            asdf
-                        </FormSubmitButton>
-                    </GridItem>
-                    <GridItem>asdf</GridItem>
-                </Grid>
-            </Box>
-        </Box>
+                        asdf
+                    </FormSubmitButton>
+                </GridItem>
+                <GridItem>
+                    {/* TODO: retrive picture here */}
+                </GridItem>
+            </Grid>
+        </BlockContainer>
     )
 }
 
