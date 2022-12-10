@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
       
       <CatalogFullColumn  
-        bgColor='lightskyblue'
+        // bgColor='lightskyblue'
         title='Something Out There'
         currency='IDR'
         price={800000}
