@@ -1,7 +1,7 @@
 import MainLayout from '@libs/layouts/MainLayout'
 import CatalogFullColumn from '@units/CatalogFullColumn'
 
-export default function Home() {
+const Home = () => {
   return (
     <MainLayout>
       
@@ -18,3 +18,5 @@ export default function Home() {
     </MainLayout>
   )
 }
+
+export default Home
