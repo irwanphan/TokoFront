@@ -16,7 +16,7 @@ const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
             bgColor='black'
             paddingTop='1px'
             paddingLeft='1px'
-            paddingRight='2px'
+            paddingRight='3px'
             paddingBottom='4px'
         >
             <Box

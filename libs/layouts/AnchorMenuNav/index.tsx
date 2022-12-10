@@ -40,7 +40,7 @@ const AnchorMenuNav = () => {
                             <AnchorMenuText href='/'>
                                 Home
                             </AnchorMenuText>
-                            <AnchorMenuText href='/memos/create'>
+                            <AnchorMenuText href='/products'>
                                 All Products
                             </AnchorMenuText>
                         </HStack>
