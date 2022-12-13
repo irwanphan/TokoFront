@@ -29,7 +29,7 @@ const Home = () => {
 
       <Grid templateColumns='1fr 1fr 1fr 1fr' gap={4}>
         <GridItem>
-          <BlockContainerLink href='/' 
+          <BlockContainerLink href={`/products/1`} 
             title='Set Your Sight Straight'
             description={`It's right there`}
             bgColor='green.50'
