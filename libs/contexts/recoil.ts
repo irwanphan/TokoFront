@@ -1,11 +1,5 @@
 import { atom, selector } from "recoil";
 
-export interface Todo {
-  id?: string;
-  title: string;
-  completed: boolean;
-}
-
 export interface CartItemInterface {
     id: string
     name: string
@@ -18,16 +12,25 @@ export const cartState = atom({
 })
 
 
-export const todosState = atom({
-  key: "todos",
-  default: [] as Todo[],
-});
+export const addToCart = (cart:any, product:any, qtyAdded:number) => {
+  const newCart = [...cart];
+  const foundIndex = cart.findIndex((x:any) => x.id === product.id);
 
-export const infoValue = selector({
-  key: "infoValue",
-  get: ({ get }) => ({
-    total: get(todosState).length,
-    completed: get(todosState).filter((todo) => todo.completed).length,
-    notCompleted: get(todosState).filter((todo) => !todo.completed).length,
-  }),
-});
+
+  // Increase quantity if existing
+  if (foundIndex >= 0) {
+    newCart[foundIndex] = {
+      ...cart[foundIndex],
+      quantity: cart[foundIndex].quantity + qtyAdded,
+    };
+    return newCart;
+  }
+
+  // Add new item
+  newCart.push({
+    product,
+    id: product.id,
+    quantity: qtyAdded,
+  });
+  return newCart;
+}
