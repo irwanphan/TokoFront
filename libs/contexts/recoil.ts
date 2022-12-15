@@ -3,7 +3,7 @@ import { atom, selector } from "recoil";
 export interface CartItemInterface {
     id: string
     name: string
-    qty: number
+    quantity: number
 }
 
 export const cartState = atom({
@@ -28,8 +28,9 @@ export const addToCart = (cart:any, product:any, qtyAdded:number) => {
 
   // Add new item
   newCart.push({
-    product,
+    // product,
     id: product.id,
+    name: product.name,
     quantity: qtyAdded,
   });
   return newCart;

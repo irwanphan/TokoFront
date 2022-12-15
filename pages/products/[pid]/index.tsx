@@ -30,8 +30,7 @@ const ProductDetailView = () => {
         console.log(selected)
     },[pid])
 
-    const [value, setValue] = useState(40)
-
+    const [value, setValue] = useState(1)
     const [internalValue, setInternalValue] = useControllableState({
         value,
         onChange: setValue,
@@ -45,7 +44,8 @@ const ProductDetailView = () => {
         const newCart = addToCart(cart, product, value)
         setCart(newCart)
 
-        console.log(cart)
+        // console.log(cart)
+        localStorage.setItem("cart", JSON.stringify(cart))
     }
 
     if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
@@ -61,30 +61,36 @@ const ProductDetailView = () => {
                         {/* {title} */}
                         {obj.name}
                     </Text>
-                    <Text mb={3}>
+                    <Text mb={4}>
                         {/* IDR 800000 */}
                         IDR {obj.price}
                     </Text>
-                    <Text fontSize={12} mt={1} color='blackAlpha.800'>
+                    <Text fontSize={14} mb={4} color='blackAlpha.800'>
                         {/* {description} */}
                         It's right there
                     </Text>
 
-                    <Flex>
-                        <Button onClick={() => setInternalValue(value + 1)}>+</Button>
-                        <Box as='span' w='200px' mx='24px'>
+                    <Flex mb={2}>
+                        <FormSubmitButton notLink px={2}
+                            onClick={() => setInternalValue(value + 1)}>
+                            +
+                        </FormSubmitButton>
+                        <Box
+                            bgColor='whiteAlpha.700'
+                            borderTop='1px solid black'
+                            borderBottom='1px solid black'
+                            py={2} px={4} h={10}
+                        >
                             {internalValue}
                         </Box>
-                        <Button onClick={() => setInternalValue(value - 1)}>-</Button>
+                        <FormSubmitButton notLink px={2}
+                            onClick={() => setInternalValue(value - 1)}>
+                            -
+                        </FormSubmitButton>
                     </Flex>
 
-                    <FormSubmitButton
-                        buttonColor='white'
-                        notLink
-                        onClick={() => {
-                            handleAddToCart(obj)
-                        }}
-                        >
+                    <FormSubmitButton notLink
+                        onClick={ () => handleAddToCart(obj) } >
                         Add to Cart
                     </FormSubmitButton>
                 </GridItem>
@@ -104,9 +110,12 @@ export const CartItems = () => {
     return (
         <Box>
             <ul className="cart-items">
-                {cart.map((item:CartItemInterface) => (
-                    <li key={item.id}>{item.name}: {item.qty}</li>
-                ))}
+                {cart.map((item:CartItemInterface) => {
+                    console.log(item)
+                    return (
+                        <li key={item.id}>{item.name}: {item.quantity}</li>
+                    )
+                })}
             </ul>
         </Box>
     )
