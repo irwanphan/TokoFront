@@ -53,7 +53,10 @@ const ProductDetailView = () => {
 
                     <FormSubmitButton
                         buttonColor='white'
-                        href='/'
+                        notLink
+                        onClick={() => {
+                            console.log(pid)
+                        }}
                         >
                         Add to Cart
                     </FormSubmitButton>

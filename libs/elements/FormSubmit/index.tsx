@@ -1,4 +1,4 @@
-import { Button, FlexProps } from '@chakra-ui/react'
+import { Box, Button, FlexProps } from '@chakra-ui/react'
 import NextLink from 'next/link' 
 
 interface FormSubmitProps extends FlexProps {
@@ -9,9 +9,15 @@ interface FormSubmitProps extends FlexProps {
     notLink?: boolean
 }
 
-const ButtonManifest = ({buttonColor, buttonBorderColor, buttonTextColor, children}: FormSubmitProps) => {
+interface ButtonManifestProps extends FlexProps {
+    buttonColor: string | undefined
+    buttonBorderColor: string | undefined
+    buttonTextColor: string | undefined
+}
+
+const ButtonManifest = ({buttonColor, buttonBorderColor, buttonTextColor, children, ...rest}: ButtonManifestProps) => {
     return (
-        <Button
+        <Box as={Button}
             py={2} px={6}
             borderRadius={0}
             borderTopWidth='1px'
@@ -27,19 +33,21 @@ const ButtonManifest = ({buttonColor, buttonBorderColor, buttonTextColor, childr
                 bgColor: 'black',
                 color: 'white'
             }}
+            {...rest}
         >
             {children}
-        </Button>
+        </Box>
     )
 }
 
-const FormSubmitButton = ({href, buttonColor, buttonBorderColor, buttonTextColor, notLink, children }: FormSubmitProps) => {
+const FormSubmitButton = ({href, buttonColor, buttonBorderColor, buttonTextColor, notLink, children, ...rest }: FormSubmitProps) => {
     if (notLink) {
         return (
             <ButtonManifest
                 buttonTextColor={buttonTextColor}
                 buttonColor={buttonColor}
                 buttonBorderColor={buttonBorderColor}
+                {...rest}
             >
                 {children}
             </ButtonManifest>
@@ -51,6 +59,7 @@ const FormSubmitButton = ({href, buttonColor, buttonBorderColor, buttonTextColor
                 buttonTextColor={buttonTextColor}
                 buttonColor={buttonColor}
                 buttonBorderColor={buttonBorderColor}
+                {...rest}
             >
                 {children}
             </ButtonManifest>
