@@ -13,7 +13,7 @@ import { useEffect, useState } from "react"
 const ProductDetailView = () => {
     const router = useRouter()
     const {pid}:any = router.query
-    console.log(pid)
+    // console.log(pid)
 
     const [qid, setQid] = useState<number|any>()
     useEffect(() => {
@@ -43,8 +43,8 @@ const ProductDetailView = () => {
                         {dummyItems[qid].name}
                     </Text>
                     <Text mb={3}>
-                        IDR 800000
-                        {dummyItems[qid].price}
+                        {/* IDR 800000 */}
+                        IDR {dummyItems[qid].price}
                     </Text>
                     <Text fontSize={12} mt={1} color='blackAlpha.800'>
                         {/* {description} */}
