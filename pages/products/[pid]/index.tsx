@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, GridItem, Text, useControllableState } from "@chakra-ui/react"
+import { Box, Button, Flex, Grid, GridItem, ListItem, OrderedList, Text, useControllableState } from "@chakra-ui/react"
 import BlockContainer, { BlockContainerLink, BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
@@ -38,14 +38,19 @@ const ProductDetailView = () => {
 
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
 
+    useEffect(() => {
+        const cartData = localStorage.getItem("cart")
+        console.log('storage: ', cartData)
+        const parsedData = JSON.parse(cartData!)
+        if (parsedData) {
+            setCart(parsedData);
+        }
+    }, [])
+
     const handleAddToCart = (product:ItemInterface) => {
-        // console.log(obj.id)
-
         const newCart = addToCart(cart, product, value)
+        localStorage.setItem("cart", JSON.stringify(newCart))
         setCart(newCart)
-
-        // console.log(cart)
-        localStorage.setItem("cart", JSON.stringify(cart))
     }
 
     if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
@@ -109,14 +114,14 @@ export const CartItems = () => {
     }
     return (
         <Box>
-            <ul className="cart-items">
+            <OrderedList className="cart-items">
                 {cart.map((item:CartItemInterface) => {
                     console.log(item)
                     return (
-                        <li key={item.id}>{item.name}: {item.quantity}</li>
+                        <ListItem key={item.id}>{item.name}: {item.quantity}</ListItem>
                     )
                 })}
-            </ul>
+            </OrderedList>
         </Box>
     )
 }

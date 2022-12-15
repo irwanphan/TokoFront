@@ -63,7 +63,6 @@ const AnchorMenuNav = () => {
             {/* } */}
         {/* </InView> */}
 
-
             <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>

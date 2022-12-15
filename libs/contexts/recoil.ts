@@ -13,9 +13,8 @@ export const cartState = atom({
 
 
 export const addToCart = (cart:any, product:any, qtyAdded:number) => {
-  const newCart = [...cart];
-  const foundIndex = cart.findIndex((x:any) => x.id === product.id);
-
+  const newCart = [...cart]
+  const foundIndex = cart.findIndex((x:any) => x.id === product.id)
 
   // Increase quantity if existing
   if (foundIndex >= 0) {
