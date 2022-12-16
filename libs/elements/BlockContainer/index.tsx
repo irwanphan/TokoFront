@@ -9,6 +9,10 @@ interface BlockContainerLinkProps extends BlockContainerProps {
 interface BlockContainerProps extends FlexProps {
     bgColor?: string
 }
+interface BlockImageProps extends FlexProps {
+    imgUrl?: string
+    alt?: string
+}
 
 const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
     return (
@@ -48,11 +52,12 @@ export const BlockContainerLink = ({ href, title, description, bgColor }:BlockCo
     )
 }
 
-export const BlockImage = () => {
+export const BlockImage = ({imgUrl, alt}: BlockImageProps) => {
     return (
         <BlockContainer>
             <Img 
-                src="https://static.wixstatic.com/media/d51f38_06581f8dd35f412a90b2d4a33054880c~mv2.png/v1/fill/w_688,h_479,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/BIG-NIGHT-IN-V2.png"
+                src={imgUrl}
+                alt={alt ?? "An image of something"}
             />
         </BlockContainer>
     )

@@ -16,7 +16,9 @@ const ProductDetailView = () => {
     const [ obj, setObj ] = useState<ItemInterface>({
         id: 0,
         name: '',
-        price: 0
+        description: '',
+        price: 0,
+        image: ''
     })
 
     const [qid, setQid] = useState<number|any>()
@@ -59,7 +61,7 @@ const ProductDetailView = () => {
         <MainLayout>
             <Grid templateColumns='1fr 1fr' gap={8}>
                 <GridItem>
-                    <BlockImage />
+                    <BlockImage imgUrl={obj.image} />
                 </GridItem>
                 <GridItem>
                     <Text fontSize={24} fontWeight={600}>
