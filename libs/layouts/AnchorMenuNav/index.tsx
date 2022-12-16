@@ -54,7 +54,7 @@ const AnchorMenuNav = () => {
                         {/* <Box position='fixed' top={0} right={0}>{inView.toString()}</Box> */}
 
                         <HStack gap={4}>
-                            <AnchorMenuIconTrigger href="#" mb={-1} tooltip='you got something' onOpen={onOpen}>
+                            <AnchorMenuIconTrigger mb={-1} tooltip='you got something' onOpen={onOpen}>
                                 <RiShoppingCartFill />
                             </AnchorMenuIconTrigger>
                         </HStack>
@@ -63,9 +63,9 @@ const AnchorMenuNav = () => {
             {/* } */}
         {/* </InView> */}
 
-            <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
+            <Drawer placement={placement} onClose={onClose} isOpen={isOpen} size="md">
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent borderLeft='2px solid black'>
                     <DrawerHeader>Your Cart</DrawerHeader>
                     <DrawerBody>
                         <CartItems />
