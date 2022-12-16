@@ -1,5 +1,6 @@
-import { Box, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, HStack, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, HStack, useDisclosure } from "@chakra-ui/react"
 import AnchorMenuIcon, { AnchorMenuIconTrigger, AnchorMenuText } from "@elements/AnchorMenu"
+import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "pages/products/[pid]"
 import { useState } from "react"
 import { AiOutlineShop } from "react-icons/ai"
@@ -70,6 +71,15 @@ const AnchorMenuNav = () => {
                     <DrawerBody>
                         <CartItems />
                     </DrawerBody>
+
+                    <DrawerFooter>
+                        <FormSubmitButton notLink onClick={onClose} mr={2}>
+                            Cancel
+                        </FormSubmitButton>
+                        <FormSubmitButton href="/" buttonColor="blue.200" >
+                            Checkout
+                        </FormSubmitButton>
+                    </DrawerFooter>
                 </DrawerContent>
             </Drawer>
 
