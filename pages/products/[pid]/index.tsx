@@ -4,8 +4,8 @@ import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
 import { useRouter } from "next/router"
 
-import { useRecoilState, useRecoilValue } from "recoil"
-import { CartItemInterface, cartState, addToCart } from "@libs/contexts/recoil"
+import { useRecoilState } from "recoil"
+import { CartItemInterface, cartState, addToCart } from "@libs/contexts/cart"
 
 import { dummyItems, ItemInterface } from "@data//dummy_items"
 import { useEffect, useState } from "react"
@@ -77,8 +77,8 @@ const ProductDetailView = () => {
 
                     <Flex mb={2}>
                         <FormSubmitButton notLink px={2}
-                            onClick={() => setInternalValue(value + 1)}>
-                            +
+                            onClick={() => setInternalValue(value - 1)}>
+                            -
                         </FormSubmitButton>
                         <Box
                             bgColor='whiteAlpha.700'
@@ -89,8 +89,8 @@ const ProductDetailView = () => {
                             {internalValue}
                         </Box>
                         <FormSubmitButton notLink px={2}
-                            onClick={() => setInternalValue(value - 1)}>
-                            -
+                            onClick={() => setInternalValue(value + 1)}>
+                            +
                         </FormSubmitButton>
                     </Flex>
 
@@ -100,29 +100,7 @@ const ProductDetailView = () => {
                     </FormSubmitButton>
                 </GridItem>
             </Grid>
-
-            <CartItems />
         </MainLayout>
-    )
-}
-
-export const CartItems = () => {
-    const cart = useRecoilValue(cartState)
-
-    if (Object.keys(cart).length === 0) {
-        return <Box>No Items</Box>
-    }
-    return (
-        <Box>
-            <OrderedList className="cart-items">
-                {cart.map((item:CartItemInterface) => {
-                    console.log(item)
-                    return (
-                        <ListItem key={item.id}>{item.name}: {item.quantity}</ListItem>
-                    )
-                })}
-            </OrderedList>
-        </Box>
     )
 }
 
