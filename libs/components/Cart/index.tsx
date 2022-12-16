@@ -1,7 +1,10 @@
-import { Box, OrderedList, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay } from "@chakra-ui/react"
+import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import { cartState, CartItemInterface } from "@libs/contexts/cart"
+import { FiX } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
+
+import { dummyItems, ItemInterface } from "@data//dummy_items"
 
 export const CartItems = () => {
     const cart = useRecoilValue(cartState)
@@ -11,14 +14,42 @@ export const CartItems = () => {
     }
     return (
         <Box>
-            <OrderedList className="cart-items">
-                {cart.map((item:CartItemInterface) => {
-                    console.log(item)
+            <List className="cart-items">
+                {cart.map((cartItem:CartItemInterface, index:number) => {
+                    const selectedItem = dummyItems.find( item => {
+                        return item.id === cartItem.id
+                    })
+                    // TODO: FIX: possibly undefined
+                    const cartItemSubtotal = cartItem.quantity * selectedItem!.price
+                    // console.log(item)
                     return (
-                        <ListItem key={item.id}>{item.name}: {item.quantity}</ListItem>
+                        <ListItem key={cartItem.id}
+                            mb={2}
+                        >
+                            <Box>
+                                {cartItem.name}
+                            </Box>
+                            <Flex
+                                color='gray.600'
+                                fontSize={12}
+                                gap={1}
+                                justifyContent='space-between'
+                            >
+                                <Flex
+                                    alignItems='center'
+                                >
+                                    {/* TODO: FIX: possibly undefined */}
+                                    {cartItem.quantity} <Box as={FiX}/> {selectedItem!.price}
+                                </Flex>
+                                <Box fontWeight={600}>
+                                    {cartItemSubtotal}
+                                </Box>
+                            </Flex>
+                            <Divider />
+                        </ListItem>
                     )
                 })}
-            </OrderedList>
+            </List>
         </Box>
     )
 }
