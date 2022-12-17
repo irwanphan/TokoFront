@@ -2,9 +2,30 @@ import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, D
 import FormSubmitButton from "@elements/FormSubmit"
 import { cartState, CartItemInterface } from "@libs/contexts/cart"
 import { FiX } from "react-icons/fi"
-import { useRecoilValue } from "recoil"
+import { selector, useRecoilValue } from "recoil"
 
 import { dummyItems, ItemInterface } from "@data//dummy_items"
+import { useEffect } from "react"
+
+const totaling = () => {
+    const cart = useRecoilValue(cartState)
+    const inCart:any = cart.map( cartItem => dummyItems.find(x => x.id === cartItem.id) )
+    const total = cart.reduce( (acc, {id, quantity}) =>
+        acc + quantity * inCart.find((x:ItemInterface) => x.id === id).price, 0)
+    // console.log(total)
+    return total
+}
+
+const Total = () => {
+    const total = totaling()
+    return (
+        <Flex flexDirection='column' textAlign='right' mt={4}>
+            {/* TODO: add currency */}
+            <Box fontSize={12}>Total (IDR)</Box>
+            <Box fontWeight={600}>{total}</Box>
+        </Flex>
+    )
+}
 
 export const CartItems = () => {
     const cart = useRecoilValue(cartState)
@@ -12,6 +33,7 @@ export const CartItems = () => {
     if (Object.keys(cart).length === 0) {
         return <Box>No Items</Box>
     }
+
     return (
         <Box>
             <List className="cart-items">
@@ -50,6 +72,7 @@ export const CartItems = () => {
                     )
                 })}
             </List>
+            <Total />
         </Box>
     )
 }
