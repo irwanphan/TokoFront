@@ -1,16 +1,17 @@
-import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider, Button, useToast } from "@chakra-ui/react"
+import { useEffect } from "react"
+import NextLink from 'next/link'
+import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider, Button, useToast, Link, Stack, useDisclosure } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import { cartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
 
 import { useRecoilState, useRecoilValue } from "recoil"
-import { addToCart } from "@libs/contexts/cart"
 
 import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
-import { useEffect } from "react"
 import BlockContainer from "@elements/BlockContainer"
+import ModalPopup from "@units/ModalPopup"
 
 const totaling = () => {
     const cart = useRecoilValue(cartState)
@@ -64,6 +65,15 @@ export const CartItems = () => {
         setCart(newCart)
         notify(`${product.name} removed from your cart`)
     }
+
+    // handling delete modal
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const modalProps = {
+        title: "Hapus item",
+        texts: '',
+        button: 'OK',
+        // action: () => handleRemoveFromCart()
+    }
     
     if (Object.keys(cart).length === 0) {
         return <Box>No Items</Box>
@@ -81,9 +91,7 @@ export const CartItems = () => {
                     const cartItemSubtotal = cartItem.quantity * selectedItem!.price
                     // console.log(item)
                     return (
-                        <ListItem key={cartItem.id}
-                            mb={2}
-                        >
+                        <ListItem key={cartItem.id} mb={2} >
                             <Flex alignItems='center' mb={1}>
                                 {cartItem.name}
                                 <Box 
@@ -95,7 +103,7 @@ export const CartItems = () => {
                                     fontSize={12}
                                     transition='0.3s ease all'
                                     _hover={{ bgColor: 'orange.200' }}
-                                    onClick={() => handleRemoveFromCart(selectedItem)}
+                                    onClick={onOpen}
                                 ><FiTrash /></Box>
                             </Flex>
                             <Flex
@@ -118,6 +126,19 @@ export const CartItems = () => {
                 })}
             </List>
             <Total />
+
+            <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose}
+                borderTopWidth="2px"
+                borderLeftWidth="2px"
+                borderRightWidth="3px"
+                borderBottomWidth="4px"
+                borderColor="black"
+                borderStyle="solid"
+            >
+                <Stack>
+
+                </Stack>
+            </ModalPopup>
         </Box>
     )
 }
