@@ -14,7 +14,7 @@ const ProductDetailView = () => {
     const router = useRouter()
     const { pid }:any = router.query
     const [ obj, setObj ] = useState<ItemInterface>({
-        id: 0,
+        id: '',
         name: '',
         description: '',
         price: 0,
