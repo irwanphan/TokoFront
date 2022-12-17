@@ -86,12 +86,17 @@ export const CartItems = () => {
                         >
                             <Flex alignItems='center' mb={1}>
                                 {cartItem.name}
-                                <Button as={FiTrash} ml={2} variant='outline' 
-                                    p={1} 
+                                <Box 
+                                    ml={2} p={1} 
+                                    borderWidth='1px'
+                                    borderStyle='solid'
+                                    borderColor='gray.600'
+                                    cursor='pointer'
                                     fontSize={12}
-                                    size='xs'
+                                    transition='0.3s ease all'
+                                    _hover={{ bgColor: 'orange.200' }}
                                     onClick={() => handleRemoveFromCart(selectedItem)}
-                                />
+                                ><FiTrash /></Box>
                             </Flex>
                             <Flex
                                 color='gray.600'
