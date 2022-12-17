@@ -11,14 +11,6 @@ import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { useEffect } from "react"
 
-export const handleAddToCart = (product:ItemInterface, value:number) => {
-    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-
-    const newCart = addToCart(cart, product, value)
-    localStorage.setItem("cart", JSON.stringify(newCart))
-    setCart(newCart)
-}
-
 const totaling = () => {
     const cart = useRecoilValue(cartState)
     const inCart:any = cart.map( cartItem => dummyItems.find(x => x.id === cartItem.id) )

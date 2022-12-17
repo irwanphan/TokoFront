@@ -9,6 +9,12 @@ const TokoFooter = () => {
             <Box fontSize={12}>
                 powered by TokoFront&copy;2022
             </Box>
+            {/* TODO: 4 GRIDs:
+                about
+                tokopro
+                connect with us
+                socials
+            */}
         </Box>
 
     )

@@ -5,8 +5,10 @@ import { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
 
-import { handleAddToCart } from "@libs/components/Cart"
 import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
+import { cartState, addToCart } from "@libs/contexts/cart"
+import { CartItemInterface } from "@libs/interfaces/cartItem"
+import { useRecoilState } from "recoil"
 
 const ProductDetailView = () => {
     const router = useRouter()
@@ -19,21 +21,39 @@ const ProductDetailView = () => {
         image: ''
     })
 
+    // handling ShowItem
     const [qid, setQid] = useState<number|any>()
     useEffect(() => {
         setQid(pid)
-        // see item as queried id
         const selected:ItemInterface|undefined = dummyItems.find( item => item.id === pid )
         if (selected !== undefined) setObj(selected)
         // console.log(selected)
     },[pid])
 
+    // handling QtyPicker
     const [value, setValue] = useState(1)
     const [internalValue, setInternalValue] = useControllableState({
         value,
         onChange: setValue,
     })
+    
+    // handling AddToCart
+    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
+    useEffect(() => {
+        const cartData = localStorage.getItem("cart")
+        // console.log('storage: ', cartData)
+        const parsedData = JSON.parse(cartData!)
+        if (parsedData) {
+            setCart(parsedData);
+        }
+    }, [])
+    const handleAddToCart = (product:ItemInterface) => {
+        const newCart = addToCart(cart, product, value)
+        localStorage.setItem("cart", JSON.stringify(newCart))
+        setCart(newCart)
+    }
 
+    // if item not show yet
     if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
 
     return (
@@ -76,7 +96,7 @@ const ProductDetailView = () => {
                     </Flex>
 
                     <FormSubmitButton notLink
-                        onClick={ () => handleAddToCart(obj, value) } >
+                        onClick={ () => handleAddToCart(obj) } >
                         Add to Cart
                     </FormSubmitButton>
                 </GridItem>
