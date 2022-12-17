@@ -1,10 +1,19 @@
 import { Box, FlexProps, Img, Text } from "@chakra-ui/react"
+import { ItemInterface } from "@libs/interfaces/storeItem"
 import NextLink from 'next/link'
 
 interface BlockContainerLinkProps extends BlockContainerProps {
     href: string
     title?: string
     description?: string
+    product?: ItemInterface
+}
+interface TitleAndDescriptionProps {
+    title?: string
+    description?: string
+}
+interface ProductBlockProps {
+    product: ItemInterface
 }
 interface BlockContainerProps extends FlexProps {
     bgColor?: string
@@ -36,18 +45,45 @@ const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
     )
 }
 
-export const BlockContainerLink = ({ href, title, description, bgColor }:BlockContainerLinkProps) => {
+const TitleAndDescription = ({title, description}:TitleAndDescriptionProps ) => (
+    <>
+        <Text fontSize={16} fontWeight={600}>
+            {title}
+        </Text>
+        <Text fontSize={12} mt={1} color='blackAlpha.800'>
+            {description}
+        </Text>
+    </>
+)
+const ProductBlock = ({product}: ProductBlockProps ) => (
+    <>
+        <Img 
+            src={product.image}
+            alt={product.name ?? "An image of something"}
+        />
+        <Text fontSize={16} fontWeight={600} mt={3}>
+            {product.name}
+        </Text>
+        <Text fontSize={12} mt={1} color='blackAlpha.800'>
+            {product.description}
+        </Text>
+    </>
+)
+
+export const BlockContainerLink = ({ href, product, title, description, bgColor }:BlockContainerLinkProps) => {
     return (
         <NextLink href={href}>
             {/* TODO: retrieve image here */}
-            <BlockContainer bgColor={bgColor}>
-                <Text fontSize={16} fontWeight={600}>
-                    {title}
-                </Text>
-                <Text fontSize={12} mt={1} color='blackAlpha.800'>
-                    {description}
-                </Text>
-            </BlockContainer>
+                {
+                    product ?
+                    <BlockContainer bgColor={bgColor}>
+                        <ProductBlock product={product} />
+                    </BlockContainer>
+                    :
+                    <BlockContainer bgColor={bgColor}>
+                        <TitleAndDescription title={title} description={description} />
+                    </BlockContainer>
+                }
         </NextLink>
     )
 }
