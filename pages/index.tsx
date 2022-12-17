@@ -1,5 +1,6 @@
 import { Box, Grid, GridItem, Text } from '@chakra-ui/react'
 import BlockContainer, { BlockContainerLink } from '@elements/BlockContainer'
+import { dummyItems, ItemInterface } from '@libs/interfaces/storeItem'
 import MainLayout from '@libs/layouts/MainLayout'
 import CatalogFullColumn from '@units/CatalogFullColumn'
 import NextLink from 'next/link'
@@ -28,22 +29,16 @@ const Home = () => {
       </Box>
 
       <Grid templateColumns='1fr 1fr 1fr 1fr' gap={4}>
-        <GridItem>
-          <BlockContainerLink href={`/products/1`} 
-            title='Set Your Sight Straight'
-            description={`It's right there`}
-            bgColor='green.50'
-          />
-        </GridItem>
-        <GridItem>
-          <BlockContainer>asdf</BlockContainer>
-        </GridItem>
-        <GridItem>
-          <BlockContainer>asdf</BlockContainer>
-        </GridItem>
-        <GridItem>
-          <BlockContainer>asdf</BlockContainer>
-        </GridItem>
+        {dummyItems.map((item:ItemInterface) => {
+          return (
+            <GridItem>
+              <BlockContainerLink href={`/products/${item.id}`} 
+                product={item}
+                // bgColor='green.50'
+              />
+            </GridItem>
+          )
+        })}
       </Grid>
 
     </MainLayout>
