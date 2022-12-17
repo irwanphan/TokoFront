@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import NextLink from 'next/link'
 import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider, Button, useToast, Link, Stack, useDisclosure } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -68,11 +68,15 @@ export const CartItems = () => {
 
     // handling delete modal
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [ scope, setScope ] = useState<ItemInterface>()
     const modalProps = {
-        title: "Hapus item",
-        texts: '',
+        title: `Remove ${scope?.name} From Cart`,
+        texts: 'Are you really OK with this decision?',
         button: 'OK',
-        // action: () => handleRemoveFromCart()
+        action: () => {
+            handleRemoveFromCart(scope)
+            onClose()
+        }
     }
     
     if (Object.keys(cart).length === 0) {
@@ -103,7 +107,10 @@ export const CartItems = () => {
                                     fontSize={12}
                                     transition='0.3s ease all'
                                     _hover={{ bgColor: 'orange.200' }}
-                                    onClick={onOpen}
+                                    onClick={() => {
+                                        setScope(selectedItem)
+                                        onOpen()
+                                    }}
                                 ><FiTrash /></Box>
                             </Flex>
                             <Flex
