@@ -1,7 +1,7 @@
-import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider } from "@chakra-ui/react"
+import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider, Button, useToast } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
-import { cartState } from "@libs/contexts/cart"
-import { FiX } from "react-icons/fi"
+import { cartState, removeFromCart } from "@libs/contexts/cart"
+import { FiTrash, FiX } from "react-icons/fi"
 
 import { useRecoilState, useRecoilValue } from "recoil"
 import { addToCart } from "@libs/contexts/cart"
@@ -10,6 +10,7 @@ import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { useEffect } from "react"
+import BlockContainer from "@elements/BlockContainer"
 
 const totaling = () => {
     const cart = useRecoilValue(cartState)
@@ -43,6 +44,26 @@ export const CartItems = () => {
             setCart(parsedData);
         }
     }, [])
+
+    // handling notification
+    const toast = useToast()
+    const notify = (message:string) => {
+        toast({
+            duration: 1500,
+            position: 'bottom-right',
+            render: () => (
+                <BlockContainer py={4} px={6}>{message}</BlockContainer>
+            )
+        })
+    }
+
+    // TODO: minus and plus item on cart
+    const handleRemoveFromCart = (product:ItemInterface|any) => {
+        const newCart = removeFromCart(cart, product)
+        localStorage.setItem("cart", JSON.stringify(newCart))
+        setCart(newCart)
+        notify(`${product.name} removed from your cart`)
+    }
     
     if (Object.keys(cart).length === 0) {
         return <Box>No Items</Box>
@@ -63,18 +84,22 @@ export const CartItems = () => {
                         <ListItem key={cartItem.id}
                             mb={2}
                         >
-                            <Box>
+                            <Flex alignItems='center' mb={1}>
                                 {cartItem.name}
-                            </Box>
+                                <Button as={FiTrash} ml={2} variant='outline' 
+                                    p={1} 
+                                    fontSize={12}
+                                    size='xs'
+                                    onClick={() => handleRemoveFromCart(selectedItem)}
+                                />
+                            </Flex>
                             <Flex
                                 color='gray.600'
                                 fontSize={12}
                                 gap={1}
                                 justifyContent='space-between'
                             >
-                                <Flex
-                                    alignItems='center'
-                                >
+                                <Flex alignItems='center'>
                                     {/* TODO: FIX: possibly undefined */}
                                     {cartItem.quantity} <Box as={FiX}/> {selectedItem!.price}
                                 </Flex>

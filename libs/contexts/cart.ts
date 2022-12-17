@@ -6,6 +6,20 @@ export const cartState = atom({
     default: [] as CartItemInterface[]
 })
 
+export const removeFromCart = (cart:any, product:any) => {
+  const foundIndex = cart.findIndex((x:any) => x.id === product.id)
+
+  const newCart = [...cart]
+  newCart.splice(foundIndex, 1) //remove from start index at foundIndex 1 object
+  return newCart
+  // if (foundIndex >= 0) {
+  //   newCart[foundIndex] = {
+  //     ...cart[foundIndex],
+  //     quantity: 0,
+  //   }
+  //   return newCart
+  // }
+}
 
 export const addToCart = (cart:any, product:any, qtyAdded:number) => {
   const newCart = [...cart]
@@ -17,7 +31,7 @@ export const addToCart = (cart:any, product:any, qtyAdded:number) => {
       ...cart[foundIndex],
       quantity: cart[foundIndex].quantity + qtyAdded,
     };
-    return newCart;
+    return newCart
   }
 
   // Add new item
@@ -27,5 +41,5 @@ export const addToCart = (cart:any, product:any, qtyAdded:number) => {
     name: product.name,
     quantity: qtyAdded,
   });
-  return newCart;
+  return newCart
 }
