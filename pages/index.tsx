@@ -1,22 +1,21 @@
 import { Box, Grid, GridItem, Text } from '@chakra-ui/react'
 import BlockContainer, { BlockContainerLink } from '@elements/BlockContainer'
-import { dummyItems, ItemInterface } from '@libs/interfaces/storeItem'
 import MainLayout from '@libs/layouts/MainLayout'
 import CatalogFullColumn from '@units/CatalogFullColumn'
 import NextLink from 'next/link'
+
+import { dummyItems, ItemInterface } from '@libs/interfaces/storeItem'
+const featuredProduct = dummyItems[3]
 
 const Home = () => {
   return (
     <MainLayout>
       
       <CatalogFullColumn  
-        // bgColor='lightskyblue'
-        title='Something Out There'
-        currency='IDR'
-        price={800000}
+        bgColor='blue.100'
+        product={featuredProduct}
         haveButton
         buttonText='Shop Now'
-        href='/'
       />
 
       <Box textAlign='center' mt={12} mb={8}>

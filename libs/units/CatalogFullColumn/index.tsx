@@ -1,15 +1,14 @@
-import { FlexProps, Grid, GridItem, Text } from '@chakra-ui/react'
+import { Box, FlexProps, Grid, GridItem, Img, Text } from '@chakra-ui/react'
 import BlockContainer from '@elements/BlockContainer'
 import FormSubmitButton from '@elements/FormSubmit'
+import { ItemInterface } from '@libs/interfaces/storeItem'
 
 interface CatalogColumnProps extends FlexProps {
-    title: string
-    price: number
-    currency: string
+    product: ItemInterface
+    currency?: string
     color?: string
     borderColor?: string
     bgColor?: string
-    href: string
     haveButton?: boolean
     buttonText?: string
     buttonColor?: string
@@ -17,26 +16,33 @@ interface CatalogColumnProps extends FlexProps {
     buttonTextColor?: string
 }
 
-const CatalogFullColumn = ( {title, price, currency, href, color, borderColor, bgColor, haveButton, buttonText, buttonColor, buttonBorderColor, buttonTextColor, ...rest}: CatalogColumnProps ) => {
+const CatalogFullColumn = ( {product, currency, color, borderColor, bgColor, haveButton, buttonText, buttonColor, buttonBorderColor, buttonTextColor, ...rest}: CatalogColumnProps ) => {
     return (
         <BlockContainer {...rest}>
-            <Grid templateColumns='1fr 1fr'>
-                <GridItem>
-                    <Text fontSize={28} mb={4}>{title}</Text>
-                    <Text mb={3}>{currency} {price}</Text>
-                    {
-                        haveButton &&
-                        <FormSubmitButton
-                            href={href}
-                            >
-                            {buttonText}
-                        </FormSubmitButton>
-                    }
-                </GridItem>
-                <GridItem>
-                    {/* TODO: retrive picture here */}
-                </GridItem>
-            </Grid>
+            <Box bgColor={bgColor}>
+                <Grid templateColumns='1fr 1fr'>
+                    <GridItem p={8}>
+                        <Text fontSize={28} mb={4}>{product.name}</Text>
+                        <Text fontSize={16} mb={4}>{product.description}</Text>
+                        <Text mb={3}>{currency ?? 'IDR'} {product.price}</Text>
+                        {
+                            haveButton &&
+                            <FormSubmitButton
+                                href={`/product/${product.id}`}
+                                >
+                                {buttonText}
+                            </FormSubmitButton>
+                        }
+                    </GridItem>
+                    <GridItem>
+                        {/* TODO: retrive picture here */}
+                        <Img 
+                            src={product.image}
+                            alt={product.name ?? "An image of something"}
+                        />
+                    </GridItem>
+                </Grid>
+            </Box>
         </BlockContainer>
     )
 }
