@@ -22,20 +22,23 @@ const CatalogFullColumn = ( {product, currency, color, borderColor, bgColor, hav
             <Box bgColor={bgColor}>
                 <Grid templateColumns='1fr 1fr'>
                     <GridItem p={8}>
-                        <Text fontSize={28} mb={4}>{product.name}</Text>
-                        <Text fontSize={16} mb={4}>{product.description}</Text>
+                        <Text  mb={4}
+                            fontSize={28} 
+                            fontWeight={600}>
+                            {product.name}
+                        </Text>
+                        <Text mb={4}>{product.description}</Text>
                         <Text mb={3}>{currency ?? 'IDR'} {product.price}</Text>
                         {
                             haveButton &&
                             <FormSubmitButton
-                                href={`/product/${product.id}`}
+                                href={`/products/${product.id}`}
                                 >
                                 {buttonText}
                             </FormSubmitButton>
                         }
                     </GridItem>
                     <GridItem>
-                        {/* TODO: retrive picture here */}
                         <Img 
                             src={product.image}
                             alt={product.name ?? "An image of something"}

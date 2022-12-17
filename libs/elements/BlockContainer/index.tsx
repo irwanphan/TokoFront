@@ -33,6 +33,8 @@ const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
             paddingBottom='4px'
             borderTopRightRadius='3px'
             borderBottomLeftRadius='4px'
+            transition='0.3s ease all'
+            _hover={{ shadow: 'lg' }}
         >
             <Box
                 p='2rem'

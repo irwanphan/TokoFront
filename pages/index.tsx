@@ -12,7 +12,7 @@ const Home = () => {
     <MainLayout>
       
       <CatalogFullColumn  
-        bgColor='blue.100'
+        bgColor='green.100'
         product={featuredProduct}
         haveButton
         buttonText='Shop Now'
