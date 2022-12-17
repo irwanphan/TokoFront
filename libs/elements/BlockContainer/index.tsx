@@ -1,13 +1,26 @@
 import { Box, FlexProps, Img, Text } from "@chakra-ui/react"
+import { ItemInterface } from "@libs/interfaces/storeItem"
 import NextLink from 'next/link'
 
 interface BlockContainerLinkProps extends BlockContainerProps {
     href: string
     title?: string
     description?: string
+    product?: ItemInterface
+}
+interface TitleAndDescriptionProps {
+    title?: string
+    description?: string
+}
+interface ProductBlockProps {
+    product: ItemInterface
 }
 interface BlockContainerProps extends FlexProps {
     bgColor?: string
+}
+interface BlockImageProps extends FlexProps {
+    imgUrl?: string
+    alt?: string
 }
 
 const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
@@ -32,27 +45,55 @@ const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
     )
 }
 
-export const BlockContainerLink = ({ href, title, description, bgColor }:BlockContainerLinkProps) => {
+const TitleAndDescription = ({title, description}:TitleAndDescriptionProps ) => (
+    <>
+        <Text fontSize={16} fontWeight={600}>
+            {title}
+        </Text>
+        <Text fontSize={12} mt={1} color='blackAlpha.800'>
+            {description}
+        </Text>
+    </>
+)
+const ProductBlock = ({product}: ProductBlockProps ) => (
+    <>
+        <Img 
+            src={product.image}
+            alt={product.name ?? "An image of something"}
+        />
+        <Text fontSize={16} fontWeight={600} mt={3}>
+            {product.name}
+        </Text>
+        <Text fontSize={12} mt={1} color='blackAlpha.800'>
+            {product.description}
+        </Text>
+    </>
+)
+
+export const BlockContainerLink = ({ href, product, title, description, bgColor }:BlockContainerLinkProps) => {
     return (
         <NextLink href={href}>
             {/* TODO: retrieve image here */}
-            <BlockContainer bgColor={bgColor}>
-                <Text fontSize={16} fontWeight={600}>
-                    {title}
-                </Text>
-                <Text fontSize={12} mt={1} color='blackAlpha.800'>
-                    {description}
-                </Text>
-            </BlockContainer>
+                {
+                    product ?
+                    <BlockContainer bgColor={bgColor}>
+                        <ProductBlock product={product} />
+                    </BlockContainer>
+                    :
+                    <BlockContainer bgColor={bgColor}>
+                        <TitleAndDescription title={title} description={description} />
+                    </BlockContainer>
+                }
         </NextLink>
     )
 }
 
-export const BlockImage = () => {
+export const BlockImage = ({imgUrl, alt}: BlockImageProps) => {
     return (
         <BlockContainer>
             <Img 
-                src="https://static.wixstatic.com/media/d51f38_06581f8dd35f412a90b2d4a33054880c~mv2.png/v1/fill/w_688,h_479,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/BIG-NIGHT-IN-V2.png"
+                src={imgUrl}
+                alt={alt ?? "An image of something"}
             />
         </BlockContainer>
     )

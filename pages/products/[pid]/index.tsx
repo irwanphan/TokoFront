@@ -1,65 +1,66 @@
-import { Box, Button, Flex, Grid, GridItem, ListItem, OrderedList, Text, useControllableState } from "@chakra-ui/react"
-import BlockContainer, { BlockContainerLink, BlockImage } from "@elements/BlockContainer"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import { Box, Flex, Grid, GridItem, Text, useControllableState } from "@chakra-ui/react"
+import { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
-import { useRouter } from "next/router"
 
-import { useRecoilState, useRecoilValue } from "recoil"
-import { CartItemInterface, cartState, addToCart } from "@libs/contexts/recoil"
-
-import { dummyItems, ItemInterface } from "@data//dummy_items"
-import { useEffect, useState } from "react"
+import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
+import { cartState, addToCart } from "@libs/contexts/cart"
+import { CartItemInterface } from "@libs/interfaces/cartItem"
+import { useRecoilState } from "recoil"
 
 const ProductDetailView = () => {
     const router = useRouter()
     const { pid }:any = router.query
     const [ obj, setObj ] = useState<ItemInterface>({
-        id: 0,
+        id: '',
         name: '',
-        price: 0
+        description: '',
+        price: 0,
+        image: ''
     })
 
+    // handling ShowItem
     const [qid, setQid] = useState<number|any>()
     useEffect(() => {
-        let qpid:any = parseInt(pid)
-        setQid(qpid)
-        const selected:ItemInterface|undefined = dummyItems.find( item => {
-            return item.id === qpid
-        })
+        setQid(pid)
+        const selected:ItemInterface|undefined = dummyItems.find( item => item.id === pid )
         if (selected !== undefined) setObj(selected)
-        console.log(selected)
+        // console.log(selected)
     },[pid])
 
+    // handling QtyPicker
     const [value, setValue] = useState(1)
     const [internalValue, setInternalValue] = useControllableState({
         value,
         onChange: setValue,
     })
-
+    
+    // handling AddToCart
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-
     useEffect(() => {
         const cartData = localStorage.getItem("cart")
-        console.log('storage: ', cartData)
+        // console.log('storage: ', cartData)
         const parsedData = JSON.parse(cartData!)
         if (parsedData) {
             setCart(parsedData);
         }
     }, [])
-
     const handleAddToCart = (product:ItemInterface) => {
         const newCart = addToCart(cart, product, value)
         localStorage.setItem("cart", JSON.stringify(newCart))
         setCart(newCart)
     }
 
+    // if item not show yet
     if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
 
     return (
         <MainLayout>
             <Grid templateColumns='1fr 1fr' gap={8}>
                 <GridItem>
-                    <BlockImage />
+                    <BlockImage imgUrl={obj.image} />
                 </GridItem>
                 <GridItem>
                     <Text fontSize={24} fontWeight={600}>
@@ -72,13 +73,13 @@ const ProductDetailView = () => {
                     </Text>
                     <Text fontSize={14} mb={4} color='blackAlpha.800'>
                         {/* {description} */}
-                        It's right there
+                        {obj.description}
                     </Text>
 
                     <Flex mb={2}>
                         <FormSubmitButton notLink px={2}
-                            onClick={() => setInternalValue(value + 1)}>
-                            +
+                            onClick={() => setInternalValue(value - 1)}>
+                            -
                         </FormSubmitButton>
                         <Box
                             bgColor='whiteAlpha.700'
@@ -89,8 +90,8 @@ const ProductDetailView = () => {
                             {internalValue}
                         </Box>
                         <FormSubmitButton notLink px={2}
-                            onClick={() => setInternalValue(value - 1)}>
-                            -
+                            onClick={() => setInternalValue(value + 1)}>
+                            +
                         </FormSubmitButton>
                     </Flex>
 
@@ -100,29 +101,7 @@ const ProductDetailView = () => {
                     </FormSubmitButton>
                 </GridItem>
             </Grid>
-
-            <CartItems />
         </MainLayout>
-    )
-}
-
-export const CartItems = () => {
-    const cart = useRecoilValue(cartState)
-
-    if (Object.keys(cart).length === 0) {
-        return <Box>No Items</Box>
-    }
-    return (
-        <Box>
-            <OrderedList className="cart-items">
-                {cart.map((item:CartItemInterface) => {
-                    console.log(item)
-                    return (
-                        <ListItem key={item.id}>{item.name}: {item.quantity}</ListItem>
-                    )
-                })}
-            </OrderedList>
-        </Box>
     )
 }
 

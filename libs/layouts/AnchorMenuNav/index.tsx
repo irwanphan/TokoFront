@@ -1,7 +1,9 @@
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, HStack, useDisclosure } from "@chakra-ui/react"
 import AnchorMenuIcon, { AnchorMenuIconTrigger, AnchorMenuText } from "@elements/AnchorMenu"
 import FormSubmitButton from "@elements/FormSubmit"
-import { CartItems } from "pages/products/[pid]"
+import { CartDrawer } from "@libs/components/Cart"
+import { useRouter } from "next/router"
+// import { CartItems } from "pages/products/[pid]"
 import { useState } from "react"
 import { AiOutlineShop } from "react-icons/ai"
 import { RiShoppingCartFill } from "react-icons/ri"
@@ -12,6 +14,8 @@ const AnchorMenuNav = () => {
     //     threshold: 0,
     //     rootMargin: '8rem'
     // })
+    const router = useRouter()
+    const path = router.pathname
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ placement, setPlacement ] = useState<string|any>('right')
@@ -55,34 +59,19 @@ const AnchorMenuNav = () => {
                         {/* <Box position='fixed' top={0} right={0}>{inView.toString()}</Box> */}
 
                         <HStack gap={4}>
-                            <AnchorMenuIconTrigger mb={-1} tooltip='you got something' onOpen={onOpen}>
-                                <RiShoppingCartFill />
-                            </AnchorMenuIconTrigger>
+                            {
+                                path == '/checkout' ? '' :
+                                <AnchorMenuIconTrigger mb={-1} tooltip='you got something' onOpen={onOpen}>
+                                    <RiShoppingCartFill />
+                                </AnchorMenuIconTrigger>
+                            }
                         </HStack>
                     </Flex>
                 </Box>
             {/* } */}
         {/* </InView> */}
 
-            <Drawer placement={placement} onClose={onClose} isOpen={isOpen} size="md">
-                <DrawerOverlay />
-                <DrawerContent borderLeft='2px solid black'>
-                    <DrawerHeader>Your Cart</DrawerHeader>
-                    <DrawerBody>
-                        <CartItems />
-                    </DrawerBody>
-
-                    <DrawerFooter>
-                        <FormSubmitButton notLink onClick={onClose} mr={2}>
-                            Cancel
-                        </FormSubmitButton>
-                        <FormSubmitButton href="/" buttonColor="blue.200" >
-                            Checkout
-                        </FormSubmitButton>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-
+            <CartDrawer placement={placement} onClose={onClose} isOpen={isOpen} />
         </Box>
     )
 }

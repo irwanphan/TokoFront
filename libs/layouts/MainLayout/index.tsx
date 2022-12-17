@@ -1,4 +1,5 @@
 import { Box, FlexProps } from "@chakra-ui/react"
+import TokoFooter from "@libs/components/TokoFooter"
 import AnchorMenuNav from "../AnchorMenuNav"
 import CustomHeader from "../CustomHeader"
 
@@ -14,6 +15,8 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
             <AnchorMenuNav/>
 
             {children}
+
+            <TokoFooter />
         </Box>
     )
 }

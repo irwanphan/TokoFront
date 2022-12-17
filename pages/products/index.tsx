@@ -1,6 +1,7 @@
 import MainLayout from "@libs/layouts/MainLayout"
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react"
 import BlockContainer, { BlockContainerLink } from "@elements/BlockContainer"
+import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
 
 const ProductsPage = () => {
     return (
@@ -11,17 +12,17 @@ const ProductsPage = () => {
                 </Text>
             </Box>
 
-            <Grid templateColumns='1fr 1fr 1fr' gap={4}>
-                <GridItem>
-                    <BlockContainerLink href='/' 
-                        title='Set Your Sight Straight'
-                        description={`It's right there`}
-                        bgColor='green.50'
-                    />
-                </GridItem>
-                <GridItem>
-                    <BlockContainer>asdf</BlockContainer>
-                </GridItem>
+            <Grid templateColumns='1fr 1fr 1fr 1fr' gap={4}>
+                {dummyItems.map((item:ItemInterface) => {
+                    return (
+                        <GridItem>
+                            <BlockContainerLink href={`/products/${item.id}`} 
+                                product={item}
+                                // bgColor='green.50'
+                            />
+                        </GridItem>
+                    )
+                })}
             </Grid>
         </MainLayout>
     )

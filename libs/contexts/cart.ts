@@ -1,10 +1,5 @@
-import { atom, selector } from "recoil";
-
-export interface CartItemInterface {
-    id: string
-    name: string
-    quantity: number
-}
+import { atom } from "recoil"
+import { CartItemInterface } from "@libs/interfaces/cartItem"
 
 export const cartState = atom({
     key: 'cart',
