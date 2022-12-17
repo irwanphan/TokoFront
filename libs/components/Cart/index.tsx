@@ -106,7 +106,7 @@ export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) =>
                     <FormSubmitButton notLink onClick={onClose} mr={2}>
                         Cancel
                     </FormSubmitButton>
-                    <FormSubmitButton href="/" buttonColor="green.100" >
+                    <FormSubmitButton href="/checkout" buttonColor="green.100" >
                         Checkout
                     </FormSubmitButton>
                 </DrawerFooter>

@@ -2,6 +2,7 @@ import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHea
 import AnchorMenuIcon, { AnchorMenuIconTrigger, AnchorMenuText } from "@elements/AnchorMenu"
 import FormSubmitButton from "@elements/FormSubmit"
 import { CartDrawer } from "@libs/components/Cart"
+import { useRouter } from "next/router"
 // import { CartItems } from "pages/products/[pid]"
 import { useState } from "react"
 import { AiOutlineShop } from "react-icons/ai"
@@ -13,6 +14,8 @@ const AnchorMenuNav = () => {
     //     threshold: 0,
     //     rootMargin: '8rem'
     // })
+    const router = useRouter()
+    const path = router.pathname
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ placement, setPlacement ] = useState<string|any>('right')
@@ -56,9 +59,12 @@ const AnchorMenuNav = () => {
                         {/* <Box position='fixed' top={0} right={0}>{inView.toString()}</Box> */}
 
                         <HStack gap={4}>
-                            <AnchorMenuIconTrigger mb={-1} tooltip='you got something' onOpen={onOpen}>
-                                <RiShoppingCartFill />
-                            </AnchorMenuIconTrigger>
+                            {
+                                path == '/checkout' ? '' :
+                                <AnchorMenuIconTrigger mb={-1} tooltip='you got something' onOpen={onOpen}>
+                                    <RiShoppingCartFill />
+                                </AnchorMenuIconTrigger>
+                            }
                         </HStack>
                     </Flex>
                 </Box>
