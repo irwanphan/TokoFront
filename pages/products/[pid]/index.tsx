@@ -42,7 +42,7 @@ const ProductDetailView = () => {
     const notify = (message:string) => {
         toast({
             duration: 1500,
-            position: 'top-right',
+            position: 'bottom-right',
             render: () => (
                 <BlockContainer py={4} px={6}>{message}</BlockContainer>
             )
