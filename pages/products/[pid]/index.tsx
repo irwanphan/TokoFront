@@ -1,14 +1,12 @@
-import { Box, Button, Flex, Grid, GridItem, ListItem, OrderedList, Text, useControllableState } from "@chakra-ui/react"
-import BlockContainer, { BlockContainerLink, BlockImage } from "@elements/BlockContainer"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import { Box, Flex, Grid, GridItem, Text, useControllableState } from "@chakra-ui/react"
+import { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
-import { useRouter } from "next/router"
 
-import { useRecoilState } from "recoil"
-import { CartItemInterface, cartState, addToCart } from "@libs/contexts/cart"
-
-import { dummyItems, ItemInterface } from "@data//dummy_items"
-import { useEffect, useState } from "react"
+import { handleAddToCart } from "@libs/components/Cart"
+import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
 
 const ProductDetailView = () => {
     const router = useRouter()
@@ -23,13 +21,11 @@ const ProductDetailView = () => {
 
     const [qid, setQid] = useState<number|any>()
     useEffect(() => {
-        let qpid:any = parseInt(pid)
-        setQid(qpid)
-        const selected:ItemInterface|undefined = dummyItems.find( item => {
-            return item.id === qpid
-        })
+        setQid(pid)
+        // see item as queried id
+        const selected:ItemInterface|undefined = dummyItems.find( item => item.id === pid )
         if (selected !== undefined) setObj(selected)
-        console.log(selected)
+        // console.log(selected)
     },[pid])
 
     const [value, setValue] = useState(1)
@@ -37,23 +33,6 @@ const ProductDetailView = () => {
         value,
         onChange: setValue,
     })
-
-    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-
-    useEffect(() => {
-        const cartData = localStorage.getItem("cart")
-        console.log('storage: ', cartData)
-        const parsedData = JSON.parse(cartData!)
-        if (parsedData) {
-            setCart(parsedData);
-        }
-    }, [])
-
-    const handleAddToCart = (product:ItemInterface) => {
-        const newCart = addToCart(cart, product, value)
-        localStorage.setItem("cart", JSON.stringify(newCart))
-        setCart(newCart)
-    }
 
     if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
 
@@ -74,7 +53,7 @@ const ProductDetailView = () => {
                     </Text>
                     <Text fontSize={14} mb={4} color='blackAlpha.800'>
                         {/* {description} */}
-                        It's right there
+                        {obj.description}
                     </Text>
 
                     <Flex mb={2}>
@@ -97,7 +76,7 @@ const ProductDetailView = () => {
                     </Flex>
 
                     <FormSubmitButton notLink
-                        onClick={ () => handleAddToCart(obj) } >
+                        onClick={ () => handleAddToCart(obj, value) } >
                         Add to Cart
                     </FormSubmitButton>
                 </GridItem>

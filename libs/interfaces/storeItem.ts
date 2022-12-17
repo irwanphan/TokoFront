@@ -5,6 +5,7 @@ export interface ItemInterface {
     price: number
     image: string
 }
+
 export const dummyItems:ItemInterface[] = [
     {
         id: "1",

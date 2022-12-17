@@ -1,11 +1,23 @@
 import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
-import { cartState, CartItemInterface } from "@libs/contexts/cart"
+import { cartState } from "@libs/contexts/cart"
 import { FiX } from "react-icons/fi"
-import { selector, useRecoilValue } from "recoil"
 
-import { dummyItems, ItemInterface } from "@data//dummy_items"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { addToCart } from "@libs/contexts/cart"
+
+import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
+import { CartItemInterface } from "@libs/interfaces/cartItem"
+import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { useEffect } from "react"
+
+export const handleAddToCart = (product:ItemInterface, value:number) => {
+    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
+
+    const newCart = addToCart(cart, product, value)
+    localStorage.setItem("cart", JSON.stringify(newCart))
+    setCart(newCart)
+}
 
 const totaling = () => {
     const cart = useRecoilValue(cartState)
@@ -28,16 +40,27 @@ const Total = () => {
 }
 
 export const CartItems = () => {
-    const cart = useRecoilValue(cartState)
+    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
+    // const cart = useRecoilValue(cartState)
 
+    useEffect(() => {
+        const cartData = localStorage.getItem("cart")
+        // console.log('storage: ', cartData)
+        const parsedData = JSON.parse(cartData!)
+        if (parsedData) {
+            setCart(parsedData);
+        }
+    }, [])
+    
     if (Object.keys(cart).length === 0) {
         return <Box>No Items</Box>
     }
-
+    
     return (
         <Box>
             <List className="cart-items">
                 {cart.map((cartItem:CartItemInterface, index:number) => {
+                    console.log(cart)
                     const selectedItem = dummyItems.find( item => {
                         return item.id === cartItem.id
                     })
@@ -77,15 +100,7 @@ export const CartItems = () => {
     )
 }
 
-interface CartDrawerProps {
-    placement: string | any
-    isOpen?: boolean
-    onOpen?: () => void
-    onClose?: () => void
-    onToggle?: () => void
-}
-
-export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerProps) => {
+export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     return (
         <Drawer placement={placement} onClose={onClose!} isOpen={isOpen!} size="md">
             <DrawerOverlay />
