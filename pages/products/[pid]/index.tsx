@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { Box, Flex, Grid, GridItem, Text, useControllableState } from "@chakra-ui/react"
-import { BlockImage } from "@elements/BlockContainer"
+import { Box, Flex, Grid, GridItem, Text, useControllableState, useToast } from "@chakra-ui/react"
+import BlockContainer, { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
 
@@ -37,6 +37,18 @@ const ProductDetailView = () => {
         onChange: setValue,
     })
     
+    // handling notification
+    const toast = useToast()
+    const notify = (message:string) => {
+        toast({
+            duration: 1500,
+            position: 'top-right',
+            render: () => (
+                <BlockContainer py={4} px={6}>{message}</BlockContainer>
+            )
+        })
+    }
+
     // handling AddToCart
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
     useEffect(() => {
@@ -51,6 +63,7 @@ const ProductDetailView = () => {
         const newCart = addToCart(cart, product, value)
         localStorage.setItem("cart", JSON.stringify(newCart))
         setCart(newCart)
+        notify(`${value} of ${obj.name} added`)
     }
 
     // if item not show yet
@@ -64,15 +77,12 @@ const ProductDetailView = () => {
                 </GridItem>
                 <GridItem>
                     <Text fontSize={24} fontWeight={600}>
-                        {/* {title} */}
                         {obj.name}
                     </Text>
                     <Text mb={4}>
-                        {/* IDR 800000 */}
                         IDR {obj.price}
                     </Text>
                     <Text fontSize={14} mb={4} color='blackAlpha.800'>
-                        {/* {description} */}
                         {obj.description}
                     </Text>
 
