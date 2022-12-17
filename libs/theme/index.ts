@@ -15,49 +15,45 @@ const Link: ComponentStyleConfig = {
 }
 const Input: ComponentStyleConfig = {
     defaultProps: {
-        colorScheme: 'yellow'
+        colorScheme: 'yellow',
+        variant: 'outline'
     },
     baseStyle: {
-        borderColor: 'gray.900',
         bgColor: 'whiteAlpha.900'
     },
     variants: {
         outline: {
             field: {
-                _focusVisible: {
-                    borderColor: 'yellow.500',
-                    boxShadow: '0 0 0 1px yellow.500'
-                }
+                borderColor: 'gray.900',
+                _focusVisible: { boxShadow: '0 0 0 1px yellow.500' },
+                _hover: { borderColor: 'gray.900' }
             }
         }
     }
 }
-const TextArea: ComponentStyleConfig = {
+const Textarea: ComponentStyleConfig = {
     defaultProps: {
-        colorScheme: 'yellow'
+        colorScheme: 'yellow',
+        variant: 'outline'
     },
     baseStyle: {
-        borderColor: 'gray.900',
-        bgColor: 'whiteAlpha.900',
-        _focusVisible: {
-            borderColor: 'yellow.500',
-            boxShadow: '0 0 0 1px yellow.500'
-        }
+        bgColor: 'whiteAlpha.900'
     },
     variants: {
         outline: {
             field: {
-                _focusVisible: {
-                    borderColor: 'yellow.500',
-                    boxShadow: '0 0 0 1px yellow.500'
-                }
+                borderColor: 'gray.900',
+                _focusVisible: { boxShadow: '0 0 0 1px yellow.500' },
+                _hover: { borderColor: 'gray.900' }
             }
         }
     }
 }
 const Divider: ComponentStyleConfig = {
     baseStyle: {
-        my: '2'
+        my: '2',
+        borderColor: 'gray.700',
+        borderWidth: '2px'
     }
 }
 const Checkbox: ComponentStyleConfig = {
@@ -92,7 +88,7 @@ const theme = extendTheme({
         Checkbox,
         Input,
         FormLabel,
-        TextArea
+        Textarea
     },
 
     breakpoints: {
@@ -115,7 +111,7 @@ const theme = extendTheme({
             transition: '.3s ease all',
             bgGradient: 'linear(to-r, whiteAlpha.900 70%, yellow.300)',
             bgSize: '128%',
-            shadow: 'md',
+            // shadow: 'md',
             px: 2,
             borderColor: 'gray.900',
             _focus: {
