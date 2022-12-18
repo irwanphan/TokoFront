@@ -8,7 +8,7 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
         <Box
             bgColor='blue.50'
             minHeight='100vh'
-            px='4rem'
+            px={{base:'1rem', sm:'2rem', md:'4rem'}}
             {...rest}
         >
             <CustomHeader />
