@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, useDisclosure } from "@chakra-ui/react"
 import AnchorMenuIcon, { AnchorMenuIconTrigger, AnchorMenuText } from "@elements/AnchorMenu"
-import { CartDrawer } from "@libs/components/Cart"
+import CartDrawer from "@libs/components/CartDrawer"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { AiOutlineShop } from "react-icons/ai"
