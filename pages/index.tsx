@@ -7,10 +7,28 @@ import NextLink from 'next/link'
 import { dummyItems, ItemInterface } from '@libs/interfaces/storeItem'
 const featuredProduct = dummyItems[3]
 
+import { useSession, signIn, signOut } from "next-auth/react"
+
 const Home = () => {
+  const { data: session } = useSession()
   return (
     <MainLayout>
-      
+{/*       
+      { (session) ? (
+          <>
+            Signed in as {session.user.email} <br />
+            <button onClick={() => signOut()}>Sign out</button>
+          </>
+        )
+       : (
+        <>
+          Not signed in <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>
+      )
+      } */}
+
+
       <CatalogFullColumn  
         bgColor='green.100'
         product={featuredProduct}
@@ -27,7 +45,7 @@ const Home = () => {
         </Text>
       </Box>
 
-      <Grid templateColumns='1fr 1fr 1fr 1fr' gap={4}>
+      <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
         {dummyItems.map((item:ItemInterface) => {
           return (
             <GridItem>

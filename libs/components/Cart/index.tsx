@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
-import NextLink from 'next/link'
 import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Text, Flex, Divider, Button, useToast, Link, Stack, useDisclosure } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import { cartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
-import { MdFace } from "react-icons/md"
-import { GiNewBorn } from "react-icons/gi"
 import { RxExit } from "react-icons/rx"
+import { FcGoogle } from "react-icons/fc"
 
 import { useRecoilState, useRecoilValue } from "recoil"
+import { signIn, signOut, useSession } from "next-auth/react"
 
 import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
@@ -91,13 +90,12 @@ export const CartItems = () => {
         <Box>
             <List className="cart-items">
                 {cart.map((cartItem:CartItemInterface, index:number) => {
-                    console.log(cart)
+                    // console.log(cart)
                     const selectedItem = dummyItems.find( item => {
                         return item.id === cartItem.id
                     })
                     // TODO: FIX: possibly undefined
                     const cartItemSubtotal = cartItem.quantity * selectedItem!.price
-                    // console.log(item)
                     return (
                         <ListItem key={cartItem.id} mb={2} >
                             <Flex alignItems='center' mb={1}>
@@ -138,14 +136,20 @@ export const CartItems = () => {
             </List>
 
             <Total />
-
             <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose} />
         </Box>
     )
 }
 
 export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
-    const [ isLogin, setIsLogin ] = useState<boolean>(true)
+    const [ isLogin, setIsLogin ] = useState<boolean>(false)
+    const { data: session } = useSession()
+    // console.log(session)
+    useEffect(() => {
+        if (session) {
+            setIsLogin(true)
+        }
+    })
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
@@ -155,8 +159,19 @@ export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) =>
         button: 'See You',
         action: () => {
             onModalClose(),
-            setIsLogin(false)
+            setIsLogin(false),
+            signOut()
         }
+    }
+
+    // handle signinWithGoogle
+    const toast = useToast()
+    const signInWithGoogle = () => {
+        toast({title:'Redirecting...'});
+        // Perform sign in
+        signIn('google', {
+            callbackUrl: window.location.href,
+        })
     }
     
     return (
@@ -174,24 +189,17 @@ export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) =>
                                 borderLeftWidth='0.5rem'
                                 borderLeftStyle='solid'
                                 paddingLeft={2}>
-                                    <Flex>
-
+                                <Flex>
                                     <Text fontWeight={600}>
-                                        Irwan Phan 
+                                        {session?.user?.name}
                                     </Text>
                                     <AnchorMenuIconTrigger tooltip="logout?" fontSize={18} p={1} ml={2}
-                                        onClick={() => {
-                                            onModalOpen()
-                                        }}
-                                    >
+                                        onClick={() => { onModalOpen() }} >
                                         <RxExit />
                                     </AnchorMenuIconTrigger>
-                                    </Flex>
+                                </Flex>
                                 <Text fontSize={12}>
-                                    Some Address Street, No. 88
-                                </Text>
-                                <Text fontSize={12}>
-                                    Pontianak, Indonesia
+                                    {session?.user?.email}
                                 </Text>
                             </Box>
                         </Box>
@@ -201,11 +209,13 @@ export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) =>
                                 You're not login yet
                             </Text>
                             <Flex gap={2}>
-                                <FormSubmitButton href="/register">
+                                {/* <FormSubmitButton href="/register">
                                     <Box as={GiNewBorn} mr={1} fontSize={20} />register
-                                </FormSubmitButton>
-                                <FormSubmitButton href="/login" buttonColor="green.100" >
-                                    <Box as={MdFace} mr={1} fontSize={20} />Login
+                                </FormSubmitButton> */}
+                                <FormSubmitButton 
+                                    onClick={() => signInWithGoogle()}
+                                    href="/">
+                                    <Box as={FcGoogle} mr={1} fontSize={20} />Login
                                 </FormSubmitButton>
                             </Flex>
                         </Box>
@@ -226,8 +236,8 @@ export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) =>
                             Checkout
                         </FormSubmitButton>
                       :
-                        <FormSubmitButton href="/login" buttonColor="green.100" >
-                            <Box as={MdFace} mr={1} fontSize={20} />Login to Checkout
+                        <FormSubmitButton href="/checkout" buttonColor="green.50" >
+                            <Box as={FcGoogle} mr={1} fontSize={20} />Login to Checkout
                         </FormSubmitButton>
                     }
                 </DrawerFooter>
