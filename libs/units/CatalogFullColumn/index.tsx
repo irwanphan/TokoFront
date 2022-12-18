@@ -20,7 +20,7 @@ const CatalogFullColumn = ( {product, currency, color, borderColor, bgColor, hav
     return (
         <BlockContainer {...rest}>
             <Box bgColor={bgColor}>
-                <Grid templateColumns='1fr 1fr'>
+                <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={4}>
                     <GridItem p={8}>
                         <Text  mb={4}
                             fontSize={28} 

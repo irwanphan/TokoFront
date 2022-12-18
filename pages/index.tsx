@@ -45,7 +45,7 @@ const Home = () => {
         </Text>
       </Box>
 
-      <Grid templateColumns='1fr 1fr 1fr 1fr' gap={4}>
+      <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
         {dummyItems.map((item:ItemInterface) => {
           return (
             <GridItem>
