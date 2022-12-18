@@ -4,6 +4,9 @@ import { Box, List, ListItem, DrawerHeader, Drawer, DrawerBody, DrawerContent, D
 import FormSubmitButton from "@elements/FormSubmit"
 import { cartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
+import { MdFace } from "react-icons/md"
+import { GiNewBorn } from "react-icons/gi"
+import { RxExit } from "react-icons/rx"
 
 import { useRecoilState, useRecoilValue } from "recoil"
 
@@ -12,6 +15,7 @@ import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import BlockContainer from "@elements/BlockContainer"
 import ModalPopup from "@units/ModalPopup"
+import AnchorMenuIconTrigger from "@elements/AnchorMenu"
 
 const totaling = () => {
     const cart = useRecoilValue(cartState)
@@ -132,30 +136,83 @@ export const CartItems = () => {
                     )
                 })}
             </List>
+
             <Total />
 
-            <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose}
-                borderTopWidth="2px"
-                borderLeftWidth="2px"
-                borderRightWidth="3px"
-                borderBottomWidth="4px"
-                borderColor="black"
-                borderStyle="solid"
-            >
-                <Stack>
-
-                </Stack>
-            </ModalPopup>
+            <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose} />
         </Box>
     )
 }
 
 export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
+    const [ isLogin, setIsLogin ] = useState<boolean>(true)
+
+    // handling delete modal
+    const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
+    const [ scope, setScope ] = useState<ItemInterface>()
+    const modalProps = {
+        title: `Remove ${scope?.name} From Cart`,
+        texts: 'Logging out?',
+        button: 'Yes',
+        action: () => {
+            onModalClose()
+        }
+    }
+    
     return (
         <Drawer placement={placement} onClose={onClose!} isOpen={isOpen!} size="md">
             <DrawerOverlay />
             <DrawerContent borderLeft='2px solid black'>
-                <DrawerHeader>Your Cart</DrawerHeader>
+                <DrawerHeader>
+                    { isLogin ? 
+                        <Box>
+                            <Text fontSize={12}>
+                                Hi there,
+                            </Text>
+                            <Box mt={1} mb={3}
+                                borderLeftColor='blue.300'
+                                borderLeftWidth='0.5rem'
+                                borderLeftStyle='solid'
+                                paddingLeft={2}>
+                                    <Flex>
+
+                                    <Text fontWeight={600}>
+                                        Irwan Phan 
+                                    </Text>
+                                    <AnchorMenuIconTrigger tooltip="logout?" fontSize={18} p={1} ml={2}
+                                        onClick={() => {
+                                            onModalOpen()
+                                        }}
+                                    >
+                                        <RxExit />
+                                    </AnchorMenuIconTrigger>
+                                    </Flex>
+                                <Text fontSize={12}>
+                                    Some Address Street, No. 88
+                                </Text>
+                                <Text fontSize={12}>
+                                    Pontianak, Indonesia
+                                </Text>
+                            </Box>
+                        </Box>
+                      :
+                        <Box>
+                            <Text fontSize={12}>
+                                You're not login yet
+                            </Text>
+                            <Flex gap={2}>
+                                <FormSubmitButton href="/register">
+                                    <Box as={GiNewBorn} mr={1} fontSize={20} />register
+                                </FormSubmitButton>
+                                <FormSubmitButton href="/login" buttonColor="green.100" >
+                                    <Box as={MdFace} mr={1} fontSize={20} />Login
+                                </FormSubmitButton>
+                            </Flex>
+                        </Box>
+                    }
+                    <Divider />
+                    Your Cart
+                </DrawerHeader>
                 <DrawerBody>
                     <CartItems />
                 </DrawerBody>
@@ -164,10 +221,18 @@ export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) =>
                     <FormSubmitButton notLink onClick={onClose} mr={2}>
                         Cancel
                     </FormSubmitButton>
-                    <FormSubmitButton href="/checkout" buttonColor="green.100" >
-                        Checkout
-                    </FormSubmitButton>
+                    { isLogin ?
+                        <FormSubmitButton href="/checkout" buttonColor="green.100" >
+                            Checkout
+                        </FormSubmitButton>
+                      :
+                        <FormSubmitButton href="/login" buttonColor="green.100" >
+                            <Box as={MdFace} mr={1} fontSize={20} />Login to Checkout
+                        </FormSubmitButton>
+                    }
                 </DrawerFooter>
+
+                <ModalPopup modalProps={modalProps} isOpen={isModalOpen} onClose={onModalClose} canCancel />
             </DrawerContent>
         </Drawer>
     )

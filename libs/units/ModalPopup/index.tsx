@@ -25,9 +25,16 @@ const ModalPopup = ({modalProps, children, isOpen, onClose, canCancel, ...rest}:
             isOpen={isOpen}
             size={"3xl"}
             motionPreset='slideInBottom'
-        >
+            >
             <ModalOverlay />
-            <ModalContent p={3} w={'50rem'} {...rest}>
+            <ModalContent p={3} w={'50rem'} {...rest}
+                borderTopWidth="2px"
+                borderLeftWidth="2px"
+                borderRightWidth="3px"
+                borderBottomWidth="4px"
+                borderColor="black"
+                borderStyle="solid"
+            >
                 <ModalHeader
                     textAlign={'center'} fontWeight={800}
                 >{modalProps.title}</ModalHeader>
@@ -38,8 +45,10 @@ const ModalPopup = ({modalProps, children, isOpen, onClose, canCancel, ...rest}:
                 </ModalBody>
                 <ModalFooter justifyContent={'center'}>
                     { canCancel && 
-                        <Button colorScheme='blue' mr={2} variant={'outline'} 
-                        onClick={onClose}>{modalProps.cancel ?? 'Batal'}</Button>
+                        <FormSubmitButton notLink mr={2} 
+                            bgColor='pink.100'
+                            onClick={onClose}
+                        >{modalProps.cancel ?? 'Batal'}</FormSubmitButton>
                     }
                     { modalProps.button &&
                         <FormSubmitButton notLink
