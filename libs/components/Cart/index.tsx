@@ -147,15 +147,15 @@ export const CartItems = () => {
 export const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ isLogin, setIsLogin ] = useState<boolean>(true)
 
-    // handling delete modal
+    // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
-    const [ scope, setScope ] = useState<ItemInterface>()
     const modalProps = {
-        title: `Remove ${scope?.name} From Cart`,
-        texts: 'Logging out?',
-        button: 'Yes',
+        title: `Logging Out?`,
+        texts: 'Come back safely',
+        button: 'See You',
         action: () => {
-            onModalClose()
+            onModalClose(),
+            setIsLogin(false)
         }
     }
     
