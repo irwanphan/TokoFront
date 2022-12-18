@@ -71,7 +71,7 @@ const ProductDetailView = () => {
 
     return (
         <MainLayout>
-            <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={8}>
+            <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={4}>
                 <GridItem>
                     <BlockImage imgUrl={obj.image} />
                 </GridItem>
