@@ -2,7 +2,6 @@ import { Box, Flex, Text } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import { BiRocket } from "react-icons/bi"
 
-
 const Custom404 = () => {
     return (
         <Box bgGradient='linear(to-b, cyan.600, blue.900)'>
@@ -18,5 +17,4 @@ const Custom404 = () => {
         </Box>
     )
 }
-
 export default Custom404
