@@ -72,6 +72,9 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                                     {session?.user?.email}
                                 </Text>
                             </Box>
+                            <FormSubmitButton href="/admin-area" buttonColor="green.100" >
+                                Your Admin Area
+                            </FormSubmitButton>
                         </Box>
                       :
                         <Box>
