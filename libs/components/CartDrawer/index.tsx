@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
-import { Box, useDisclosure, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Flex, Divider, DrawerBody, DrawerFooter, Text, Img, Circle } from "@chakra-ui/react"
-import { AnchorMenuIconTrigger } from "@elements/AnchorMenu"
+import { Box, useDisclosure, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Flex, Divider, DrawerBody, DrawerFooter, Text } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 
 import ModalPopup from "@units/ModalPopup"
@@ -10,6 +9,7 @@ import { RxExit } from "react-icons/rx"
 
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { CartItems } from "../Cart"
+import SessionProfile from "@units/SessionProfile"
 
 const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
@@ -59,30 +59,14 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                                 borderLeftWidth='0.5rem'
                                 borderLeftStyle='solid'
                                 paddingLeft={2}>
-                                <Flex>
-                                    <Circle size='1.5rem' borderRadius='full' overflow='hidden' 
-                                        borderWidth='1px 2px 2px 1px'
-                                        borderStyle='solid'
-                                        borderColor='gray.900'
-                                        bgColor='gray.300'
-                                        mr={2}
-                                        >
-                                        <Img src={session?.user?.image!} referrerPolicy="no-referrer" />
-                                    </Circle>
-                                    <Text fontWeight={600}>
-                                        {session?.user?.name}
-                                    </Text>
-                                    <AnchorMenuIconTrigger tooltip="logout?" fontSize={18} p={1} ml={2}
-                                        onOpen={onModalOpen}>
-                                        <RxExit />
-                                    </AnchorMenuIconTrigger>
-                                </Flex>
-                                <Text fontSize={12}>
-                                    {session?.user?.email}
-                                </Text>
+                                <SessionProfile session={session}/>
                             </Box>
-                            <FormSubmitButton href="/admin-area" >
-                                Your Admin Area
+                            <FormSubmitButton href="/admin-area" mr={2} px={3} >
+                                Admin Area
+                            </FormSubmitButton>
+                            <FormSubmitButton notLink px={3}
+                                onClick={() => onModalOpen()}>
+                                <Box as={RxExit} mr={2} /> Logout
                             </FormSubmitButton>
                         </Box>
                       :
