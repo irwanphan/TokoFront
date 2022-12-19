@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Box, useDisclosure, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Flex, Divider, DrawerBody, DrawerFooter, Text } from "@chakra-ui/react"
+import { Box, useDisclosure, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Flex, Divider, DrawerBody, DrawerFooter, Text, Img, Circle } from "@chakra-ui/react"
 import { AnchorMenuIconTrigger } from "@elements/AnchorMenu"
 import FormSubmitButton from "@elements/FormSubmit"
 
@@ -60,6 +60,15 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                                 borderLeftStyle='solid'
                                 paddingLeft={2}>
                                 <Flex>
+                                    <Circle size='1.5rem' borderRadius='full' overflow='hidden' 
+                                        borderWidth='1px 2px 2px 1px'
+                                        borderStyle='solid'
+                                        borderColor='gray.900'
+                                        bgColor='gray.300'
+                                        mr={2}
+                                        >
+                                        <Img src={session?.user?.image!} referrerPolicy="no-referrer" />
+                                    </Circle>
                                     <Text fontWeight={600}>
                                         {session?.user?.name}
                                     </Text>
@@ -72,7 +81,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                                     {session?.user?.email}
                                 </Text>
                             </Box>
-                            <FormSubmitButton href="/admin-area" buttonColor="green.100" >
+                            <FormSubmitButton href="/admin-area" >
                                 Your Admin Area
                             </FormSubmitButton>
                         </Box>
