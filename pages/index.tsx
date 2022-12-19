@@ -48,7 +48,7 @@ const Home = () => {
       <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
         {dummyItems.map((item:ItemInterface) => {
           return (
-            <GridItem>
+            <GridItem key={item.id}>
               <BlockContainerLink href={`/products/${item.id}`} 
                 product={item}
                 // bgColor='green.50'

@@ -64,7 +64,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                                         {session?.user?.name}
                                     </Text>
                                     <AnchorMenuIconTrigger tooltip="logout?" fontSize={18} p={1} ml={2}
-                                        onClick={() => { onModalOpen() }} >
+                                        onOpen={onModalOpen}>
                                         <RxExit />
                                     </AnchorMenuIconTrigger>
                                 </Flex>
