@@ -37,7 +37,7 @@ const BlockContainer = ({ bgColor, children, ...rest }:BlockContainerProps) => {
             _hover={{ shadow: 'lg' }}
         >
             <Box
-                p={{base:'1.5rem', sm:'2rem', md:'1.5rem', lg:'2rem'}}
+                p={{base:'1rem', sm:'1.25rem', md:'1.5rem', lg:'2rem'}}
                 bgColor={bgColor ?? 'white'}
                 {...rest}
             >

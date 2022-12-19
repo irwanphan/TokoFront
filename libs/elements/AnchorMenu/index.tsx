@@ -10,6 +10,10 @@ interface AnchorMenuProps extends FlexProps {
 export const AnchorMenuText = ({href, tooltip, children, ...rest}: AnchorMenuProps) => {
     return (
         <Link
+            transition='0.3s ease all'
+            bgSize='0% 200%'
+            bgGradient= 'linear(to-b, transparent, transparent 50%, gray.700 50%, gray.700)'
+            _hover={{bgSize: '100% 198%'}}
             href={href}>
             {children}
         </Link>

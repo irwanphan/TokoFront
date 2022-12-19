@@ -5,13 +5,9 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { AiOutlineShop } from "react-icons/ai"
 import { RiShoppingCartFill } from "react-icons/ri"
-// import { InView, useInView } from "react-intersection-observer"
+import { InView } from "react-intersection-observer"
 
 const AnchorMenuNav = () => {
-    // const { ref, inView } = useInView({
-    //     threshold: 0,
-    //     rootMargin: '8rem'
-    // })
     const router = useRouter()
     const path = router.pathname
 
@@ -20,28 +16,28 @@ const AnchorMenuNav = () => {
     
     return (
         <Box>
-        {/* <InView> */}
-            {/* {({inView, ref}) => */}
+        <InView>
+            {({inView, ref}) =>
                 <Box>
-                    {/* <Box ref={ref} h='6rem' position={inView ? 'absolute' : 'relative'} /> */}
+                    <Box ref={ref} h={{ base: '4rem', md: '6rem' }} position={inView ? 'absolute' : 'relative'} />
                     <Flex  
                         w='full' 
                         mx='auto'
                         justifyContent='space-between'
-                        // alignItems='center'
-                        // justifyContent='center'
-                        // position={!inView ? 'fixed' : 'relative'}
-                        // bgColor={!inView ? 'whiteAlpha.900' : 'transparent'}
-                        h='6rem' 
+                        position={!inView ? 'fixed' : 'relative'}
+                        bgColor={!inView ? 'whiteAlpha.900' : 'transparent'}
+                        h={{ base: '4rem', md: '6rem' }}
                         transition='0.3s ease all'
                         zIndex={2}
-                        // px={{ base: 0, md: 8 }}
-                        // rounded={{ base: 'none', md: '2xl' }}
-                        // borderWidth={{ base: '1px 0 0 0', md: '1px 2px 3px 1px' }}
-                        // borderStyle='solid'
-                        // borderColor={!inView ? 'gray.800' : 'transparent'}
-                        // boxShadow={!inView ? '2xl' : 'none'}
-                        // bottom={-4} left={0} right={0}        
+                        px={ 
+                            !inView ? { base: 4, md: 10 } 
+                                    : { base: 0, md: 0 }
+                            }
+                        borderWidth='0 0 3px 0'
+                        borderStyle='solid'
+                        borderColor={!inView ? 'gray.800' : 'transparent'}
+                        boxShadow={!inView ? '2xl' : 'none'}
+                        top={0} left={0} right={0}        
                         >
                         <HStack gap={4}>
                             <AnchorMenuIcon href="/" mb={-1}>
@@ -66,8 +62,8 @@ const AnchorMenuNav = () => {
                         </HStack>
                     </Flex>
                 </Box>
-            {/* } */}
-        {/* </InView> */}
+            }
+        </InView>
 
             <CartDrawer placement={placement} onClose={onClose} isOpen={isOpen} />
         </Box>
