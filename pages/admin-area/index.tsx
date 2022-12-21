@@ -7,6 +7,24 @@ import MainLayout from "@libs/layouts/MainLayout"
 import { FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
 
+// protect admin-area route
+import { getSession } from 'next-auth/react'
+export async function getServerSideProps(context:any) {
+    // Check if user is authenticated
+    const session = await getSession(context);
+    // If not, redirect to the homepage
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: {}
+    }
+}
 
 const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
