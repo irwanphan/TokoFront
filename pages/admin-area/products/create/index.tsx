@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import BlockContainer from "@elements/BlockContainer"
 import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -18,7 +18,7 @@ interface IFormInput {
 
 const CreateProductPage = () => {
     const [ isLoading, setIsLoading ] = useState(false)
-    const [ isDisabled, setDisabled ] = useState(true)
+    const [ isDisabled, setDisabled ] = useState(false)
 
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
@@ -31,7 +31,6 @@ const CreateProductPage = () => {
 
     const createProduct = (data:any) => axios.post('/api/products', data);
     const toast = useToast()
-    const toastRef = useRef()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         data.price = parseInt(data.price) // price was string
         setIsLoading(true)
