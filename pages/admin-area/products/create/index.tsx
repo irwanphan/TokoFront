@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import BlockContainer from "@elements/BlockContainer"
 import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -6,6 +6,7 @@ import MainLayout from "@libs/layouts/MainLayout"
 import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoadingOverlay from "@elements/LoadingOverlay"
+import { useToast } from "@chakra-ui/react"
 
 interface IFormInput {
     name: string
@@ -27,12 +28,15 @@ const CreateProductPage = () => {
     })
 
     const createProduct = (data:any) => axios.post('/api/products', data);
-    
+    const toast = useToast()
+    const toastRef = useRef()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         data.price = parseInt(data.price) // price was string
         setIsLoading(true)
+        toast({title:'Saving...'})
         await createProduct(data)
         setIsLoading(false)
+        toast({title:'Saved', status:'success'})
     }
 
     return (

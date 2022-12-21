@@ -37,7 +37,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     // handle signinWithGoogle
     const toast = useToast()
     const signInWithGoogle = () => {
-        toast({title:'Redirecting...'});
+        toast({title:'Redirecting...'})
         // Perform sign in
         signIn('google', {
             callbackUrl: window.location.href,
