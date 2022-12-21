@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ### Setup Supabase Project & Prisma
 
 initiate Prisma:
@@ -11,3 +9,8 @@ setup .env variables
 install Prisma Client
 - npm install @prisma/client
 - npx prisma generate
+
+create table in Supabase
+- npx prisma db push
+or
+- npx prisma migrate dev

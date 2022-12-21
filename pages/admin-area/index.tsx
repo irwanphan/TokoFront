@@ -17,10 +17,13 @@ const AdminAreaPage = () => {
             {
                 userCategory === 'admin' &&
                 <BlockContainer>
-                    <Flex alignItems='center'>
-                        <Box as={FiPackage} mr={2} />
-                        <Text fontWeight={600} >Product List</Text>
-                    </Flex>
+                    <Box>
+                        <Flex alignItems='center'>
+                            <Box as={FiPackage} mr={2} />
+                            <Text fontWeight={600} >Product List</Text>
+                        </Flex>
+                        <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
+                    </Box>
                     <Divider />
                     <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                         <CartItems />
