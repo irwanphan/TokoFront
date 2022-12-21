@@ -1,9 +1,11 @@
+import { useState } from "react"
 import BlockContainer from "@elements/BlockContainer"
 import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
 import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
+import LoadingOverlay from "@elements/LoadingOverlay"
 
 interface IFormInput {
     name: string
@@ -13,6 +15,8 @@ interface IFormInput {
 }
 
 const CreateProductPage = () => {
+    const [ isLoading, setIsLoading ] = useState(false)
+
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
           name: '',
@@ -26,11 +30,11 @@ const CreateProductPage = () => {
     
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         data.price = parseInt(data.price) // price was string
-        console.log(data)
-        const save = await createProduct(data)
-        console.log("done")
+        setIsLoading(true)
+        await createProduct(data)
+        setIsLoading(false)
     }
-   
+
     return (
         <MainLayout>
             <BlockContainer>
@@ -63,6 +67,9 @@ const CreateProductPage = () => {
                     </FormSubmitButton>
                 </form>
             </BlockContainer>
+
+            { isLoading && <LoadingOverlay isLoading={isLoading} /> }
+            
         </MainLayout>
     )
 }
