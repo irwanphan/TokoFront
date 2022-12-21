@@ -7,6 +7,7 @@ import MainLayout from "@libs/layouts/MainLayout"
 import { FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
 
+// TODO: apply middleware to all admin-area
 // protect admin-area route
 import { getSession } from 'next-auth/react'
 export async function getServerSideProps(context:any) {

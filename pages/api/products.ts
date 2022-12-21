@@ -11,35 +11,33 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         return res.status(401).json({ message: 'Unauthorized.' });
     }
     
+    const refIdExist = await prisma.product.findUnique({
+        where: {
+            refId: req.body.refId
+        }
+    })
+    if (refIdExist) {
+        // console.log(`Product with reference id ${refIdExist.refId} is already existed`)
+        res.status(500).json({ 
+            message: `Product with reference id ${refIdExist.refId} is already existed`
+        })
+    }
+
     if (req.method === 'POST') {
         try {
             const { name, refId, description, price } = req.body;
-
-            const refIdExist = await prisma.product.findUnique({
-                where: {
-                    refId: refId
-                }
+                
+            const product = await prisma.product.create({
+                data: {
+                    name,
+                    refId,
+                    description,
+                    price
+                },
             })
-            if (refIdExist) {
-                // console.log(`Product with reference id ${refIdExist.refId} is already existed`)
-                res.status(500).json({ 
-                    message: `Product with reference id ${refIdExist.refId} is already existed`
-                })
-            }
 
-            else {
-                const product = await prisma.product.create({
-                    data: {
-                        name,
-                        refId,
-                        description,
-                        price
-                    },
-                })
-    
-                console.log(product)
-                res.status(200).json(product)
-            }
+            console.log(product)
+            res.status(200).json(product)
 
         } catch (e) {
             console.log(e)
