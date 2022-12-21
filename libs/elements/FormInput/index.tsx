@@ -17,10 +17,10 @@ interface FormInputProps extends FlexProps {
     options? : optionProps[]
     icon? : IconType
     spaceAfter?: string
-    disabled?: boolean
+    isDisabled?: boolean
 }
 
-const FormInput = ({name, label, type, register, value, placeholder, options, icon, spaceAfter, disabled, children, ...rest}:FormInputProps) => {
+const FormInput = ({name, label, type, register, value, placeholder, options, icon, spaceAfter, isDisabled, children, ...rest}:FormInputProps) => {
     const FormInputManifest = () => {
         if (type === 'textarea') {
             return (
@@ -34,13 +34,13 @@ const FormInput = ({name, label, type, register, value, placeholder, options, ic
                     borderColor='gray.900'
                     _hover={{ layerStyle: 'formInputHover' }}
                     mb={ spaceAfter ?? '2' }
-                    isDisabled={disabled}
+                    isDisabled={isDisabled}
                 />
             )
         }
         if (type === 'number') {
             return (
-                <NumberInput isDisabled={disabled}>
+                <NumberInput isDisabled={isDisabled}>
                     <NumberInputField 
                         {...register(name)}
                         name={name}
@@ -64,7 +64,7 @@ const FormInput = ({name, label, type, register, value, placeholder, options, ic
                 borderColor='gray.900'
                 _hover={{ layerStyle: 'formInputHover' }}
                 mb={ spaceAfter ?? '2' }
-                isDisabled={disabled}
+                isDisabled={isDisabled}
             />
         )
     }

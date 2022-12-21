@@ -6,7 +6,8 @@ import MainLayout from "@libs/layouts/MainLayout"
 import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoadingOverlay from "@elements/LoadingOverlay"
-import { useToast } from "@chakra-ui/react"
+import { Box, Flex, useToast, Text, Divider } from "@chakra-ui/react"
+import { FiPackage } from "react-icons/fi"
 
 interface IFormInput {
     name: string
@@ -17,6 +18,7 @@ interface IFormInput {
 
 const CreateProductPage = () => {
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ isDisabled, setDisabled ] = useState(true)
 
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
@@ -36,39 +38,57 @@ const CreateProductPage = () => {
         toast({title:'Saving...'})
         await createProduct(data)
         setIsLoading(false)
+        setDisabled
         toast({title:'Saved', status:'success'})
     }
 
     return (
         <MainLayout>
             <BlockContainer>
+                <Box>
+                    <Flex alignItems='center'>
+                        <Box as={FiPackage} mr={2} />
+                        <Text fontWeight={600} >New Product</Text>
+                    </Flex>
+                    <Divider/>
+                </Box>
                 <form>
                     <FormInput 
                         name='name'
                         label='Product name' 
                         placeholder="eg. X-Branded Chocolate Variant 120g"
+                        isDisabled={isDisabled}
                         register={register} />
                     <FormInput 
                         name='refId' 
                         label='Reference product id' 
                         placeholder='eg. SKU-123' 
+                        isDisabled={isDisabled}
                         register={register} />
                     <FormInput 
                         name='description' 
                         label='Product description'
                         type="textarea"
                         placeholder="eg. this product do bang bang"
+                        isDisabled={isDisabled}
                         register={register} />
                     <FormInput
                         name='price'
                         label='Product price (IDR)'
                         type='number'
                         placeholder="eg. 50000"
+                        isDisabled={isDisabled}
                         register={register} />
 
-                    <FormSubmitButton notLink onClick={handleSubmit(onSubmit)} >
-                        Save
-                    </FormSubmitButton>
+                    <Flex gap={2}>
+                        <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
+                        <FormSubmitButton notLink 
+                            buttonColor="green.100"
+                            isDisabled={isDisabled}
+                            onClick={handleSubmit(onSubmit)} >
+                            Save
+                        </FormSubmitButton>
+                    </Flex>
                 </form>
             </BlockContainer>
 
