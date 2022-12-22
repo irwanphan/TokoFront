@@ -9,6 +9,7 @@ import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
 import { cartState, addToCart } from "@libs/contexts/cart"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { useRecoilState } from "recoil"
+import { productsState } from "@libs/contexts/products"
 
 const ProductDetailView = () => {
     const router = useRouter()
@@ -22,10 +23,11 @@ const ProductDetailView = () => {
     })
 
     // handling ShowItem
-    const [qid, setQid] = useState<number|any>()
+    const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    const [ qid, setQid ] = useState<number|any>()
     useEffect(() => {
         setQid(pid)
-        const selected:ItemInterface|undefined = dummyItems.find( item => item.id === pid )
+        const selected:ItemInterface|undefined = store.find( item => item.id === pid )
         if (selected !== undefined) setObj(selected)
         // console.log(selected)
     },[pid])
@@ -60,10 +62,12 @@ const ProductDetailView = () => {
         }
     }, [])
     const handleAddToCart = (product:ItemInterface) => {
-        const newCart = addToCart(cart, product, value)
-        localStorage.setItem("cart", JSON.stringify(newCart))
-        setCart(newCart)
-        notify(`${value} of ${obj.name} added`)
+        console.log(cart)
+
+        // const newCart = addToCart(cart, product, value)
+        // localStorage.setItem("cart", JSON.stringify(newCart))
+        // setCart(newCart)
+        // notify(`${value} of ${obj.name} added`)
     }
 
     // if item not show yet

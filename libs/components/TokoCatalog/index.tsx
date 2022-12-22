@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Skeleton } from "@chakra-ui/react"
+import { Grid, GridItem, Skeleton } from "@chakra-ui/react"
 import { useEffect, useState } from 'react'
 import { loadProducts, productsState } from '@libs/contexts/products'
 import { useRecoilState } from 'recoil'
@@ -7,6 +7,7 @@ import { ItemInterface } from "@libs/interfaces/storeItem"
 
 const TokoCatalog = () => {
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
 
     useEffect(() => {
