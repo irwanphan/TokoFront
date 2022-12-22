@@ -5,7 +5,7 @@ import BlockContainer, { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
 
-import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
+import { ItemInterface } from "@libs/interfaces/storeItem"
 import { cartState, addToCart } from "@libs/contexts/cart"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { useRecoilState } from "recoil"
@@ -24,12 +24,19 @@ const ProductDetailView = () => {
 
     // handling ShowItem
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    const [ stock, setStock ] = useState<number>()
+    const [ inCart, setInCart ] = useState<number>()
     const [ qid, setQid ] = useState<number|any>()
     useEffect(() => {
         setQid(pid)
         const selected:ItemInterface|undefined = store.find( item => item.id === pid )
+        setStock(selected?.currentStock)
         if (selected !== undefined) setObj(selected)
+        const taken:CartItemInterface|undefined = cart.find( item => item.id === pid )
+        setInCart(taken?.quantity)
         // console.log(selected)
+        // console.log(stock)
+        console.log(taken)
     },[pid])
 
     // handling QtyPicker
@@ -62,8 +69,6 @@ const ProductDetailView = () => {
         }
     }, [])
     const handleAddToCart = (product:ItemInterface) => {
-        console.log(cart)
-
         // const newCart = addToCart(cart, product, value)
         // localStorage.setItem("cart", JSON.stringify(newCart))
         // setCart(newCart)

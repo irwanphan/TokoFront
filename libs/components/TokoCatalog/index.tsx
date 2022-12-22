@@ -4,6 +4,7 @@ import { loadProducts, productsState } from '@libs/contexts/products'
 import { useRecoilState } from 'recoil'
 import BlockContainer, { BlockContainerLink } from "@elements/BlockContainer"
 import { ItemInterface } from "@libs/interfaces/storeItem"
+import LoadingBlock from "@elements/LoadingBlock"
 
 const TokoCatalog = () => {
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
@@ -18,11 +19,10 @@ const TokoCatalog = () => {
 
     if (isLoadingProducts) return (
         <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
-            <BlockContainer>
-                <Skeleton h={40} mb={3} />
-                <Skeleton h={5} mb={3} />
-                <Skeleton h={3} mb={3} />
-            </BlockContainer>
+            <LoadingBlock />
+            <LoadingBlock />
+            <LoadingBlock />
+            <LoadingBlock />
         </Grid>
     )
 
