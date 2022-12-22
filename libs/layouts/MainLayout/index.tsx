@@ -21,5 +21,4 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
     )
 }
 
-
 export default MainLayout

@@ -1,34 +1,15 @@
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react'
-import BlockContainer, { BlockContainerLink } from '@elements/BlockContainer'
+import { Box, Text } from '@chakra-ui/react'
 import MainLayout from '@libs/layouts/MainLayout'
 import CatalogFullColumn from '@units/CatalogFullColumn'
-import NextLink from 'next/link'
 
-import { dummyItems, ItemInterface } from '@libs/interfaces/storeItem'
+import { dummyItems } from '@libs/interfaces/storeItem'
+import TokoCatalog from '@libs/components/TokoCatalog'
 const featuredProduct = dummyItems[3]
 
-import { useSession, signIn, signOut } from "next-auth/react"
-
 const Home = () => {
-  const { data: session } = useSession()
+  
   return (
     <MainLayout>
-{/*       
-      { (session) ? (
-          <>
-            Signed in as {session.user.email} <br />
-            <button onClick={() => signOut()}>Sign out</button>
-          </>
-        )
-       : (
-        <>
-          Not signed in <br />
-          <button onClick={() => signIn()}>Sign in</button>
-        </>
-      )
-      } */}
-
-
       <CatalogFullColumn  
         bgColor='green.100'
         product={featuredProduct}
@@ -45,18 +26,7 @@ const Home = () => {
         </Text>
       </Box>
 
-      <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
-        {dummyItems.map((item:ItemInterface) => {
-          return (
-            <GridItem key={item.id}>
-              <BlockContainerLink href={`/products/${item.id}`} 
-                product={item}
-                // bgColor='green.50'
-              />
-            </GridItem>
-          )
-        })}
-      </Grid>
+      <TokoCatalog />
 
     </MainLayout>
   )
