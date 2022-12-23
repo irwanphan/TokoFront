@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Box, List, ListItem, Flex, Divider, useToast, useDisclosure } from "@chakra-ui/react"
+import { Box, List, ListItem, Flex, Divider, useToast, useDisclosure, Skeleton } from "@chakra-ui/react"
 import { cartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
 
@@ -12,6 +12,27 @@ import ModalPopup from "@units/ModalPopup"
 import { productsState } from "@libs/contexts/products"
 import CartTotal from "../CartTotal"
 import LoadingBlock from "@elements/LoadingBlock"
+
+export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
+    const newCart = [...cart]
+    newCart.map((cartItem:CartItemInterface, index:number) => {
+        const selectedItem = store.find( (item:ItemInterface) => {
+            return item.id === cartItem.id
+        })
+        // console.log(selectedItem)
+        if (selectedItem) {
+            const newCartItem = {
+                ...newCart[index],
+                price: selectedItem.price,
+                subtotal: cartItem.quantity * selectedItem.price
+            }
+            // console.log('current cart item: ',newCartItem)
+            newCart[index] = newCartItem
+        }
+    })
+    // console.log('new cart: ',newCart)
+    return newCart
+}
 
 export const CartItems = () => {
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
@@ -50,27 +71,6 @@ export const CartItems = () => {
             onClose()
         }
     }
-    
-    const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
-        const newCart = [...cart]
-        newCart.map((cartItem:CartItemInterface, index:number) => {
-            const selectedItem = store.find( (item:ItemInterface) => {
-                return item.id === cartItem.id
-            })
-            // console.log(selectedItem)
-            if (selectedItem) {
-                const newCartItem = {
-                    ...newCart[index],
-                    price: selectedItem.price,
-                    subtotal: cartItem.quantity * selectedItem.price
-                }
-                // console.log('current cart item: ',newCartItem)
-                newCart[index] = newCartItem
-            }
-        })
-        // console.log('new cart: ',newCart)
-        return newCart
-    }
 
     // loading item to cart
     const [ isLoading, setIsLoading ] = useState<boolean>(true)
@@ -81,20 +81,28 @@ export const CartItems = () => {
         if (parsedData) {
             setCart(parsedData);
         }
+    }, [])
 
+    useEffect(() => {
         if (Object.keys(cart).length !== 0) {
             const newCart = crossCheck(cart, store)
             setCheckCart(newCart)
         }
+
         setIsLoading(false)
-    }, [])
-    // console.log('check cart',checkCart)
+    }, [cart])
+    console.log('check cart',checkCart)
+
+    if (isLoading) return (
+        <Box>
+            <Skeleton h={6} mb={2} />
+            <Skeleton h={4} />
+        </Box>
+    )
 
     if (Object.keys(cart).length === 0) {
         return <Box>No Items</Box>
     }
-
-    if (isLoading) return <LoadingBlock />
     
     return (
         <Box>

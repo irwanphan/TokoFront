@@ -1,24 +1,39 @@
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Flex, Skeleton } from "@chakra-ui/react"
+import { crossCheck } from "@components/Cart"
+import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
 import { cartState } from "@libs/contexts/cart"
 import { productsState } from "@libs/contexts/products"
 import { ItemInterface } from "@libs/interfaces/storeItem"
-import { useRecoilValue } from "recoil"
-
+import { useEffect, useState } from "react"
+import { constSelector, useRecoilValue } from "recoil"
 
 const CartTotal = () => {
+    const store = useRecoilValue<ItemInterface[]>(productsState)
+    const cart = useRecoilValue<CartItemInterface[]>(cartState)
+    const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
+    const [ isLoadingTotal, setIsLoadingTotal ] = useState<boolean>(true)
+    const [ total, setTotal ] = useState<number>()
 
-    
-    const totaling = () => {
-        const store = useRecoilValue(productsState)
-        const cart = useRecoilValue(cartState)
-        const inCart:any = cart.map( cartItem => store.find(x => x.id === cartItem.id) )
-        const total = cart.reduce( (acc, {id, quantity}) =>
-            acc + quantity * inCart.find((x:ItemInterface) => x.id === id).price, 0)
-        // console.log(total)
-        return total
-    }
+    useEffect(() => {
+        if (Object.keys(cart).length !== 0) {
+            const newCart = crossCheck(cart, store)
+            setCheckCart(newCart)
+        }
+        console.log(checkCart)
+        // const total = checkCart.reduce( (acc:number, index:number) =>
+        //     acc + checkCart[index].quantity * checkCart[index].price
+        // )
+        // setTotal(total)
+        // setIsLoading(false)
+    }, [])
+    // console.log(total)
 
-    const total = totaling()
+    if (isLoadingTotal) return (
+        <Box>
+            <Skeleton height={4} mb={2} />
+            <Skeleton height={6} />
+        </Box>
+    )
 
     return (
         <Flex flexDirection='column' textAlign='right' mt={4}>
