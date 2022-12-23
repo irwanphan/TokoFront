@@ -5,43 +5,18 @@ import { FiTrash, FiX } from "react-icons/fi"
 
 import { useRecoilState, useRecoilValue } from "recoil"
 
-import { dummyItems, ItemInterface } from "@libs/interfaces/storeItem"
-import { CartItemInterface } from "@libs/interfaces/cartItem"
+import { ItemInterface } from "@libs/interfaces/storeItem"
+import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import BlockContainer from "@elements/BlockContainer"
 import ModalPopup from "@units/ModalPopup"
-
-const totaling = () => {
-    const cart = useRecoilValue(cartState)
-    const inCart:any = cart.map( cartItem => dummyItems.find(x => x.id === cartItem.id) )
-    const total = cart.reduce( (acc, {id, quantity}) =>
-        acc + quantity * inCart.find((x:ItemInterface) => x.id === id).price, 0)
-    // console.log(total)
-    return total
-}
-
-const Total = () => {
-    const total = totaling()
-    return (
-        <Flex flexDirection='column' textAlign='right' mt={4}>
-            {/* TODO: add currency */}
-            <Box fontSize={12}>Total (IDR)</Box>
-            <Box fontWeight={600}>{total}</Box>
-        </Flex>
-    )
-}
+import { productsState } from "@libs/contexts/products"
+import CartTotal from "../CartTotal"
+import LoadingBlock from "@elements/LoadingBlock"
 
 export const CartItems = () => {
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-    // const cart = useRecoilValue(cartState)
-
-    useEffect(() => {
-        const cartData = localStorage.getItem("cart")
-        // console.log('storage: ', cartData)
-        const parsedData = JSON.parse(cartData!)
-        if (parsedData) {
-            setCart(parsedData);
-        }
-    }, [])
+    const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
+    const store = useRecoilValue(productsState)
 
     // handling notification
     const toast = useToast()
@@ -76,20 +51,55 @@ export const CartItems = () => {
         }
     }
     
+    const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
+        const newCart = [...cart]
+        newCart.map((cartItem:CartItemInterface, index:number) => {
+            const selectedItem = store.find( (item:ItemInterface) => {
+                return item.id === cartItem.id
+            })
+            // console.log(selectedItem)
+            if (selectedItem) {
+                const newCartItem = {
+                    ...newCart[index],
+                    price: selectedItem.price,
+                    subtotal: cartItem.quantity * selectedItem.price
+                }
+                // console.log('current cart item: ',newCartItem)
+                newCart[index] = newCartItem
+            }
+        })
+        // console.log('new cart: ',newCart)
+        return newCart
+    }
+
+    // loading item to cart
+    const [ isLoading, setIsLoading ] = useState<boolean>(true)
+    useEffect(() => {
+        const cartData = localStorage.getItem("cart")
+        // console.log('storage: ', cartData)
+        const parsedData = JSON.parse(cartData!)
+        if (parsedData) {
+            setCart(parsedData);
+        }
+
+        if (Object.keys(cart).length !== 0) {
+            const newCart = crossCheck(cart, store)
+            setCheckCart(newCart)
+        }
+        setIsLoading(false)
+    }, [])
+    // console.log('check cart',checkCart)
+
     if (Object.keys(cart).length === 0) {
         return <Box>No Items</Box>
     }
+
+    if (isLoading) return <LoadingBlock />
     
     return (
         <Box>
             <List className="cart-items">
-                {cart.map((cartItem:CartItemInterface, index:number) => {
-                    // console.log(cart)
-                    const selectedItem = dummyItems.find( item => {
-                        return item.id === cartItem.id
-                    })
-                    // TODO: FIX: possibly undefined
-                    const cartItemSubtotal = cartItem.quantity * selectedItem!.price
+                {checkCart.map((cartItem:CartItemCheckoutInterface) => {
                     return (
                         <ListItem key={cartItem.id} mb={2} >
                             <Flex alignItems='center' mb={1}>
@@ -104,7 +114,7 @@ export const CartItems = () => {
                                     transition='0.3s ease all'
                                     _hover={{ bgColor: 'orange.200' }}
                                     onClick={() => {
-                                        setScope(selectedItem)
+                                        // setScope(selectedItem)
                                         onOpen()
                                     }}
                                 ><FiTrash /></Box>
@@ -117,10 +127,10 @@ export const CartItems = () => {
                             >
                                 <Flex alignItems='center'>
                                     {/* TODO: FIX: possibly undefined */}
-                                    {cartItem.quantity} <Box as={FiX}/> {selectedItem!.price}
+                                    {cartItem.quantity} <Box as={FiX}/> {cartItem.price}
                                 </Flex>
                                 <Box fontWeight={600}>
-                                    {cartItemSubtotal}
+                                    {cartItem.subtotal}
                                 </Box>
                             </Flex>
                             <Divider />
@@ -129,7 +139,7 @@ export const CartItems = () => {
                 })}
             </List>
 
-            <Total />
+            <CartTotal />
             <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose} />
         </Box>
     )

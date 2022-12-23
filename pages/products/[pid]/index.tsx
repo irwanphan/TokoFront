@@ -10,8 +10,11 @@ import { cartState, addToCart } from "@libs/contexts/cart"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { useRecoilState } from "recoil"
 import { productsState } from "@libs/contexts/products"
+import LoadingBlock from "@elements/LoadingBlock"
 
 const ProductDetailView = () => {
+    const [ isLoading, setIsLoading ] = useState<boolean>(true)
+    
     const router = useRouter()
     const { pid }:any = router.query
     const [ obj, setObj ] = useState<ItemInterface>({
@@ -35,9 +38,10 @@ const ProductDetailView = () => {
         const taken:CartItemInterface|undefined = cart.find( item => item.id === pid )
         setInCart(taken?.quantity)
         // console.log(selected)
-        // console.log(stock)
-        console.log(taken)
+        setIsLoading(false)
     },[pid])
+    // console.log(inCart)
+    // console.log(stock)
 
     // handling QtyPicker
     const [value, setValue] = useState(1)
@@ -69,14 +73,28 @@ const ProductDetailView = () => {
         }
     }, [])
     const handleAddToCart = (product:ItemInterface) => {
-        // const newCart = addToCart(cart, product, value)
-        // localStorage.setItem("cart", JSON.stringify(newCart))
-        // setCart(newCart)
-        // notify(`${value} of ${obj.name} added`)
+        if (inCart) {
+            if (inCart + value > stock!) {
+                notify(`${obj.name}'s stock is not enough`)
+                return
+            }
+        }
+        const newCart = addToCart(cart, product, value)
+        localStorage.setItem("cart", JSON.stringify(newCart))
+        setCart(newCart)
+        notify(`${value} of ${obj.name} added`)
     }
 
     // if item not show yet
     if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
+
+    if (isLoading) return (
+        <MainLayout>
+            <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={4}>
+                <LoadingBlock />
+            </Grid>
+        </MainLayout>
+    )
 
     return (
         <MainLayout>

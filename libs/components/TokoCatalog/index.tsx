@@ -1,8 +1,8 @@
-import { Grid, GridItem, Skeleton } from "@chakra-ui/react"
+import { Grid, GridItem } from "@chakra-ui/react"
 import { useEffect, useState } from 'react'
 import { loadProducts, productsState } from '@libs/contexts/products'
 import { useRecoilState } from 'recoil'
-import BlockContainer, { BlockContainerLink } from "@elements/BlockContainer"
+import { BlockContainerLink } from "@elements/BlockContainer"
 import { ItemInterface } from "@libs/interfaces/storeItem"
 import LoadingBlock from "@elements/LoadingBlock"
 
