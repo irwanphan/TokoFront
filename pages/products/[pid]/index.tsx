@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { Box, Flex, Grid, GridItem, Text, useControllableState, useToast } from "@chakra-ui/react"
+import { Box, Flex, Grid, GridItem, Skeleton, Text, useControllableState, useToast } from "@chakra-ui/react"
 import BlockContainer, { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
@@ -13,7 +13,7 @@ import { loadProducts, productsState } from "@libs/contexts/products"
 import LoadingBlock from "@elements/LoadingBlock"
 
 const ProductDetailView = () => {
-    const [ isLoading, setIsLoading ] = useState<boolean>(true)
+    const [ isLoadingProduct, setIsLoadingProduct ] = useState<boolean>(true)
     
     const router = useRouter()
     const { pid }:any = router.query
@@ -56,7 +56,7 @@ const ProductDetailView = () => {
         setInCart(taken?.quantity)
         // console.log(selected)
     },[store])
-    useEffect(() => { setIsLoading(false) },[inCart])
+    useEffect(() => { setIsLoadingProduct(false) },[inCart])
     // console.log(inCart)
     // console.log(stock)
 
@@ -105,10 +105,16 @@ const ProductDetailView = () => {
     // if item not show yet
     // if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
 
-    if (isLoading) return (
+    if (isLoadingProduct) return (
         <MainLayout>
             <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={4}>
                 <LoadingBlock />
+                <Box>
+                    <Skeleton h={12} mb={4} />
+                    <Skeleton h={6} mb={2} />
+                    <Skeleton h={4} mb={6} />
+                    <Skeleton h={8} w={40} />
+                </Box>
             </Grid>
         </MainLayout>
     )
