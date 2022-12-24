@@ -1,6 +1,7 @@
-import { Box, Grid, Skeleton, useToast } from "@chakra-ui/react"
+import { Box, Flex, Grid, Skeleton, useToast } from "@chakra-ui/react"
 import { productsState, loadProducts } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
+import FormSubmitButton from "@elements/FormSubmit"
 import LoadingBlock from "@elements/LoadingBlock"
 import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@layouts//MainLayout"
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react"
 import { useRecoilState } from "recoil"
 
 const ProductDetailViewPage = () => {
+    const [ userCategory, setUserCategory ] = useState('admin')
     const [ isLoadingProduct, setIsLoadingProduct ] = useState<boolean>(true)
     
     const router = useRouter()
@@ -23,8 +25,7 @@ const ProductDetailViewPage = () => {
 
     // handling ShowItem
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
-    const [ stock, setStock ] = useState<number>()
-    const [ inCart, setInCart ] = useState<number>()
+    const [ selected, setSelected ] = useState<ItemInterface>()
     const [ qid, setQid ] = useState<number|any>()
     
     const toast = useToast()
@@ -47,8 +48,12 @@ const ProductDetailViewPage = () => {
         setQid(pid)
     }, [pid] )
     useEffect(() => {
-        const selected:ItemInterface|undefined = store.find( item => item.id === pid )
+        const selectedItem:ItemInterface|undefined = store.find( item => item.id === pid )
+        setSelected(selectedItem)
     }, [store] )
+    useEffect(() => {
+        setIsLoadingProduct(false)
+    }, [selected])
 
     if (isLoadingProduct) return (
         <MainLayout>
@@ -66,7 +71,13 @@ const ProductDetailViewPage = () => {
 
     return (
         <MainLayout>
-            
+            {
+                userCategory === 'admin' &&
+                <Flex gap={2}>
+                    <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
+                </Flex>
+            }
+            <Box mt={4} />
         </MainLayout>
     )
 }
