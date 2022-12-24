@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Box, Divider, Flex, Text } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
+import { Box, Divider, Flex, Text, useToast } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
@@ -10,6 +10,9 @@ import { TbFileInvoice } from "react-icons/tb"
 // TODO: apply middleware to all admin-area
 // protect admin-area route
 import { getSession } from 'next-auth/react'
+import { loadProducts, productsState } from "@contexts/products"
+import { useRecoilState } from "recoil"
+import { ItemInterface } from "@interfaces//storeItem"
 export async function getServerSideProps(context:any) {
     // Check if user is authenticated
     const session = await getSession(context);
@@ -29,6 +32,25 @@ export async function getServerSideProps(context:any) {
 
 const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
+    const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
+    const toast = useToast()
+
+    useEffect(() => {
+        const products = loadProducts()
+        .then(res => setStore(res))
+        .then(() => setIsLoadingProducts(false))
+        .catch(e => {
+            toast({
+                title: 'Error',
+                description: `You're not connected to our server!`,
+                render: () => (
+                    <BlockContainer py={4} px={6} bgColor="green.100">You're not connected to our server!</BlockContainer>
+                )
+            })
+            // console.error(e.response.status)
+        })
+    }, [])
     
     return (
         <MainLayout>
