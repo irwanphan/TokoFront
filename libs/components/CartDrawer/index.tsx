@@ -59,7 +59,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                                 borderLeftWidth='0.5rem'
                                 borderLeftStyle='solid'
                                 paddingLeft={2}>
-                                {/* <SessionProfile session={session}/> */}
+                                <SessionProfile session={session}/>
                             </Box>
                             <FormSubmitButton href="/admin-area" mr={2} px={3} >
                                 Admin Area
@@ -90,7 +90,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                     Your Cart
                 </DrawerHeader>
                 <DrawerBody>
-                    {/* <CartItems /> */}
+                    <CartItems />
                 </DrawerBody>
 
                 <DrawerFooter>
@@ -108,7 +108,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                     }
                 </DrawerFooter>
 
-                {/* <ModalPopup modalProps={modalProps} isOpen={isModalOpen} onClose={onModalClose} canCancel /> */}
+                <ModalPopup modalProps={modalProps} isOpen={isModalOpen} onClose={onModalClose} canCancel />
             </DrawerContent>
         </Drawer>
     )

@@ -52,16 +52,17 @@ export const CartItems = () => {
     }
 
     // TODO: minus and plus item on cart
-    const handleRemoveFromCart = (product:ItemInterface|any) => {
-        const newCart = removeFromCart(cart, product)
+    const handleRemoveFromCart = (product:CartItemCheckoutInterface|any) => {
+        const toBeDelete = store.find((item) => item.id === product.id)
+        const newCart = removeFromCart(cart, toBeDelete)
         localStorage.setItem("cart", JSON.stringify(newCart))
         setCart(newCart)
-        notify(`${product?.name} removed from your cart`)
+        notify(`${toBeDelete?.name} removed from your cart`)
     }
 
     // handling delete modal
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [ scope, setScope ] = useState<ItemInterface>()
+    const [ scope, setScope ] = useState<CartItemCheckoutInterface>()
     const modalProps = {
         title: `Remove ${scope?.name} From Cart`,
         texts: 'Are you really OK with this decision?',
@@ -122,7 +123,7 @@ export const CartItems = () => {
                                     transition='0.3s ease all'
                                     _hover={{ bgColor: 'orange.200' }}
                                     onClick={() => {
-                                        // setScope(selectedItem)
+                                        setScope(cartItem)
                                         onOpen()
                                     }}
                                 ><FiTrash /></Box>
