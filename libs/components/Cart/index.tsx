@@ -92,7 +92,7 @@ export const CartItems = () => {
 
         setIsLoading(false)
     }, [cart])
-    console.log('check cart',checkCart)
+    // console.log('check cart',checkCart)
 
     if (isLoading) return (
         <Box>

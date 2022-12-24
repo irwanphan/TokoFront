@@ -19,14 +19,21 @@ const CartTotal = () => {
             const newCart = crossCheck(cart, store)
             setCheckCart(newCart)
         }
-        console.log(checkCart)
-        // const total = checkCart.reduce( (acc:number, index:number) =>
-        //     acc + checkCart[index].quantity * checkCart[index].price
-        // )
-        // setTotal(total)
-        // setIsLoading(false)
     }, [])
-    // console.log(total)
+    useEffect(() => {
+        // console.log('checkcart: ', checkCart)
+        if(checkCart.length > 0) {
+            const total = checkCart?.reduce( (acc:number, {quantity, price}:any) =>
+            acc + quantity * price, 0
+            )
+            // console.log(total)
+            setTotal(total)
+        }
+    }, [checkCart])
+    useEffect(() => {
+        setIsLoadingTotal(false)
+    },[total])
+    // console.log('check cart (total): ', checkCart)
 
     if (isLoadingTotal) return (
         <Box>
