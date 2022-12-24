@@ -9,7 +9,7 @@ import { ItemInterface } from "@libs/interfaces/storeItem"
 import { cartState, addToCart } from "@libs/contexts/cart"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { useRecoilState } from "recoil"
-import { productsState } from "@libs/contexts/products"
+import { loadProducts, productsState } from "@libs/contexts/products"
 import LoadingBlock from "@elements/LoadingBlock"
 
 const ProductDetailView = () => {
@@ -30,16 +30,21 @@ const ProductDetailView = () => {
     const [ stock, setStock ] = useState<number>()
     const [ inCart, setInCart ] = useState<number>()
     const [ qid, setQid ] = useState<number|any>()
+    
     useEffect(() => {
+        // TODO: API for get single product
+        const products = loadProducts().then(res => setStore(res))
         setQid(pid)
+    }, [pid])
+    useEffect(() => {
         const selected:ItemInterface|undefined = store.find( item => item.id === pid )
         setStock(selected?.currentStock)
         if (selected !== undefined) setObj(selected)
         const taken:CartItemInterface|undefined = cart.find( item => item.id === pid )
         setInCart(taken?.quantity)
         // console.log(selected)
-        setIsLoading(false)
-    },[pid])
+    },[store])
+    useEffect(() => { setIsLoading(false) },[inCart])
     // console.log(inCart)
     // console.log(stock)
 
@@ -86,7 +91,7 @@ const ProductDetailView = () => {
     }
 
     // if item not show yet
-    if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
+    // if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
 
     if (isLoading) return (
         <MainLayout>
