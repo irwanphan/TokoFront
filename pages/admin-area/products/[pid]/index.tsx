@@ -37,6 +37,15 @@ const ProductDetailViewPage = () => {
         price: 0,
         image: ''
     })
+    const { control, handleSubmit, register, setValue } = useForm({ mode: 'onBlur' })
+    //     defaultValues: {
+    //         name: '',
+    //         refId: '',
+    //         description: '',
+    //         price: 0,
+    //         currentStock: 0
+    //     }
+    // })
 
     // handling ShowItem
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
@@ -67,19 +76,18 @@ const ProductDetailViewPage = () => {
         setSelected(selectedItem)
     }, [store] )
     useEffect(() => {
-        console.log(selected)
+        if (selected) {
+            console.log(selected)
+            // setValue(
+            //     'name': selected.name },
+            //     { refId: selected.refId },
+            //     { description: selected.description },
+            //     { price: selected.price },
+            //     { currentStock: selected.currentStock }
+            // )
+        }
         setIsLoadingProduct(false)
     }, [selected])
-
-    const { control, handleSubmit, register } = useForm({
-        defaultValues: {
-            name: '',
-            refId: '',
-            description: '',
-            price: 0,
-            currentStock: 0
-        }
-    })
 
     const createProduct = (data:any) => axios.post('/api/products', data);
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -130,13 +138,13 @@ const ProductDetailViewPage = () => {
                         name='name'
                         label='Product name' 
                         placeholder="eg. X-Branded Chocolate Variant 120g"
-                        defaultValue={selected?.name}
+                        // defaultValue={selected?.name}
                         isDisabled={isDisabled}
                         register={register} />
                     <FormInput 
                         name='refId' 
                         label='Reference product id' 
-                        defaultValue={selected?.refId}
+                        // defaultValue={selected?.refId}
                         placeholder='eg. SKU-123' 
                         isDisabled={isDisabled}
                         register={register} />
@@ -144,7 +152,7 @@ const ProductDetailViewPage = () => {
                         name='description' 
                         label='Product description'
                         type="textarea"
-                        defaultValue={selected?.description}
+                        // defaultValue={selected?.description}
                         placeholder="eg. this product do bang bang"
                         isDisabled={isDisabled}
                         register={register} />
@@ -152,7 +160,7 @@ const ProductDetailViewPage = () => {
                         name='price'
                         label='Product price (IDR)'
                         type='number'
-                        defaultValue={selected?.price}
+                        // defaultValue={selected?.price}
                         placeholder="eg. 50000"
                         isDisabled={isDisabled}
                         register={register} />
@@ -161,7 +169,7 @@ const ProductDetailViewPage = () => {
                         name='currentStock'
                         label='Current Stock (piece)'
                         type='number'
-                        defaultValue={selected?.currentStock}
+                        // defaultValue={selected?.currentStock}
                         placeholder="eg. 50"
                         isDisabled={isDisabled}
                         register={register} />
@@ -171,7 +179,8 @@ const ProductDetailViewPage = () => {
                         <FormSubmitButton notLink 
                             buttonColor="green.100"
                             isDisabled={isDisabled}
-                            onClick={handleSubmit(onSubmit)} >
+                            // onClick={handleSubmit(onSubmit)} 
+                            >
                             Save
                         </FormSubmitButton>
                     </Flex>
