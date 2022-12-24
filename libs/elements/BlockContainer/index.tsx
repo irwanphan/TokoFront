@@ -60,14 +60,14 @@ const TitleAndDescription = ({title, description}:TitleAndDescriptionProps ) => 
 const ProductBlock = ({product}: ProductBlockProps ) => (
     <>
         <Img 
-            src={product.image}
-            alt={product.name ?? "An image of something"}
+            src={product?.image}
+            alt={product?.name ?? "An image of something"}
         />
         <Text fontSize={16} fontWeight={600} mt={3}>
-            {product.name}
+            {product?.name ?? ""}
         </Text>
         <Text fontSize={12} mt={1} color='blackAlpha.800'>
-            {product.description}
+            {product?.description}
         </Text>
     </>
 )

@@ -25,14 +25,14 @@ const CatalogFullColumn = ( {product, currency, color, borderColor, bgColor, hav
                         <Text  mb={4}
                             fontSize={28} 
                             fontWeight={600}>
-                            {product.name}
+                            {product?.name}
                         </Text>
-                        <Text mb={4}>{product.description}</Text>
-                        <Text mb={3}>{currency ?? 'IDR'} {product.price}</Text>
+                        <Text mb={4}>{product?.description}</Text>
+                        <Text mb={3}>{currency ?? 'IDR'} {product?.price}</Text>
                         {
                             haveButton &&
                             <FormSubmitButton
-                                href={`/products/${product.id}`}
+                                href={`/products/${product?.id}`}
                                 >
                                 {buttonText}
                             </FormSubmitButton>
@@ -40,8 +40,8 @@ const CatalogFullColumn = ( {product, currency, color, borderColor, bgColor, hav
                     </GridItem>
                     <GridItem>
                         <Img 
-                            src={product.image}
-                            alt={product.name ?? "An image of something"}
+                            src={product?.image}
+                            alt={product?.name ?? "An image of something"}
                         />
                     </GridItem>
                 </Grid>

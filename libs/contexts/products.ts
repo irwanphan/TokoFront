@@ -10,6 +10,7 @@ export const productsState = atom({
 export async function loadProducts() {
     const getProducts:any = await axios.get('/api/products')
         .then(response => response.data)
+        .catch(e => console.log(e))
     return getProducts
 }
   

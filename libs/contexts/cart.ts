@@ -37,8 +37,8 @@ export const addToCart = (cart:any, product:any, qtyAdded:number) => {
   // Add new item
   newCart.push({
     // product,
-    id: product.id,
-    name: product.name,
+    id: product?.id,
+    name: product?.name,
     quantity: qtyAdded,
   });
   return newCart

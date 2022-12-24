@@ -56,7 +56,7 @@ export const CartItems = () => {
         const newCart = removeFromCart(cart, product)
         localStorage.setItem("cart", JSON.stringify(newCart))
         setCart(newCart)
-        notify(`${product.name} removed from your cart`)
+        notify(`${product?.name} removed from your cart`)
     }
 
     // handling delete modal
@@ -111,7 +111,7 @@ export const CartItems = () => {
                     return (
                         <ListItem key={cartItem.id} mb={2} >
                             <Flex alignItems='center' mb={1}>
-                                {cartItem.name}
+                                {cartItem?.name}
                                 <Box 
                                     ml={2} p={1} 
                                     borderWidth='1px'

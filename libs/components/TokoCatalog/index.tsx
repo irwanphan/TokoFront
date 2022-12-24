@@ -14,8 +14,10 @@ const TokoCatalog = () => {
     useEffect(() => {
         const products = loadProducts()
         .then(res => setStore(res))
-        .then(() => setIsLoadingProducts(false))
     }, [])
+    useEffect(() => {
+        if (store) {setIsLoadingProducts(false)}
+    }, [store])
 
     if (isLoadingProducts) return (
         <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
