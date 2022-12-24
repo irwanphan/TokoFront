@@ -1,4 +1,4 @@
-import { Box, Flex, Divider, Text, useToast, List, ListItem, useDisclosure } from "@chakra-ui/react"
+import { Box, Flex, Divider, Text, useToast, List, ListItem, useDisclosure, Skeleton } from "@chakra-ui/react"
 import { productsState, loadProducts } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -44,6 +44,34 @@ const ManageProductsPage = () => {
         }
     }
     
+    if (isLoadingProducts) {
+        return (
+            <MainLayout>
+                <Flex gap={2}>
+                    <FormSubmitButton href="/admin-area">Admin Dashboard</FormSubmitButton>
+                </Flex>
+                <Box mt={4} />
+
+                <BlockContainer>
+                    <Box>
+                        <Flex alignItems='center'>
+                            <Box as={FiPackage} mr={2} />
+                            <Text fontWeight={600} >Product List</Text>
+                        </Flex>
+                    </Box>
+                    <Divider />
+                    <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
+                    <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
+                        <Box>
+                            <Skeleton h={6} mb={2} />
+                            <Skeleton h={4} />
+                        </Box>
+                    </Box>
+                </BlockContainer>
+            </MainLayout>
+        )
+    }
+
     return (
         <MainLayout>
             <Flex gap={2}>
