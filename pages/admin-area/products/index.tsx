@@ -5,6 +5,7 @@ import FormSubmitButton from "@elements/FormSubmit"
 import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@libs/layouts/MainLayout"
 import ModalPopup from "@units/ModalPopup"
+import TriggerBox from "@units/TriggerBox"
 import { useState, useEffect } from "react"
 import { FiEdit, FiPackage, FiSlash } from "react-icons/fi"
 import { useRecoilState } from "recoil"
@@ -114,38 +115,24 @@ const ManageProductsPage = () => {
                                                 </Flex>
                                             </Flex>
                                             <Flex gap={2}>
-                                                <Flex 
-                                                    p={1} h={6}
-                                                    borderWidth='1px'
-                                                    borderStyle='solid'
-                                                    borderColor='gray.600'
-                                                    cursor='pointer'
-                                                    alignItems='center'
-                                                    direction='row'
-                                                    fontSize={12}
-                                                    transition='0.3s ease all'
-                                                    _hover={{ bgColor: 'green.200' }}
+                                                <TriggerBox
+                                                    icon={FiEdit}
+                                                    hoverColor='green.200'
                                                     onClick={() => {
                                                         // setScope(item)
-                                                        // onOpen()
+                                                        onOpen()
                                                     }}
-                                                >Edit <Box ml={1} as={FiEdit} /></Flex>
-                                                <Flex 
-                                                    p={1} h={6}
-                                                    borderWidth='1px'
-                                                    borderStyle='solid'
-                                                    borderColor='gray.600'
-                                                    cursor='pointer'
-                                                    alignItems='center'
-                                                    direction='row'
-                                                    fontSize={12}
-                                                    transition='0.3s ease all'
-                                                    _hover={{ bgColor: 'orange.200' }}
+                                                >Edit
+                                                </TriggerBox>
+                                                <TriggerBox 
+                                                    icon={FiSlash}
+                                                    hoverColor='orange.200'
                                                     onClick={() => {
                                                         setScope(item)
                                                         onOpen()
                                                     }}
-                                                >Mark Inactive <Box ml={1} as={FiSlash} /></Flex>
+                                                >Mark Inactive
+                                                </TriggerBox>
                                             </Flex>
                                         </Flex>
                                         <Divider />
