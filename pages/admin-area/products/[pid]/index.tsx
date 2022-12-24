@@ -8,7 +8,7 @@ import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@layouts//MainLayout"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { FiPackage } from "react-icons/fi"
+import { FiEdit } from "react-icons/fi"
 import { useRecoilState } from "recoil"
 import { useForm, SubmitHandler } from "react-hook-form"
 import axios from "axios"
@@ -128,8 +128,8 @@ const ProductDetailViewPage = () => {
             <BlockContainer>
             <Box>
                     <Flex alignItems='center'>
-                        <Box as={FiPackage} mr={2} />
-                        <Text fontWeight={600} >New Product</Text>
+                        <Box as={FiEdit} mr={2} />
+                        <Text fontWeight={600} >Edit: {selected?.name}</Text>
                     </Flex>
                     <Divider/>
                 </Box>
