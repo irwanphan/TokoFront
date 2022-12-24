@@ -1,17 +1,32 @@
-import { Box, Flex, Grid, Skeleton, useToast } from "@chakra-ui/react"
+import { Box, Divider, Flex, Grid, Skeleton, useToast, Text } from "@chakra-ui/react"
 import { productsState, loadProducts } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
+import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
 import LoadingBlock from "@elements/LoadingBlock"
 import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@layouts//MainLayout"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { FiPackage } from "react-icons/fi"
 import { useRecoilState } from "recoil"
+import { useForm, SubmitHandler } from "react-hook-form"
+import axios from "axios"
+import LoadingOverlay from "@elements/LoadingOverlay"
+
+interface IFormInput {
+    name: string
+    refId: string
+    description: string
+    price: number | any
+    currentStock?: number
+}
 
 const ProductDetailViewPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
+    const [ isLoading, setIsLoading ] = useState(false)
     const [ isLoadingProduct, setIsLoadingProduct ] = useState<boolean>(true)
+    const [ isDisabled, setDisabled ] = useState(false)
     
     const router = useRouter()
     const { pid }:any = router.query
@@ -52,8 +67,31 @@ const ProductDetailViewPage = () => {
         setSelected(selectedItem)
     }, [store] )
     useEffect(() => {
+        console.log(selected)
         setIsLoadingProduct(false)
     }, [selected])
+
+    const { control, handleSubmit, register } = useForm({
+        defaultValues: {
+            name: '',
+            refId: '',
+            description: '',
+            price: 0,
+            currentStock: 0
+        }
+    })
+
+    const createProduct = (data:any) => axios.post('/api/products', data);
+    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+        data.price = parseInt(data.price) // price was string
+        setIsLoading(true)
+        toast({title:'Saving...'})
+        await createProduct(data)
+        setIsLoading(false)
+        setDisabled
+        toast({title:'Saved', status:'success'})
+    }
+
 
     if (isLoadingProduct) return (
         <MainLayout>
@@ -78,6 +116,69 @@ const ProductDetailViewPage = () => {
                 </Flex>
             }
             <Box mt={4} />
+
+            <BlockContainer>
+            <Box>
+                    <Flex alignItems='center'>
+                        <Box as={FiPackage} mr={2} />
+                        <Text fontWeight={600} >New Product</Text>
+                    </Flex>
+                    <Divider/>
+                </Box>
+                <form>
+                    <FormInput 
+                        name='name'
+                        label='Product name' 
+                        placeholder="eg. X-Branded Chocolate Variant 120g"
+                        defaultValue={selected?.name}
+                        isDisabled={isDisabled}
+                        register={register} />
+                    <FormInput 
+                        name='refId' 
+                        label='Reference product id' 
+                        defaultValue={selected?.refId}
+                        placeholder='eg. SKU-123' 
+                        isDisabled={isDisabled}
+                        register={register} />
+                    <FormInput 
+                        name='description' 
+                        label='Product description'
+                        type="textarea"
+                        defaultValue={selected?.description}
+                        placeholder="eg. this product do bang bang"
+                        isDisabled={isDisabled}
+                        register={register} />
+                    <FormInput
+                        name='price'
+                        label='Product price (IDR)'
+                        type='number'
+                        defaultValue={selected?.price}
+                        placeholder="eg. 50000"
+                        isDisabled={isDisabled}
+                        register={register} />
+                    {/* TODO: import unit */}
+                    <FormInput
+                        name='currentStock'
+                        label='Current Stock (piece)'
+                        type='number'
+                        defaultValue={selected?.currentStock}
+                        placeholder="eg. 50"
+                        isDisabled={isDisabled}
+                        register={register} />
+
+                    <Flex gap={2} justifyContent='flex-end'>
+                        <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
+                        <FormSubmitButton notLink 
+                            buttonColor="green.100"
+                            isDisabled={isDisabled}
+                            onClick={handleSubmit(onSubmit)} >
+                            Save
+                        </FormSubmitButton>
+                    </Flex>
+                </form>
+            </BlockContainer>
+
+            { isLoading && <LoadingOverlay isLoading={isLoading} /> }
         </MainLayout>
     )
 }

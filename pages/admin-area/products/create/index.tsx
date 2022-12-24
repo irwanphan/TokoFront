@@ -22,10 +22,10 @@ const CreateProductPage = () => {
 
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
-          name: '',
-          refId: '',
-          description: '',
-          price: 0
+            name: '',
+            refId: '',
+            description: '',
+            price: 0
         }
     })
 
