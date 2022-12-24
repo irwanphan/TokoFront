@@ -6,6 +6,7 @@ import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@libs/layouts/MainLayout"
 import ModalPopup from "@units/ModalPopup"
 import TriggerBox from "@units/TriggerBox"
+import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import { FiEdit, FiPackage, FiSlash } from "react-icons/fi"
 import { useRecoilState } from "recoil"
@@ -15,6 +16,7 @@ const ManageProductsPage = () => {
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
     const toast = useToast()
+    const router = useRouter()
 
     useEffect(() => {
         const products = loadProducts()
@@ -119,8 +121,7 @@ const ManageProductsPage = () => {
                                                     icon={FiEdit}
                                                     hoverColor='green.200'
                                                     onClick={() => {
-                                                        // setScope(item)
-                                                        onOpen()
+                                                        router.replace(`/admin-area/products/${item.id}`)
                                                     }}
                                                 >Edit
                                                 </TriggerBox>
