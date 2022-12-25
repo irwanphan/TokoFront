@@ -11,31 +11,38 @@ datasource db {
 }
 
 model Product {
-  id            String    @id @default(cuid())
-  refId         String?   @unique
+  id            String      @id @default(cuid())
+  refId         String?     @unique
   image         String?
   name          String
   description   String
-  price         Float     @default(0)
-  currentStock  Float     @default(0)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  price         Float       @default(0)
+  currentStock  Float       @default(0)
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
+  id            Int         @id @default(autoincrement())
+  email         String      @unique
   name          String?
-  role          Role      @default(user)
+  role          Role        @default(user)
   purchases     Purchase[]
 }
 
 model Purchase {
-  id            Int        @id @default(autoincrement())
-  createdAt     DateTime   @default(now())
-  purchaseBy    User       @relation(fields: [userId], references: [id])
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  purchaseBy    User        @relation(fields: [userId], references: [id])
   userId        Int
+  detail        PurchaseDetail[]
+}
+
+model PurchaseDetail {
+  id            Int         @id @default(autoincrement())
+  purchase      Purchase    @relation(fields: [purchaseId], references: [id])
+  purchaseId    Int
 }
 
 enum Role {
