@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react"
-import { Box, useDisclosure, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Flex, Divider, DrawerBody, DrawerFooter, Text } from "@chakra-ui/react"
+import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Divider, DrawerBody, DrawerFooter } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
-
-import ModalPopup from "@units/ModalPopup"
-import { useSession, signOut, signIn } from "next-auth/react"
 import { FcGoogle } from "react-icons/fc"
-import { RxExit } from "react-icons/rx"
-
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { CartItems } from "../Cart"
-import SessionProfile from "@units/SessionProfile"
+import { useSession, signIn } from "next-auth/react"
+import TokoAuth from "@components/TokoAuth"
 
 const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
@@ -21,26 +17,13 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
         }
     })
 
-    // handling logout modal
-    const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
-    const modalProps = {
-        title: `Logging Out?`,
-        texts: 'Come back safely',
-        button: 'See You',
-        action: () => {
-            onModalClose(),
-            setIsLogin(false),
-            signOut()
-        }
-    }
-
-    // handle signinWithGoogle
+    // handle signinWithGoogle to Checkout
     const toast = useToast()
-    const signInWithGoogle = () => {
+    const signInWithGoogleCheckout = () => {
         toast({title:'Redirecting...'})
         // Perform sign in
         signIn('google', {
-            callbackUrl: window.location.href,
+            callbackUrl: '/checkout',
         })
     }
     
@@ -49,43 +32,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
             <DrawerOverlay />
             <DrawerContent borderLeft='2px solid black'>
                 <DrawerHeader>
-                    { isLogin ? 
-                        <Box>
-                            <Text fontSize={12}>
-                                Hi there,
-                            </Text>
-                            <Box mt={1} mb={3}
-                                borderLeftColor='blue.300'
-                                borderLeftWidth='0.5rem'
-                                borderLeftStyle='solid'
-                                paddingLeft={2}>
-                                <SessionProfile session={session}/>
-                            </Box>
-                            <FormSubmitButton href="/admin-area" mr={2} px={3} >
-                                Admin Area
-                            </FormSubmitButton>
-                            <FormSubmitButton notLink px={3}
-                                onClick={() => onModalOpen()}>
-                                <Box as={RxExit} mr={2} /> Logout
-                            </FormSubmitButton>
-                        </Box>
-                      :
-                        <Box>
-                            <Text fontSize={12}>
-                                You're not login yet
-                            </Text>
-                            <Flex gap={2}>
-                                {/* <FormSubmitButton href="/register">
-                                    <Box as={GiNewBorn} mr={1} fontSize={20} />register
-                                </FormSubmitButton> */}
-                                <FormSubmitButton 
-                                    onClick={() => signInWithGoogle()}
-                                    href="/">
-                                    <Box as={FcGoogle} mr={1} fontSize={20} />Login
-                                </FormSubmitButton>
-                            </Flex>
-                        </Box>
-                    }
+                    <TokoAuth />
                     <Divider />
                     Your Cart
                 </DrawerHeader>
@@ -102,13 +49,13 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                             Checkout
                         </FormSubmitButton>
                       :
-                        <FormSubmitButton href="/checkout" buttonColor="green.50" >
+                        <FormSubmitButton 
+                            onClick={() => signInWithGoogleCheckout()}
+                            href="/" buttonColor="green.50" >
                             <Box as={FcGoogle} mr={1} fontSize={20} />Login to Checkout
                         </FormSubmitButton>
                     }
                 </DrawerFooter>
-
-                <ModalPopup modalProps={modalProps} isOpen={isModalOpen} onClose={onModalClose} canCancel />
             </DrawerContent>
         </Drawer>
     )
