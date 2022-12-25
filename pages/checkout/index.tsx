@@ -3,8 +3,12 @@ import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
+import SessionProfile from "@units/SessionProfile"
+import { useSession } from "next-auth/react"
 
 const CheckoutPage = () => {
+    const { data: session } = useSession()
+    // console.log(session)
     return (
         <MainLayout>
             <Box textAlign='left' mb={8}>
@@ -28,13 +32,7 @@ const CheckoutPage = () => {
                                 borderLeftWidth='0.5rem'
                                 borderLeftStyle='solid'
                                 paddingLeft={2}>
-                                <Text fontWeight={600}>Irwan Phan</Text>
-                                <Text fontSize={12}>
-                                    Some Address Street, No. 88
-                                </Text>
-                                <Text fontSize={12}>
-                                    Pontianak, Indonesia
-                                </Text>
+                                <SessionProfile session={session} />
                             </Box>
                         </Box>
 
