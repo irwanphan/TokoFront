@@ -12,7 +12,7 @@ const CartTotal = () => {
     const cart = useRecoilValue<CartItemInterface[]>(cartState)
     const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
     const [ isLoadingTotal, setIsLoadingTotal ] = useState<boolean>(true)
-    const [ total, setTotal ] = useState<number>()
+    const [ total, setTotal ] = useState<number>(0)
 
     useEffect(() => {
         if (Object.keys(cart).length !== 0) {
@@ -23,15 +23,15 @@ const CartTotal = () => {
     useEffect(() => {
         // console.log('checkcart: ', checkCart)
         if(checkCart.length > 0) {
-            const total = checkCart?.reduce( (acc:number, {quantity, price}:any) =>
-            acc + quantity * price, 0
+            const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
+            acc + subtotal, 0
             )
             // console.log(total)
             setTotal(total)
         }
     }, [checkCart])
     useEffect(() => {
-        setIsLoadingTotal(false)
+        if (total) setIsLoadingTotal(false)
     },[total])
     // console.log('check cart (total): ', checkCart)
 

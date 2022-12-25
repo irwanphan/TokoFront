@@ -16,10 +16,10 @@ import LoadingOverlay from "@elements/LoadingOverlay"
 
 interface IFormInput {
     name: string
-    refId: string
+    refId: string | undefined | any
     description: string
     price: number | any
-    currentStock?: number
+    currentStock?: number | undefined | any
 }
 
 const ProductDetailViewPage = () => {
@@ -30,22 +30,7 @@ const ProductDetailViewPage = () => {
     
     const router = useRouter()
     const { pid }:any = router.query
-    const [ obj, setObj ] = useState<ItemInterface>({
-        id: '',
-        name: '',
-        description: '',
-        price: 0,
-        image: ''
-    })
-    const { control, handleSubmit, register, setValue } = useForm({ mode: 'onBlur' })
-    //     defaultValues: {
-    //         name: '',
-    //         refId: '',
-    //         description: '',
-    //         price: 0,
-    //         currentStock: 0
-    //     }
-    // })
+    const { control, handleSubmit, register, setValue } = useForm()
 
     // handling ShowItem
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
@@ -78,13 +63,11 @@ const ProductDetailViewPage = () => {
     useEffect(() => {
         if (selected) {
             console.log(selected)
-            // setValue(
-            //     'name': selected.name },
-            //     { refId: selected.refId },
-            //     { description: selected.description },
-            //     { price: selected.price },
-            //     { currentStock: selected.currentStock }
-            // )
+            setValue('name', selected.name)
+            setValue('refId', selected.refId)
+            setValue('description', selected.description)
+            setValue('price', selected.price)
+            setValue('currentStock', selected.currentStock)
         }
         setIsLoadingProduct(false)
     }, [selected])
@@ -126,7 +109,7 @@ const ProductDetailViewPage = () => {
             <Box mt={4} />
 
             <BlockContainer>
-            <Box>
+                <Box>
                     <Flex alignItems='center'>
                         <Box as={FiEdit} mr={2} />
                         <Text fontWeight={600} >Edit: {selected?.name}</Text>

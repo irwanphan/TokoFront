@@ -116,10 +116,10 @@ const ManageProductsPage = () => {
                                                     <Text fontWeight={600}>{item.price}</Text>                                            
                                                 </Flex>
                                             </Flex>
-                                            <Flex gap={2}>
+                                            <Flex gap={2} alignItems='flex-end'>
                                                 <TriggerBox
                                                     icon={FiEdit}
-                                                    hoverColor='green.200'
+                                                    hoverColor='green.100'
                                                     onClick={() => {
                                                         router.replace(`/admin-area/products/${item.id}`)
                                                     }}
@@ -127,7 +127,7 @@ const ManageProductsPage = () => {
                                                 </TriggerBox>
                                                 <TriggerBox 
                                                     icon={FiSlash}
-                                                    hoverColor='orange.200'
+                                                    hoverColor='orange.100'
                                                     onClick={() => {
                                                         setScope(item)
                                                         onOpen()
