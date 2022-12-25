@@ -62,7 +62,7 @@ const ProductDetailViewPage = () => {
     }, [store] )
     useEffect(() => {
         if (selected) {
-            console.log(selected)
+            // console.log(selected)
             setValue('name', selected.name)
             setValue('refId', selected.refId)
             setValue('description', selected.description)
@@ -157,6 +157,7 @@ const ProductDetailViewPage = () => {
                         isDisabled={isDisabled}
                         register={register} />
 
+                    <Divider />
                     <Flex gap={2} justifyContent='flex-end'>
                         <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
                         <FormSubmitButton notLink 

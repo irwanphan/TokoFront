@@ -14,6 +14,7 @@ interface IFormInput {
     refId: string
     description: string
     price: number | any
+    currentStock?: number
 }
 
 const CreateProductPage = () => {
@@ -25,7 +26,8 @@ const CreateProductPage = () => {
             name: '',
             refId: '',
             description: '',
-            price: 0
+            price: 0,
+            currentStock: 0
         }
     })
 
@@ -78,8 +80,17 @@ const CreateProductPage = () => {
                         placeholder="eg. 50000"
                         isDisabled={isDisabled}
                         register={register} />
+                    <FormInput
+                        name='currentStock'
+                        label='Current Stock (piece)'
+                        type='number'
+                        // defaultValue={selected?.currentStock}
+                        placeholder="eg. 50"
+                        isDisabled={isDisabled}
+                        register={register} />
 
-                    <Flex gap={2}>
+                    <Divider />
+                    <Flex gap={2} justifyContent='flex-end'>
                         <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
                         <FormSubmitButton notLink 
                             buttonColor="green.100"
