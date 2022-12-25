@@ -43,14 +43,15 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         else
         {
             try {
-                const { name, refId, description, price } = req.body;
+                const { name, refId, description, price, currentStock } = req.body;
                     
                 const product = await prisma.product.create({
                     data: {
                         name,
                         refId,
                         description,
-                        price
+                        price,
+                        currentStock
                     },
                 })
                 console.log(product)
