@@ -76,8 +76,7 @@ const TokoAuth = () => {
                     <Box as={GiNewBorn} mr={1} fontSize={20} />register
                 </FormSubmitButton> */}
                 <FormSubmitButton 
-                    onClick={() => signInWithGoogle()}
-                    href="/">
+                    onClick={() => signInWithGoogle()} notLink >
                     <Box as={FcGoogle} mr={1} fontSize={20} />Login
                 </FormSubmitButton>
             </Flex>
