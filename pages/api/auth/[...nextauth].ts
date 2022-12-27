@@ -15,3 +15,6 @@ export default NextAuth({
         })
     ]
 })
+
+// TODO: implement nextAuth Supabase adapter
+// https://www.youtube.com/watch?v=EdYQ9fF-hz4
