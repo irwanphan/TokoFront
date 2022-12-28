@@ -1,14 +1,49 @@
-import { Box, Divider, Flex, FormLabel, Grid, GridItem, Input, Text } from "@chakra-ui/react"
+import { Box, Divider, Flex, FormLabel, Grid, GridItem, Input, Text, useToast } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
 import SessionProfile from "@units/SessionProfile"
 import { useSession } from "next-auth/react"
+import { useForm, SubmitHandler } from "react-hook-form"
+import LoadingOverlay from "@elements/LoadingOverlay"
+import FormInput from "@elements/FormInput"
+import { useState } from "react"
+
+interface IFormInput {
+    address: string
+    city: string
+    province: string
+    postal: string
+}
 
 const CheckoutPage = () => {
     const { data: session } = useSession()
     // console.log(session)
+
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ isDisabled, setDisabled ] = useState(false)
+    
+    const { control, handleSubmit, register } = useForm({
+        defaultValues: {
+            address: '',
+            city: '',
+            province: '',
+            postal: ''
+        }
+    })
+
+    const toast = useToast()
+    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+        // setDisabled
+        setIsLoading(true)
+        toast({title:'Saving...'})
+        // await createProduct(data)
+        setIsLoading(false)
+        toast({title: data.address})
+        toast({title:'Saved', status:'success'})
+    }
+
     return (
         <MainLayout>
             <Box textAlign='left' mb={8}>
@@ -36,27 +71,47 @@ const CheckoutPage = () => {
                             </Box>
                         </Box>
 
-                        <FormLabel>Shipping Address</FormLabel>
-                        <Input layerStyle='formInputBase' />
+                        <FormInput 
+                            name='address'
+                            label='Shipping Address' 
+                            placeholder="eg. Jalan Sudirman, no 72"
+                            isDisabled={isDisabled}
+                            register={register} />
                         <Flex gap={3}>
                             <Box>
-                                <FormLabel>City</FormLabel>
-                                <Input layerStyle='formInputBase' />
+                                <FormInput 
+                                    name='city'
+                                    label='City' 
+                                    placeholder="eg. Jakarta Pusat"
+                                    isDisabled={isDisabled}
+                                    register={register} />
                             </Box>
                             <Box>
-                                <FormLabel>State</FormLabel>
-                                <Input layerStyle='formInputBase' />
+                                <FormInput 
+                                    name='province'
+                                    label='Province' 
+                                    placeholder="eg. DKI Jakarta"
+                                    isDisabled={isDisabled}
+                                    register={register} />
                             </Box>
                             <Box>
-                                <FormLabel>Postal Code</FormLabel>
-                                <Input layerStyle='formInputBase' />
+                                <FormInput 
+                                    name='postal code'
+                                    label='Postal Code' 
+                                    placeholder="eg. 12930"
+                                    isDisabled={isDisabled}
+                                    register={register} />
                             </Box>
                         </Flex>
 
                         <Divider mt={8} mb={4} />
 
                         <Flex justifyContent='flex-end' gap={2}>
-                            <FormSubmitButton notLink buttonColor="green.200">
+                            <FormSubmitButton href="/" >Back to Store</FormSubmitButton>
+                            <FormSubmitButton notLink 
+                                buttonColor="green.100"
+                                isDisabled={isDisabled}
+                                onClick={handleSubmit(onSubmit)} >
                                 Proceed Order
                             </FormSubmitButton>
                         </Flex>

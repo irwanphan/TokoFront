@@ -54,42 +54,45 @@ const CreateProductPage = () => {
                     <Divider/>
                 </Box>
                 <form>
-                    <FormInput 
-                        name='name'
-                        label='Product name' 
-                        placeholder="eg. X-Branded Chocolate Variant 120g"
-                        isDisabled={isDisabled}
-                        register={register} />
-                    <FormInput 
-                        name='refId' 
-                        label='Reference product id' 
-                        placeholder='eg. SKU-123' 
-                        isDisabled={isDisabled}
-                        register={register} />
-                    <FormInput 
-                        name='description' 
-                        label='Product description'
-                        type="textarea"
-                        placeholder="eg. this product do bang bang"
-                        isDisabled={isDisabled}
-                        register={register} />
-                    <FormInput
-                        name='price'
-                        label='Product price (IDR)'
-                        type='number'
-                        placeholder="eg. 50000"
-                        isDisabled={isDisabled}
-                        register={register} />
-                    <FormInput
-                        name='currentStock'
-                        label='Current Stock (piece)'
-                        type='number'
-                        // defaultValue={selected?.currentStock}
-                        placeholder="eg. 50"
-                        isDisabled={isDisabled}
-                        register={register} />
+                    <Box>
+                        <FormInput 
+                            name='name'
+                            label='Product name' 
+                            placeholder="eg. X-Branded Chocolate Variant 120g"
+                            isDisabled={isDisabled}
+                            register={register} />
+                        <FormInput 
+                            name='refId' 
+                            label='Reference product id' 
+                            placeholder='eg. SKU-123' 
+                            isDisabled={isDisabled}
+                            register={register} />
+                        <FormInput 
+                            name='description' 
+                            label='Product description'
+                            type="textarea"
+                            placeholder="eg. this product do bang bang"
+                            isDisabled={isDisabled}
+                            register={register} />
+                        <FormInput
+                            name='price'
+                            label='Product price (IDR)'
+                            type='number'
+                            placeholder="eg. 50000"
+                            isDisabled={isDisabled}
+                            register={register} />
+                        <FormInput
+                            name='currentStock'
+                            label='Current Stock (piece)'
+                            type='number'
+                            // defaultValue={selected?.currentStock}
+                            placeholder="eg. 50"
+                            isDisabled={isDisabled}
+                            register={register} />
+                    </Box>
 
-                    <Divider />
+                    <Divider mt={8} mb={4} />
+
                     <Flex gap={2} justifyContent='flex-end'>
                         <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
                         <FormSubmitButton notLink 
