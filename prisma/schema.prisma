@@ -32,7 +32,7 @@ model Purchase {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
   detail    PurchaseDetail[]
-  users     users            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users     User             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("purchases")
   @@schema("public")
@@ -65,7 +65,7 @@ model accounts {
   oauth_token_secret String?
   oauth_token        String?
   userId             String? @db.Uuid
-  users              User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users              users?  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([provider, providerAccountId], map: "provider_unique")
   @@schema("next_auth")
@@ -76,7 +76,7 @@ model sessions {
   expires      DateTime @db.Timestamptz(6)
   sessionToken String   @unique(map: "sessiontoken_unique")
   userId       String?  @db.Uuid
-  users        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users        users?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("next_auth")
 }
@@ -90,7 +90,7 @@ model verification_tokens {
   @@schema("next_auth")
 }
 
-model User {
+model users {
   id            String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name          String?
   email         String?    @unique(map: "email_unique")
@@ -98,21 +98,21 @@ model User {
   image         String?
   accounts      accounts[]
   sessions      sessions[]
-  users         users?
+  users         User?
 
-  @@map("users")
   @@schema("next_auth")
 }
 
-model users {
+model User {
   id        String     @id @db.Uuid
   name      String?
   email     String?
   image     String?
   createdAt DateTime?  @default(now()) @db.Timestamp(6)
   updatedAt DateTime?  @db.Timestamp(6)
+  role      Role       @default(user)
   purchases Purchase[]
-  users     User       @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users     users      @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
