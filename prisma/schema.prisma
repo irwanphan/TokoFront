@@ -1,135 +1,126 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["public", "next_auth"]
+  schemas  = ["next_auth", "public"]
 }
 
 model Product {
-  id              String        @id @default(cuid())
-  refId           String?       @unique
+  id              String           @id @default(cuid())
+  refId           String?          @unique
   image           String?
   name            String
   description     String
-  price           Float         @default(0)
-  currentStock    Float         @default(0)
-  isActive        Boolean       @default(true)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  price           Float            @default(0)
+  currentStock    Float            @default(0)
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   purchaseDetails PurchaseDetail[]
 
-  @@schema("public")
   @@map("products")
-}
-
-model SupabaseUser {
-  id              String        @id @default(uuid())
-  email           String        @unique
-  name            String?
-  image           String?
-  role            Role          @default(user)
-  authenticated   User          @relation(name: "users_id_fkey", fields: [id], references: [id], onUpdate: NoAction, onDelete: Cascade)
-  purchases       Purchase[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
   @@schema("public")
-  @@map("users")
 }
 
 model Purchase {
-  id              Int           @id @default(autoincrement())
-  user            SupabaseUser  @relation(fields: [userId], references: [id])
-  userId          String
-  detail          PurchaseDetail[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id        Int              @id @default(autoincrement())
+  userId    String           @db.Uuid
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  detail    PurchaseDetail[]
+  users     users            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@schema("public")
   @@map("purchases")
+  @@schema("public")
 }
 
 model PurchaseDetail {
-  id              Int           @id @default(autoincrement())
-  purchase        Purchase      @relation(fields: [purchaseId], references: [id])
-  purchaseId      Int
-  product         Product       @relation(fields: [productId], references: [id])
-  productId       String
-  purchasePrice   Float
+  id            Int      @id @default(autoincrement())
+  purchaseId    Int
+  productId     String
+  purchasePrice Float
+  product       Product  @relation(fields: [productId], references: [id])
+  purchase      Purchase @relation(fields: [purchaseId], references: [id])
+
+  @@map("purchase_details")
+  @@schema("public")
+}
+
+model accounts {
+  id                 String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         BigInt?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+  userId             String? @db.Uuid
+  users              User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([provider, providerAccountId], map: "provider_unique")
+  @@schema("next_auth")
+}
+
+model sessions {
+  id           String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  expires      DateTime @db.Timestamptz(6)
+  sessionToken String   @unique(map: "sessiontoken_unique")
+  userId       String?  @db.Uuid
+  users        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("next_auth")
+}
+
+model verification_tokens {
+  identifier String?
+  token      String   @id
+  expires    DateTime @db.Timestamptz(6)
+
+  @@unique([token, identifier], map: "token_identifier_unique")
+  @@schema("next_auth")
+}
+
+model User {
+  id            String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name          String?
+  email         String?    @unique(map: "email_unique")
+  emailVerified DateTime?  @db.Timestamptz(6)
+  image         String?
+  accounts      accounts[]
+  sessions      sessions[]
+  users         users?
+
+  @@map("users")
+  @@schema("next_auth")
+}
+
+model users {
+  id        String     @id @db.Uuid
+  name      String?
+  email     String?
+  image     String?
+  createdAt DateTime?  @default(now()) @db.Timestamp(6)
+  updatedAt DateTime?  @db.Timestamp(6)
+  purchases Purchase[]
+  users     User       @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
-  @@map("purchase_details")
 }
 
 enum Role {
   user
   admin
 
-  @@schema("public")
   @@map("roles")
-}
-
-
-// set up tables in next_auth schema
-
-model User {
-  id                String          @id @default(uuid())
-  name              String
-  email             String
-  emailVerified     DateTime?
-  image             String
-  accounts          Account[]       @relation(name: "AccountsByUser")
-  sessions          Session[]       @relation(name: "SessionsByUser")
-  authenticated     SupabaseUser?   @relation(name: "users_id_fkey")
-
-  @@schema("next_auth")
-  @@map("users")
-}
-
-model Session {
-  id                String      @id @default(uuid())
-  expires           DateTime
-  sessionToken      String
-  userId            String
-  user              User        @relation(name: "SessionsByUser", fields: [userId], references: [id], onUpdate: NoAction, onDelete: Cascade)
-
-  @@schema("next_auth")
-  @@map("sessions")
-}
-
-model Account {
-  id                String      @id @default(uuid())
-  type              String
-  provider          String
-  providerAccountId String
-  refreshToken      String?
-  accessToken       String?
-  expiresAt         BigInt?
-  tokenType         String?
-  scope             String?
-  idToken           String?
-  sessionState      String?
-  oauthTokenSecret  String?
-  oauthToken        String?
-  userId            String
-  user              User        @relation(name: "AccountsByUser", fields: [userId], references: [id], onUpdate: NoAction, onDelete: Cascade)
-
-  @@schema("next_auth")
-  @@map("accounts")
-}
-
-model VerificationToken {
-  identifier        String
-  token             String      @id
-  expires           DateTime
-
-  @@schema("next_auth")
-  @@map("verification_tokens")
+  @@schema("public")
 }
