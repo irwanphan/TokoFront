@@ -3,11 +3,13 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "next_auth"]
 }
 
 model Product {
@@ -22,25 +24,36 @@ model Product {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   purchaseDetails PurchaseDetail[]
+
+  @@schema("public")
+  @@map("products")
 }
 
-model User {
-  id              Int           @id @default(autoincrement())
+model SupabaseUser {
+  id              String        @id @default(uuid())
   email           String        @unique
   name            String?
+  image           String?
   role            Role          @default(user)
+  authenticated   User          @relation(name: "users_id_fkey", fields: [id], references: [id], onUpdate: NoAction, onDelete: Cascade)
   purchases       Purchase[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+
+  @@schema("public")
+  @@map("users")
 }
 
 model Purchase {
   id              Int           @id @default(autoincrement())
-  purchaseBy      User          @relation(fields: [userId], references: [id])
-  userId          Int
+  user            SupabaseUser  @relation(fields: [userId], references: [id])
+  userId          String
   detail          PurchaseDetail[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+
+  @@schema("public")
+  @@map("purchases")
 }
 
 model PurchaseDetail {
@@ -50,9 +63,73 @@ model PurchaseDetail {
   product         Product       @relation(fields: [productId], references: [id])
   productId       String
   purchasePrice   Float
+
+  @@schema("public")
+  @@map("purchase_details")
 }
 
 enum Role {
   user
   admin
+
+  @@schema("public")
+  @@map("roles")
+}
+
+
+// set up tables in next_auth schema
+
+model User {
+  id                String          @id @default(uuid())
+  name              String
+  email             String
+  emailVerified     DateTime?
+  image             String
+  accounts          Account[]       @relation(name: "AccountsByUser")
+  sessions          Session[]       @relation(name: "SessionsByUser")
+  authenticated     SupabaseUser?   @relation(name: "users_id_fkey")
+
+  @@schema("next_auth")
+  @@map("users")
+}
+
+model Session {
+  id                String      @id @default(uuid())
+  expires           DateTime
+  sessionToken      String
+  userId            String
+  user              User        @relation(name: "SessionsByUser", fields: [userId], references: [id], onUpdate: NoAction, onDelete: Cascade)
+
+  @@schema("next_auth")
+  @@map("sessions")
+}
+
+model Account {
+  id                String      @id @default(uuid())
+  type              String
+  provider          String
+  providerAccountId String
+  refreshToken      String?
+  accessToken       String?
+  expiresAt         BigInt?
+  tokenType         String?
+  scope             String?
+  idToken           String?
+  sessionState      String?
+  oauthTokenSecret  String?
+  oauthToken        String?
+  userId            String
+  user              User        @relation(name: "AccountsByUser", fields: [userId], references: [id], onUpdate: NoAction, onDelete: Cascade)
+
+  @@schema("next_auth")
+  @@map("accounts")
+}
+
+model VerificationToken {
+  identifier        String
+  token             String      @id
+  expires           DateTime
+
+  @@schema("next_auth")
+  @@map("verification_tokens")
 }

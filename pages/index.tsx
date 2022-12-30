@@ -6,7 +6,13 @@ import { dummyItems } from '@libs/interfaces/storeItem'
 import TokoCatalog from '@libs/components/TokoCatalog'
 const featuredProduct = dummyItems[3]
 
+import { useSession } from 'next-auth/react'
+
 const Home = () => {
+  const session = useSession()
+  console.log(session)
+  const {data} = useSession()
+  console.log(data)
   
   return (
     <MainLayout>
