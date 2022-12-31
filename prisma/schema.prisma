@@ -13,6 +13,7 @@ model Product {
   id              String           @id @default(cuid())
   refId           String?          @unique
   image           String?
+  unit            String
   name            String
   description     String
   price           Float            @default(0)
@@ -43,7 +44,9 @@ model PurchaseDetail {
   purchaseId    Int
   productId     String
   purchasePrice Float
-  product       Product  @relation(fields: [productId], references: [id])
+  qty           Float
+  unit          String
+  product       Product  @relation(fields: [productId], references: [refId])
   purchase      Purchase @relation(fields: [purchaseId], references: [id])
 
   @@map("purchase_details")

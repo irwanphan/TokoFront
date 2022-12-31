@@ -17,7 +17,8 @@ export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
     const newCart = [...cart]
     newCart.map((cartItem:CartItemInterface, index:number) => {
         const selectedItem = store.find( (item:ItemInterface) => {
-            return item.id === cartItem.id
+            // cart is using product's refId
+            return item.refId === cartItem.id
         })
         // console.log(selectedItem)
         if (selectedItem) {
@@ -38,6 +39,7 @@ export const CartItems = () => {
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
     const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
     const store = useRecoilValue(productsState)
+    // console.log('in store: ', store)
 
     // handling notification
     const toast = useToast()
@@ -53,7 +55,10 @@ export const CartItems = () => {
 
     // TODO: minus and plus item on cart
     const handleRemoveFromCart = (product:CartItemCheckoutInterface|any) => {
-        const toBeDelete = store.find((item) => item.id === product.id)
+        // console.log(product)
+        const toBeDelete = store.find((item) => item.refId === product.id)
+        // console.log('in store: ', store)
+        // console.log(toBeDelete)
         const newCart = removeFromCart(cart, toBeDelete)
         localStorage.setItem("cart", JSON.stringify(newCart))
         setCart(newCart)
