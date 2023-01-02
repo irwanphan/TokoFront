@@ -5,7 +5,7 @@ import { cartState } from "@libs/contexts/cart"
 import { productsState } from "@libs/contexts/products"
 import { ItemInterface } from "@libs/interfaces/storeItem"
 import { useEffect, useState } from "react"
-import { constSelector, useRecoilValue } from "recoil"
+import { useRecoilValue } from "recoil"
 
 const CartTotal = () => {
     const store = useRecoilValue<ItemInterface[]>(productsState)
@@ -19,14 +19,13 @@ const CartTotal = () => {
             const newCart = crossCheck(cart, store)
             setCheckCart(newCart)
         }
-    }, [])
+    }, [store, cart])
     useEffect(() => {
-        // console.log('checkcart: ', checkCart)
         if(checkCart.length > 0) {
             const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
             acc + subtotal, 0
             )
-            // console.log(total)
+            // console.log('total: ', total)
             setTotal(total)
         }
     }, [checkCart])
