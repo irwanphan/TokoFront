@@ -32,8 +32,7 @@ const ProductDetailView = () => {
     const [ qid, setQid ] = useState<number|any>()
     const [ selected, setSelected ] = useState<boolean>(false)
 
-    // console.log('pid store: ', store)
-    
+    // set selected productId / pid
     useEffect(() => { setQid(pid) }, [pid])
 
     useEffect(() => {
@@ -73,14 +72,6 @@ const ProductDetailView = () => {
 
     // handling AddToCart
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-    // useEffect(() => {
-    //     const cartData = localStorage.getItem("cart")
-    //     // console.log('storage: ', cartData)
-    //     const parsedData = JSON.parse(cartData!)
-    //     if (parsedData) {
-    //         setCart(parsedData);
-    //     }
-    // }, [])
     const handleAddToCart = (product:ItemInterface) => {
         if (inCart) {
             if (inCart + value > stock!) {
