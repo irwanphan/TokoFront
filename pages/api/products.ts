@@ -16,7 +16,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         // get all products
         try {
             const products = await prisma.product.findMany({
-                orderBy: { name: 'desc' }
+                // orderBy: { name: 'name' }
             })
             console.log(products)
             res.status(200).json(products)

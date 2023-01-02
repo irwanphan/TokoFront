@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { Box, Flex, Grid, GridItem, Skeleton, Text, useControllableState, useToast } from "@chakra-ui/react"
+import { Box, Button, Flex, Grid, GridItem, Skeleton, Text, useControllableState, useToast } from "@chakra-ui/react"
 import BlockContainer, { BlockImage } from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import MainLayout from "@libs/layouts/MainLayout"
@@ -8,8 +8,8 @@ import MainLayout from "@libs/layouts/MainLayout"
 import { ItemInterface } from "@libs/interfaces/storeItem"
 import { cartState, addToCart } from "@libs/contexts/cart"
 import { CartItemInterface } from "@libs/interfaces/cartItem"
-import { useRecoilState } from "recoil"
-import { loadProducts, productsState } from "@libs/contexts/products"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { productsState } from "@libs/contexts/products"
 import LoadingBlock from "@elements/LoadingBlock"
 
 const ProductDetailView = () => {
@@ -26,39 +26,31 @@ const ProductDetailView = () => {
     })
 
     // handling ShowItem
-    const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    const store = useRecoilValue(productsState)
     const [ stock, setStock ] = useState<number>()
     const [ inCart, setInCart ] = useState<number>()
     const [ qid, setQid ] = useState<number|any>()
+    const [ selected, setSelected ] = useState<boolean>(false)
+
+    // console.log('pid store: ', store)
     
+    useEffect(() => { setQid(pid) }, [pid])
+
     useEffect(() => {
-        // TODO: API for get single product
-        const products = loadProducts()
-        .then(res => setStore(res))
-        // .then(() => setIsLoadingProducts(false))
-        .catch(e => {
-            toast({
-                title: 'Error',
-                description: `You're not connected to our server!`,
-                render: () => (
-                    <BlockContainer py={4} px={6} bgColor="green.100">You're not connected to our server!</BlockContainer>
-                )
-            })
-            // console.error(e.response.status)
-        })
-        setQid(pid)
-    }, [pid])
-    useEffect(() => {
-        const selected:ItemInterface|undefined = store.find( item => item.id === pid )
-        setStock(selected?.currentStock)
-        if (selected !== undefined) setObj(selected)
-        const taken:CartItemInterface|undefined = cart.find( item => item.id === pid )
-        setInCart(taken?.quantity)
-        // console.log(selected)
-    },[store])
-    useEffect(() => { setIsLoadingProduct(false) },[inCart])
+        if (store !== undefined) {
+            const selected:ItemInterface|undefined = store.find( item => item.id === pid )
+            setStock(selected?.currentStock)
+            if (selected !== undefined) setObj(selected)
+            const taken:CartItemInterface|undefined = cart.find( item => item.id === pid )
+            setInCart(taken?.quantity)
+            // console.log('selected item: ', selected)
+            setSelected(true)
+        }
+    }, [store])
     // console.log(inCart)
     // console.log(stock)
+    
+    useEffect(() => { if (selected) { setIsLoadingProduct(false) } },[inCart, selected])
 
     // handling QtyPicker
     const [value, setValue] = useState(1)
@@ -101,9 +93,6 @@ const ProductDetailView = () => {
         setCart(newCart)
         notify(`${value} of ${obj.name} added`)
     }
-
-    // if item not show yet
-    // if (!qid) { return ( <MainLayout>Loading . . .</MainLayout> ) }
 
     if (isLoadingProduct) return (
         <MainLayout>
@@ -159,6 +148,10 @@ const ProductDetailView = () => {
                         onClick={ () => handleAddToCart(obj) } >
                         Add to Cart
                     </FormSubmitButton>
+
+                    <Button
+                        onClick={()=> console.log(store)}
+                    >check</Button>
                 </GridItem>
             </Grid>
         </MainLayout>

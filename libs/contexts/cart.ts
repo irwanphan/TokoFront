@@ -7,15 +7,14 @@ export const cartState = atom({
 })
 
 export const removeFromCart = (cart:any, product:any) => {
-  // console.log(cart)
-  // console.log(product)
   // item in cart is using product's refId
   const foundIndex = cart.findIndex((x:any) => x.id === product.refId)
-  // console.log(foundIndex)
 
   const newCart = [...cart]
   newCart.splice(foundIndex, 1) //remove from start index at foundIndex 1 object
   return newCart
+
+  // to remove all
   // if (foundIndex >= 0) {
   //   newCart[foundIndex] = {
   //     ...cart[foundIndex],

@@ -11,6 +11,7 @@ export interface ItemInterface {
 export const dummyItems:ItemInterface[] = [
     {
         id: "1",
+        refId: "Something", 
         name: "Something", 
         description: "It's something ain't Lorem Ipsum",
         price: 100000,
@@ -18,6 +19,7 @@ export const dummyItems:ItemInterface[] = [
     },
     {
         id: "2",
+        refId: "Coffee", 
         name: "Coffee", 
         description: "It's something ain't Lorem Ipsum",
         price: 15000,
@@ -25,6 +27,7 @@ export const dummyItems:ItemInterface[] = [
     },
     {
         id: "3",
+        refId: "Tea", 
         name: "Tea", 
         description: "It's something ain't Lorem Ipsum",
         price: 7000,
@@ -32,6 +35,7 @@ export const dummyItems:ItemInterface[] = [
     },
     {
         id: "4",
+        refId: "Xmas Stuff", 
         name: "Xmas Stuff", 
         description: "It's something ain't Lorem Ipsum",
         price: 123400,
@@ -39,6 +43,7 @@ export const dummyItems:ItemInterface[] = [
     },
     {
         id: "5",
+        refId: "Another Item", 
         name: "Another Item", 
         description: "It's something ain't Lorem Ipsum",
         price: 5000,

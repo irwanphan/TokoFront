@@ -9,9 +9,9 @@ import { ItemInterface } from "@libs/interfaces/storeItem"
 import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import BlockContainer from "@elements/BlockContainer"
 import ModalPopup from "@units/ModalPopup"
-import { productsState } from "@libs/contexts/products"
-import CartTotal from "../CartTotal"
-import LoadingBlock from "@elements/LoadingBlock"
+import { loadProducts, productsState, useFetchProducts } from "@libs/contexts/products"
+import CartTotal from "@components/CartTotal"
+// import LoadingBlock from "@elements/LoadingBlock"
 
 export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
     const newCart = [...cart]
@@ -38,7 +38,8 @@ export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
 export const CartItems = () => {
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
     const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
-    const store = useRecoilValue(productsState)
+    const [ store, setStore ] = useRecoilState<CartItemCheckoutInterface[]|any>(productsState)
+    const { products, isLoadingProducts } = useFetchProducts()
     // console.log('in store: ', store)
 
     // handling notification
@@ -55,9 +56,7 @@ export const CartItems = () => {
 
     // TODO: minus and plus item on cart
     const handleRemoveFromCart = (product:CartItemCheckoutInterface|any) => {
-        // console.log(product)
-        const toBeDelete = store.find((item) => item.refId === product.id)
-        // console.log('in store: ', store)
+        const toBeDelete = store.find((item:ItemInterface) => item.refId === product.id)
         // console.log(toBeDelete)
         const newCart = removeFromCart(cart, toBeDelete)
         localStorage.setItem("cart", JSON.stringify(newCart))
@@ -80,6 +79,12 @@ export const CartItems = () => {
 
     // loading item to cart
     const [ isLoading, setIsLoading ] = useState<boolean>(true)
+    // load everything in store
+    useEffect(() => {
+        !isLoadingProducts && setStore(products)
+    })
+    // console.log(store)
+    // load cart from local storage
     useEffect(() => {
         const cartData = localStorage.getItem("cart")
         // console.log('storage: ', cartData)
@@ -87,15 +92,17 @@ export const CartItems = () => {
         if (parsedData) {
             setCart(parsedData);
         }
-    }, [])
-
+    }, [store])
+    // check cart for price and subtotal
     useEffect(() => {
+        // console.log(store)
         if (Object.keys(cart).length !== 0) {
-            const newCart = crossCheck(cart, store)
-            setCheckCart(newCart)
+            // const newCart = crossCheck(cart, store)
+            // setCheckCart(newCart)
+        } else {
+            // setCheckCart([])
         }
-
-        setIsLoading(false)
+        // setIsLoading(false)
     }, [cart])
     // console.log('check cart',checkCart)
 
