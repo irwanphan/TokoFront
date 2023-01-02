@@ -18,7 +18,7 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
     useEffect(() => {
         isLoadingProducts   ? console.log('loading products ...')
                             : setStore(products!) 
-        console.log('store update: ', store)
+        // console.log('store update: ', store)
     }, [products])
 
     // load cart from local-storage
@@ -27,9 +27,9 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
         const cartData = localStorage.getItem("cart")
         // console.log('storage: ', cartData)
         const parsedData = JSON.parse(cartData!)
-        if (parsedData) { setCart(parsedData) }
-        console.log('cart update: ', cart)
+        parsedData && setCart(parsedData)
     }, [])
+    // console.log('cart update: ', cart)
 
     return (
         <Box

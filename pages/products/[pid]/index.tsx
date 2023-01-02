@@ -73,14 +73,14 @@ const ProductDetailView = () => {
 
     // handling AddToCart
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-    useEffect(() => {
-        const cartData = localStorage.getItem("cart")
-        // console.log('storage: ', cartData)
-        const parsedData = JSON.parse(cartData!)
-        if (parsedData) {
-            setCart(parsedData);
-        }
-    }, [])
+    // useEffect(() => {
+    //     const cartData = localStorage.getItem("cart")
+    //     // console.log('storage: ', cartData)
+    //     const parsedData = JSON.parse(cartData!)
+    //     if (parsedData) {
+    //         setCart(parsedData);
+    //     }
+    // }, [])
     const handleAddToCart = (product:ItemInterface) => {
         if (inCart) {
             if (inCart + value > stock!) {

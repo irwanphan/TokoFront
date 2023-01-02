@@ -2,16 +2,14 @@ import { useEffect, useState } from "react"
 import { Box, List, ListItem, Flex, Divider, useToast, useDisclosure, Skeleton } from "@chakra-ui/react"
 import { cartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
-
-import { useRecoilState, useRecoilValue } from "recoil"
-
-import { ItemInterface } from "@libs/interfaces/storeItem"
-import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import BlockContainer from "@elements/BlockContainer"
 import ModalPopup from "@units/ModalPopup"
-import { loadProducts, productsState, useFetchProducts } from "@libs/contexts/products"
+
+import { useRecoilState } from "recoil"
+import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
+import { ItemInterface } from "@libs/interfaces/storeItem"
+import { productsState } from "@libs/contexts/products"
 import CartTotal from "@components/CartTotal"
-// import LoadingBlock from "@elements/LoadingBlock"
 
 export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
     const newCart = [...cart]
@@ -37,10 +35,10 @@ export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
 
 export const CartItems = () => {
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-    const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
     const [ store, setStore ] = useRecoilState<CartItemCheckoutInterface[]|any>(productsState)
-    const { products, isLoadingProducts } = useFetchProducts()
+    const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
     // console.log('in store: ', store)
+    // console.log('in cart: ', cart)
 
     // handling notification
     const toast = useToast()
@@ -79,31 +77,16 @@ export const CartItems = () => {
 
     // loading item to cart
     const [ isLoading, setIsLoading ] = useState<boolean>(true)
-    // load everything in store
-    useEffect(() => {
-        !isLoadingProducts && setStore(products)
-    })
-    // console.log(store)
-    // load cart from local storage
-    useEffect(() => {
-        const cartData = localStorage.getItem("cart")
-        // console.log('storage: ', cartData)
-        const parsedData = JSON.parse(cartData!)
-        if (parsedData) {
-            setCart(parsedData);
-        }
-    }, [store])
     // check cart for price and subtotal
     useEffect(() => {
-        // console.log(store)
         if (Object.keys(cart).length !== 0) {
-            // const newCart = crossCheck(cart, store)
-            // setCheckCart(newCart)
+            const newCart = crossCheck(cart, store)
+            setCheckCart(newCart)
         } else {
-            // setCheckCart([])
+            setCheckCart([])
         }
-        // setIsLoading(false)
-    }, [cart])
+        setIsLoading(false)
+    }, [cart, store])
     // console.log('check cart',checkCart)
 
     if (isLoading) return (
