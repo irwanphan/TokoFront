@@ -8,17 +8,25 @@ import { useSession } from "next-auth/react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import FormInput from "@elements/FormInput"
 import { useState } from "react"
+import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
+import { useRecoilValue } from "recoil"
+import { cartState, checkCartState } from "@contexts/cart"
 
 interface IFormInput {
     address: string
     city: string
     province: string
     postal: string
+    orders: CartItemCheckoutInterface[]
 }
 
 const CheckoutPage = () => {
     const { data: session } = useSession()
     // console.log(session)
+
+    // TODO: checkcart to globalstate
+    const cart = useRecoilValue<CartItemInterface[]>(cartState)
+    const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
 
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isDisabled, setDisabled ] = useState(false)
@@ -28,7 +36,8 @@ const CheckoutPage = () => {
             address: '',
             city: '',
             province: '',
-            postal: ''
+            postal: '',
+            orders: []
         }
     })
 
@@ -37,6 +46,8 @@ const CheckoutPage = () => {
         // setDisabled
         setIsLoading(true)
         toast({title:'Saving...'})
+        console.log(data)
+        console.log(checkCart)
         // await createProduct(data)
         setIsLoading(false)
         toast({title: data.address})
@@ -95,7 +106,7 @@ const CheckoutPage = () => {
                             </Box>
                             <Box>
                                 <FormInput 
-                                    name='postal code'
+                                    name='postal'
                                     label='Postal Code' 
                                     placeholder="eg. 12930"
                                     isDisabled={isDisabled}
