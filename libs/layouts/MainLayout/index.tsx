@@ -8,12 +8,12 @@ import TokoFooter from "@libs/components/TokoFooter"
 import { useEffect } from "react"
 import { useRecoilState } from "recoil"
 import { cartState } from "@contexts/cart"
-import { productsState, useFetchProducts } from "@contexts/products"
+import { productsState, useFetchCatalog } from "@contexts/products"
 import { CartItemInterface } from "@interfaces//cartItem"
 import { ItemInterface } from "@interfaces//storeItem"
 
 const MainLayout = ({children, ...rest}: FlexProps) => {
-    const { products, isLoadingProducts } = useFetchProducts()
+    const { catalog, isLoadingCatalog } = useFetchCatalog()
     const toast = useToast()
 
     const notify = (message:string) => {
@@ -29,10 +29,10 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
     // load products to store
     const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)    
     useEffect(() => {
-        isLoadingProducts   ? notify('preparing ...')
-                            : setStore(products!) 
-        // console.log('store update: ', store)
-    }, [products])
+        isLoadingCatalog    ? notify('preparing ...')
+                            : setStore(catalog!) 
+        // console.log('catalog update: ', catalog)
+    }, [catalog])
 
     // load cart from local-storage
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
@@ -51,7 +51,7 @@ const MainLayout = ({children, ...rest}: FlexProps) => {
             px={{base:'1rem', sm:'2rem', md:'4rem'}}
             {...rest}
         >
-            {isLoadingProducts && <LoadingOverlay/>}
+            {isLoadingCatalog && <LoadingOverlay/>}
             <CustomHeader />
             <AnchorMenuNav/>
 
