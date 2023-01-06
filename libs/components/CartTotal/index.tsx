@@ -1,25 +1,14 @@
 import { Box, Flex, Skeleton } from "@chakra-ui/react"
-import { crossCheck } from "@components/Cart"
 import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
-import { cartState } from "@libs/contexts/cart"
-import { productsState } from "@libs/contexts/products"
-import { ItemInterface } from "@libs/interfaces/storeItem"
+import { checkCartState } from "@libs/contexts/cart"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
 
 const CartTotal = () => {
-    const store = useRecoilValue<ItemInterface[]>(productsState)
-    const cart = useRecoilValue<CartItemInterface[]>(cartState)
-    const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
+    const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
     const [ isLoadingTotal, setIsLoadingTotal ] = useState<boolean>(true)
     const [ total, setTotal ] = useState<number>(0)
 
-    useEffect(() => {
-        if (Object.keys(cart).length !== 0) {
-            const newCart = crossCheck(cart, store)
-            setCheckCart(newCart)
-        }
-    }, [store, cart])
     useEffect(() => {
         if(checkCart.length > 0) {
             const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
