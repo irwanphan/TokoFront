@@ -8,9 +8,9 @@ import { useSession } from "next-auth/react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import FormInput from "@elements/FormInput"
 import { useState } from "react"
-import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
+import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
-import { cartState, checkCartState } from "@contexts/cart"
+import { checkCartState } from "@contexts/cart"
 
 interface IFormInput {
     address: string
@@ -23,9 +23,6 @@ interface IFormInput {
 const CheckoutPage = () => {
     const { data: session } = useSession()
     // console.log(session)
-
-    // TODO: checkcart to globalstate
-    const cart = useRecoilValue<CartItemInterface[]>(cartState)
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
 
     const [ isLoading, setIsLoading ] = useState(false)
@@ -43,11 +40,13 @@ const CheckoutPage = () => {
 
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+        // TODO: disable form when submit
         // setDisabled
         setIsLoading(true)
         toast({title:'Saving...'})
+        // console.log(checkCart)
+        data.orders = checkCart
         console.log(data)
-        console.log(checkCart)
         // await createProduct(data)
         setIsLoading(false)
         toast({title: data.address})
