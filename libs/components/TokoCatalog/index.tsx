@@ -1,14 +1,13 @@
-import { Grid, GridItem, useToast } from "@chakra-ui/react"
+import { Grid, GridItem } from "@chakra-ui/react"
 import { useEffect, useState } from 'react'
 import { productsState } from '@libs/contexts/products'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { BlockContainerLink } from "@elements/BlockContainer"
 import { ItemInterface } from "@libs/interfaces/storeItem"
 import LoadingBlock from "@elements/LoadingBlock"
 
 const TokoCatalog = () => {
-    const toast = useToast()
-    const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    const store = useRecoilValue<ItemInterface[]>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
 

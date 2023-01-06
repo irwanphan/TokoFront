@@ -25,7 +25,7 @@ export const productsState = atom({
 export const useFetchCatalog = () => {
     const [ catalog, setCatalog ] = useState<ItemInterface[]>()
     const [ isLoadingCatalog, setIsLoadingCatalog ] = useState<boolean>(true)
-    console.log(catalog)
+    // console.log(catalog)
 
     useEffect(() => {
         const fetchData = async () => {
