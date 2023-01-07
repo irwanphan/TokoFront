@@ -4,13 +4,18 @@ import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
 import SessionProfile from "@units/SessionProfile"
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
+
+interface UserInterface {
+    email: string | null | undefined
+    name: string | null | undefined
+}
 
 interface IFormInput {
     address: string
@@ -18,6 +23,24 @@ interface IFormInput {
     province: string
     postal: string
     orders: CartItemCheckoutInterface[]
+    user: UserInterface
+}
+
+export async function getServerSideProps(context:any) {
+    // Check if user is authenticated
+    const session = await getSession(context);
+    // If not, redirect to the homepage
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: {}
+    }
 }
 
 const CheckoutPage = () => {
@@ -34,7 +57,8 @@ const CheckoutPage = () => {
             city: '',
             province: '',
             postal: '',
-            orders: []
+            orders: [],
+            user: { email: '', name: '' }
         }
     })
 
@@ -46,6 +70,8 @@ const CheckoutPage = () => {
         toast({title:'Saving...'})
         // console.log(checkCart)
         data.orders = checkCart
+        data.user.email = session!.user.email
+        data.user.name = session!.user.name
         console.log(data)
         // await createProduct(data)
         setIsLoading(false)

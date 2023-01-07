@@ -1,5 +1,5 @@
 import { Box, Flex, Skeleton } from "@chakra-ui/react"
-import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
+import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { checkCartState } from "@libs/contexts/cart"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
