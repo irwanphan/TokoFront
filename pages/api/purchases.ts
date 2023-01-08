@@ -10,11 +10,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     // }
 
     if (req.method === 'GET') {
-        // TODO: get specific purchase, or just leave it to global state
         // get all purchases
         try {
             const purchases = await prisma.purchase.findMany({
-                // orderBy: { name: 'name' }
+                include: {
+                    detail: true,
+                    shipment: true
+                }
             })
             console.log(purchases)
             res.status(200).json(purchases)

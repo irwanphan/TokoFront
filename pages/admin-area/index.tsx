@@ -1,15 +1,16 @@
 import { useState } from "react"
-import { Box, Divider, Flex, Text } from "@chakra-ui/react"
+import { Box, Divider, Flex, Skeleton, Text } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
 import { FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
+import { useFetchPurchases } from "@hooks/useFetchPurchases"
+import { getSession } from 'next-auth/react'
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
-import { getSession } from 'next-auth/react'
 export async function getServerSideProps(context:any) {
     // Check if user is authenticated
     const session = await getSession(context);
@@ -29,6 +30,9 @@ export async function getServerSideProps(context:any) {
 
 const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
+
+    const { purchases, isLoadingPurchases } = useFetchPurchases()
+    console.log(purchases)
 
     return (
         <MainLayout>
@@ -62,6 +66,16 @@ const AdminAreaPage = () => {
                     <Text fontWeight={600} >Shopping history</Text>
                 </Flex>
                 <Divider />
+                    <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
+                        {   isLoadingPurchases ?
+                            <Box>
+                                <Skeleton h={6} mb={2} />
+                                <Skeleton h={4} />
+                            </Box>
+                        :   
+                            <p>asdf</p>
+                        }
+                </Box>
             </BlockContainer>
         </MainLayout>
     )
