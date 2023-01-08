@@ -5,9 +5,9 @@ import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
 import SessionProfile from "@units/SessionProfile"
 import { getSession, useSession } from "next-auth/react"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
@@ -27,6 +27,19 @@ interface IFormInput {
     total: number
     orders: CartItemCheckoutInterface[]
     user: UserInterface
+}
+const resolver: Resolver<IFormInput> = async (values) => {
+    return {
+        values: values.address ? values : {},
+        errors: !values.address
+            ? {
+                address: {
+                    type: 'required',
+                    message: 'This is required.',
+                },
+            }
+        : {},
+    }
 }
 
 export async function getServerSideProps(context:any) {
@@ -54,7 +67,7 @@ const CheckoutPage = () => {
     const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
     
-    const { control, handleSubmit, register } = useForm({
+    const { setFocus, handleSubmit, register, formState: { errors } } = useForm({
         defaultValues: {
             address: '',
             city: '',
@@ -63,8 +76,19 @@ const CheckoutPage = () => {
             total: 0,
             orders: [],
             user: { email: '', name: '' }
-        }
+        },
+        resolver
     })
+
+    // useEffect(() => {
+    //     const firstError = Object.keys(errors).reduce((field, a) => {
+    //       return !!errors[field] ? field : a;
+    //     }, null);
+      
+    //     if (firstError) {
+    //       setFocus(firstError);
+    //     }
+    //   }, [errors, setFocus]);
 
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
@@ -122,6 +146,14 @@ const CheckoutPage = () => {
                             placeholder="eg. Jalan Sudirman, no 72"
                             isDisabled={isDisabled}
                             register={register} />
+                            {   errors?.address && 
+                                <Box bgColor='red.600'
+                                    color='white'
+                                    fontSize='0.75rem'
+                                    fontWeight={600}
+                                    px={2} py={1.5}
+                                >{errors.address.message}</Box>
+                            }
                         <Flex gap={3}>
                             <Box>
                                 <FormInput 
