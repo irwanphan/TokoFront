@@ -1,44 +1,17 @@
 import { useEffect, useState } from "react"
 import { Box, List, ListItem, Flex, Divider, useToast, useDisclosure, Skeleton } from "@chakra-ui/react"
-import { cartState, removeFromCart } from "@libs/contexts/cart"
+import { cartState, checkCartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
 import BlockContainer from "@elements/BlockContainer"
 import ModalPopup from "@units/ModalPopup"
 
-import { useRecoilState } from "recoil"
+import { useRecoilValue } from "recoil"
 import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
-import { ItemInterface } from "@libs/interfaces/storeItem"
-import { productsState } from "@libs/contexts/products"
 import CartTotal from "@components/CartTotal"
 
-export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
-    const newCart = [...cart]
-    newCart.map((cartItem:CartItemInterface, index:number) => {
-        const selectedItem = store.find( (item:ItemInterface) => {
-            // cart is using product's refId
-            return item.refId === cartItem.id
-        })
-        // console.log(selectedItem)
-        if (selectedItem) {
-            const newCartItem = {
-                ...newCart[index],
-                price: selectedItem.price,
-                subtotal: cartItem.quantity * selectedItem.price
-            }
-            // console.log('current cart item: ',newCartItem)
-            newCart[index] = newCartItem
-        }
-    })
-    // console.log('new cart: ',newCart)
-    return newCart
-}
-
 export const CartItems = () => {
-    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
-    const [ store, setStore ] = useRecoilState<CartItemCheckoutInterface[]|any>(productsState)
-    const [ checkCart, setCheckCart ] = useState<CartItemCheckoutInterface[]|any>([])
-    // console.log('in store: ', store)
-    // console.log('in cart: ', cart)
+    const cart = useRecoilValue<CartItemInterface[]>(cartState)
+    const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
 
     // handling notification
     const toast = useToast()
@@ -53,12 +26,12 @@ export const CartItems = () => {
     }
 
     // TODO: minus and plus item on cart
-    const handleRemoveFromCart = (product:CartItemCheckoutInterface|any) => {
-        const toBeDelete = store.find((item:ItemInterface) => item.refId === product.id)
-        // console.log(toBeDelete)
+    const handleRemoveFromCart = (scope:CartItemCheckoutInterface|any) => {
+        const toBeDelete = cart.find((item:CartItemInterface) => item.id === scope.id)
+        // console.log(toBeDelete) // cart item's id = store item's ref id
         const newCart = removeFromCart(cart, toBeDelete)
         localStorage.setItem("cart", JSON.stringify(newCart))
-        setCart(newCart)
+        // setCart(newCart) // set in context
         notify(`${toBeDelete?.name} removed from your cart`)
     }
 
@@ -77,16 +50,9 @@ export const CartItems = () => {
 
     // loading item to cart
     const [ isLoading, setIsLoading ] = useState<boolean>(true)
-    // check cart for price and subtotal
     useEffect(() => {
-        if (Object.keys(cart).length !== 0) {
-            const newCart = crossCheck(cart, store)
-            setCheckCart(newCart)
-        } else {
-            setCheckCart([])
-        }
         setIsLoading(false)
-    }, [cart, store])
+    }, [checkCart])
     // console.log('check cart',checkCart)
 
     if (isLoading) return (
@@ -143,7 +109,7 @@ export const CartItems = () => {
                 })}
             </List>
 
-            <CartTotal />
+            {/* <CartTotal /> */}
             <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose} />
         </Box>
     )

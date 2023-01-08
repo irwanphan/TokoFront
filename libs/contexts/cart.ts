@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil"
+import { atom, selector, useRecoilState, useSetRecoilState } from "recoil"
 import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import { ItemInterface } from "@interfaces//storeItem";
 import { productsState } from "./products";
@@ -20,11 +20,14 @@ export const checkCartState = selector({
 })
 
 export const removeFromCart = (cart:any, product:any) => {
+  const setCart = useSetRecoilState<CartItemInterface[]>(cartState)
   // item in cart is using product's refId
   const foundIndex = cart.findIndex((x:any) => x.id === product.refId)
 
   const newCart = [...cart]
   newCart.splice(foundIndex, 1) //remove from start index at foundIndex 1 object
+  setCart(newCart)
+
   return newCart
 
   // to remove all
@@ -38,6 +41,7 @@ export const removeFromCart = (cart:any, product:any) => {
 }
 
 export const addToCart = (cart:any, product:any, qtyAdded:number) => {
+  const setCart = useSetRecoilState<CartItemInterface[]>(cartState)
   const newCart = [...cart]
   const foundIndex = cart.findIndex((x:any) => x.id === product.refId)
 
@@ -47,6 +51,7 @@ export const addToCart = (cart:any, product:any, qtyAdded:number) => {
       ...cart[foundIndex],
       quantity: cart[foundIndex].quantity + qtyAdded,
     };
+    setCart(newCart)
     return newCart
   }
 
