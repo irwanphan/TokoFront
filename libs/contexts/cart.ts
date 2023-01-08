@@ -1,7 +1,9 @@
-import { atom, selector } from "recoil"
+import { atom, selector, useRecoilValue } from "recoil"
 import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import { ItemInterface } from "@interfaces//storeItem";
 import { productsState } from "./products";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export const cartState = atom({
   key: 'cart',
@@ -18,6 +20,17 @@ export const checkCartState = selector({
     return checkCart
   }
 })
+
+// export const cartTotalState = selector({
+//   key: 'cartTotal',
+//   get: ({get}) => {
+//     const checkCart = get(checkCartState)
+//     const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
+//       acc + subtotal, 0
+//     )
+//     return total
+//   }
+// })
 
 export const removeFromCart = (cart:any, product:any) => {
   // item in cart is using product's refId
@@ -81,4 +94,25 @@ export const crossCheck = (cart:CartItemInterface[], store:ItemInterface[]) => {
   })
   // console.log('new cart: ',newCart)
   return newCart
+}
+
+export const useCartTotal = () => {
+  const [ total, setTotal ] = useState<number>()
+  const [ isLoadingTotal, setIsLoadingTotal ] = useState<boolean>(true)
+  const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
+
+  useEffect(() => {
+    const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
+      acc + subtotal, 0
+    )
+    setTotal(total)
+  }, [checkCart])
+  useEffect(() => {
+    if ( typeof(total) == 'number' ) setIsLoadingTotal(false)
+  }, [total])
+
+  return {
+      total,
+      isLoadingTotal
+  }
 }

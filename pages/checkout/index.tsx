@@ -7,13 +7,12 @@ import SessionProfile from "@units/SessionProfile"
 import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
-import { checkCartState } from "@contexts/cart"
+import { checkCartState, useCartTotal } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
-import { totalValue } from "@components/CartTotal"
 
 interface UserInterface {
     email: string | null | undefined
@@ -66,12 +65,7 @@ const CheckoutPage = () => {
         }
     })
 
-    const [ total, setTotal ] = useState<number>(0)
-    useEffect(() => {
-        const total = totalValue(checkCart)
-        setTotal(total!)
-        setIsLoading(false)
-    }, [checkCart] )
+    const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
 
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
@@ -83,7 +77,7 @@ const CheckoutPage = () => {
         toast({title:'Saving...'})
         // console.log(checkCart)
         data.orders = checkCart
-        data.total = total
+        data.total = total!
         data.user.email = session!.user.email
         data.user.name = session!.user.name
         // console.log(data)
