@@ -7,12 +7,13 @@ import SessionProfile from "@units/SessionProfile"
 import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
+import { totalValue } from "@components/CartTotal"
 
 interface UserInterface {
     email: string | null | undefined
@@ -23,6 +24,7 @@ interface IFormInput {
     city: string
     province: string
     postal: string
+    total: number
     orders: CartItemCheckoutInterface[]
     user: UserInterface
 }
@@ -49,7 +51,7 @@ const CheckoutPage = () => {
     // console.log(session)
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
 
-    const [ isLoading, setIsLoading ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
     
     const { control, handleSubmit, register } = useForm({
@@ -58,20 +60,30 @@ const CheckoutPage = () => {
             city: '',
             province: '',
             postal: '',
+            total: 0,
             orders: [],
             user: { email: '', name: '' }
         }
     })
 
+    const [ total, setTotal ] = useState<number>(0)
+    useEffect(() => {
+        const total = totalValue(checkCart)
+        setTotal(total!)
+        setIsLoading(false)
+    }, [checkCart] )
+    // console.log(total)
+
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         // TODO: disable form when submit
-        // setDisabled
+        setDisabled
         setIsLoading(true)
         toast({title:'Saving...'})
         // console.log(checkCart)
         data.orders = checkCart
+        data.total = total
         data.user.email = session!.user.email
         data.user.name = session!.user.name
         // console.log(data)

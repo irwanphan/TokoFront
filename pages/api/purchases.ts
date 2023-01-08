@@ -27,82 +27,66 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
     
     if (req.method === 'POST') {
-        // const refIdExist = await prisma.product.findUnique({
-        //     where: {
-        //         refId: req.body.refId
-        //     }
-        // })
-        // if (refIdExist) {
-        //     // console.log(`Product with reference id ${refIdExist.refId} is already existed`)
-        //     res.status(500).json({ 
-        //         message: `Product with reference id ${refIdExist.refId} is already existed`
-        //     })
-        // }
-        // else
-        // {
-            try {
-                const { address, city, province, postal, user, orders } = req.body
+        
+        try {
+            const { address, city, province, postal, total, user, orders } = req.body
 
-                console.log(user)
+            // console.log(user)
+            const userId = 'c1e2cdb9-9285-4483-9856-6068da672c82'
+            // console.log(userId)
+            const checkuser = await prisma.users.findMany({
+                where: {
+                    id: userId
+                }
+            })
+            // console.log(checkuser)
 
-                const userId = 'c1e2cdb9-9285-4483-9856-6068da672c82'
-                // console.log(userId)
-                const checkuser = await prisma.users.findMany({
-                    where: {
-                        id: userId
-                    }
-                })
-                console.log(checkuser)
+            // TODO: TEMP: use irwanphan user id
+            const userEmail:any = user.email
+            // console.log(userEmail)
 
-                // TODO: TEMP: use irwanphan user id
-                const userEmail:any = user.email
-                // console.log(userEmail)
-
-                const total = 10000
-                // console.log(total)
-                // orders.map((order:any) => {
-                //     console.log(order.id)
-                // })
-                    
-                const purchase = await prisma.purchase.create({
-                    data: {
-                        user: {
-                            connect: {
-                                id: userId
-                            }
-                        },
-                        userEmail,
-                        total,
-                        shipment: {
-                            create: {
-                                address,
-                                city,
-                                province,
-                                postal
-                            }
-                        },
-                        detail: {
-                            create: 
-
-                                orders.map((order:any) => ({
-                                    productId: order.id,
-                                    purchasePrice: order.price,
-                                    qty: order.quantity,
-                                    unit: 'piece'
-                                })),
-                            
-
-                        },
+            // orders.map((order:any) => {
+            //     console.log(order.id)
+            // })
+                
+            const purchase = await prisma.purchase.create({
+                data: {
+                    user: {
+                        connect: {
+                            id: userId
+                        }
                     },
-                })
-                // console.log(purchase)
-                // res.status(200).json(purchase)
+                    userEmail,
+                    total,
+                    shipment: {
+                        create: {
+                            address,
+                            city,
+                            province,
+                            postal
+                        }
+                    },
+                    detail: {
+                        create: 
 
-            } catch (e:any) {
-                console.log(e)
-                res.status(500).json({ message: `${e.status}` })
-            }
-        // }
+                            orders.map((order:any) => ({
+                                productId: order.id,
+                                purchasePrice: order.price,
+                                qty: order.quantity,
+                                unit: 'piece'
+                            })),
+                        
+
+                    },
+                },
+            })
+            console.log(purchase)
+            res.status(200).json(purchase)
+
+        } catch (e:any) {
+            console.log(e)
+            res.status(500).json({ message: `${e.status}` })
+        }
     }
     else {
         res.setHeader('Allow', ['POST']);

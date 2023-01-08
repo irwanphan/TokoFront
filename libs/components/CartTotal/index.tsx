@@ -4,19 +4,24 @@ import { checkCartState } from "@libs/contexts/cart"
 import { useEffect, useState } from "react"
 import { useRecoilValue } from "recoil"
 
+export const totalValue = (checkCart:CartItemCheckoutInterface[]) => {
+    if(checkCart.length > 0) {
+        const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
+        acc + subtotal, 0
+        )
+        // console.log('total: ', total)
+        return total
+    }
+}
+
 const CartTotal = () => {
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
     const [ isLoadingTotal, setIsLoadingTotal ] = useState<boolean>(true)
     const [ total, setTotal ] = useState<number>(0)
 
     useEffect(() => {
-        if(checkCart.length > 0) {
-            const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
-            acc + subtotal, 0
-            )
-            // console.log('total: ', total)
-            setTotal(total)
-        }
+        const total = totalValue(checkCart)
+        setTotal(total!)
     }, [checkCart])
     useEffect(() => {
         if (total) setIsLoadingTotal(false)
