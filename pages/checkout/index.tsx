@@ -7,16 +7,17 @@ import SessionProfile from "@units/SessionProfile"
 import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
+import LoadingOverlay from "@elements/LoadingOverlay"
+import axios from "axios"
 
 interface UserInterface {
     email: string | null | undefined
     name: string | null | undefined
 }
-
 interface IFormInput {
     address: string
     city: string
@@ -62,6 +63,7 @@ const CheckoutPage = () => {
         }
     })
 
+    const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         // TODO: disable form when submit
@@ -72,8 +74,8 @@ const CheckoutPage = () => {
         data.orders = checkCart
         data.user.email = session!.user.email
         data.user.name = session!.user.name
-        console.log(data)
-        // await createProduct(data)
+        // console.log(data)
+        await createPurchaseOrder(data)
         setIsLoading(false)
         toast({title: data.address})
         toast({title:'Saved', status:'success'})
@@ -81,6 +83,7 @@ const CheckoutPage = () => {
 
     return (
         <MainLayout>
+            { isLoading ?? <LoadingOverlay /> }
             <Box textAlign='left' mb={8}>
                 <Text fontSize={32}>
                     Your Cart

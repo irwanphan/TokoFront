@@ -63,3 +63,9 @@ $$ language plpgsql security definer;
 create trigger on_auth_user_created
   after insert on next_auth.users
   for each row execute procedure public.handle_new_user();
+
+### on Prisma schema changes
+
+npm i --save-dev prisma@latest
+npm i @prisma/client@latest
+npx prisma generate

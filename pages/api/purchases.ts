@@ -41,23 +41,66 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         // else
         // {
             try {
-                const { name, refId, description, price, currentStock } = req.body;
+                const { address, city, province, postal, user, orders } = req.body
+
+                console.log(user)
+
+                const userId = 'c1e2cdb9-9285-4483-9856-6068da672c82'
+                // console.log(userId)
+                const checkuser = await prisma.users.findMany({
+                    where: {
+                        id: userId
+                    }
+                })
+                console.log(checkuser)
+
+                // TODO: TEMP: use irwanphan user id
+                const userEmail:any = user.email
+                // console.log(userEmail)
+
+                const total = 10000
+                // console.log(total)
+                // orders.map((order:any) => {
+                //     console.log(order.id)
+                // })
                     
-                const product = await prisma.product.create({
+                const purchase = await prisma.purchase.create({
                     data: {
-                        name,
-                        refId,
-                        description,
-                        price,
-                        currentStock
+                        user: {
+                            connect: {
+                                id: userId
+                            }
+                        },
+                        userEmail,
+                        total,
+                        shipment: {
+                            create: {
+                                address,
+                                city,
+                                province,
+                                postal
+                            }
+                        },
+                        detail: {
+                            create: 
+
+                                orders.map((order:any) => ({
+                                    productId: order.id,
+                                    purchasePrice: order.price,
+                                    qty: order.quantity,
+                                    unit: 'piece'
+                                })),
+                            
+
+                        },
                     },
                 })
-                // console.log(product)
-                res.status(200).json(product)
+                // console.log(purchase)
+                // res.status(200).json(purchase)
 
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e)
-                res.status(500).json({ message: `${e}` })
+                res.status(500).json({ message: `${e.status}` })
             }
         // }
     }
