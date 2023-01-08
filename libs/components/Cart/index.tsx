@@ -34,7 +34,6 @@ export const CartItems = () => {
         // setCart(newCart) // set in context
         notify(`${toBeDelete?.name} removed from your cart`)
     }
-
     // handling delete modal
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [ scope, setScope ] = useState<CartItemCheckoutInterface>()
@@ -53,7 +52,6 @@ export const CartItems = () => {
     useEffect(() => {
         setIsLoading(false)
     }, [checkCart])
-    // console.log('check cart',checkCart)
 
     if (isLoading) return (
         <Box>
@@ -96,7 +94,6 @@ export const CartItems = () => {
                                 justifyContent='space-between'
                             >
                                 <Flex alignItems='center'>
-                                    {/* TODO: FIX: possibly undefined */}
                                     {cartItem.quantity} <Box as={FiX}/> {cartItem.price}
                                 </Flex>
                                 <Box fontWeight={600}>
@@ -109,7 +106,7 @@ export const CartItems = () => {
                 })}
             </List>
 
-            {/* <CartTotal /> */}
+            <CartTotal />
             <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose} />
         </Box>
     )
