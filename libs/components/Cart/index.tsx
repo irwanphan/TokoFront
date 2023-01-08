@@ -1,25 +1,39 @@
 import { useEffect, useState } from "react"
-import { Box, List, ListItem, Flex, Divider, useDisclosure, Skeleton } from "@chakra-ui/react"
-import { cartState, checkCartState, removeFromCart } from "@libs/contexts/cart"
+import { Box, List, ListItem, Flex, Divider, useDisclosure, Skeleton, useToast } from "@chakra-ui/react"
+import { cartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
 import ModalPopup from "@units/ModalPopup"
 
-import { useRecoilValue } from "recoil"
+import { useRecoilState } from "recoil"
 import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import CartTotal from "@components/CartTotal"
-import { notify } from "@utils/notify"
+import { useCheckCart } from "@hooks/useCheckCart"
+import BlockContainer from "@elements/BlockContainer"
 
 export const CartItems = () => {
-    const cart = useRecoilValue<CartItemInterface[]>(cartState)
-    const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
+    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
+    const { checkCart, isLoadingCheckCart } = useCheckCart()
+    console.log(isLoadingCheckCart)
 
+    // handling notification
+    const toast = useToast()
+    const notify = (message:String) => {
+        toast({
+            duration: 1500,
+            position: 'bottom-right',
+            render: () => (
+                <BlockContainer py={4} px={6}>{message}</BlockContainer>
+            )
+        })
+    }
+    
     // TODO: minus and plus item on cart
     const handleRemoveFromCart = (scope:CartItemCheckoutInterface|any) => {
         const toBeDelete = cart.find((item:CartItemInterface) => item.id === scope.id)
         // console.log(toBeDelete) // cart item's id = store item's ref id
         const newCart = removeFromCart(cart, toBeDelete)
         localStorage.setItem("cart", JSON.stringify(newCart))
-        // setCart(newCart) // set in context
+        setCart(newCart)
         notify(`${toBeDelete?.name} removed from your cart`)
     }
     // handling delete modal
@@ -41,7 +55,7 @@ export const CartItems = () => {
         setIsLoading(false)
     }, [checkCart])
 
-    if (isLoading) return (
+    if (isLoading || isLoadingCheckCart) return (
         <Box>
             <Skeleton h={6} mb={2} />
             <Skeleton h={4} />
