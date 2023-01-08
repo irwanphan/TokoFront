@@ -10,7 +10,6 @@ export const useFetchPurchases = () => {
         const fetchData = async () => {
             try {
                 const { data: response } = await axios.get('/api/purchases')
-                // console.log(response)
                 setPurchases(response)
             } catch (error) {
                 console.log(error)
