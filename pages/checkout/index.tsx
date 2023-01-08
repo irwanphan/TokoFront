@@ -10,9 +10,10 @@ import FormInput from "@elements/FormInput"
 import { useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
-import { checkCartState, useCartTotal } from "@contexts/cart"
+import { checkCartState } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
+import useCartTotal from "@hooks/useCartTotal"
 
 interface UserInterface {
     email: string | null | undefined

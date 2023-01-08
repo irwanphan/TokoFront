@@ -1,5 +1,5 @@
 import { Box, Flex, Skeleton } from "@chakra-ui/react"
-import { useCartTotal } from "@libs/contexts/cart"
+import useCartTotal from "@hooks/useCartTotal"
 
 const CartTotal = () => {
     const { total, isLoadingTotal } = useCartTotal()
