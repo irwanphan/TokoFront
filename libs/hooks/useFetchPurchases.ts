@@ -1,9 +1,10 @@
+import { PurchasesInterface } from "@interfaces//purchases"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
 export const useFetchPurchases = () => {
     // TODO: purchases type
-    const [ purchases, setPurchases ] = useState()
+    const [ purchases, setPurchases ] = useState<PurchasesInterface[]>()
     const [ isLoadingPurchases, setIsLoadingPurchases ] = useState<boolean>(true)
 
     useEffect(() => {

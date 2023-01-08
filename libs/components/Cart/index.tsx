@@ -13,7 +13,7 @@ import BlockContainer from "@elements/BlockContainer"
 export const CartItems = () => {
     const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
     const { checkCart, isLoadingCheckCart } = useCheckCart()
-    console.log(isLoadingCheckCart)
+    // console.log(isLoadingCheckCart)
 
     // handling notification
     const toast = useToast()

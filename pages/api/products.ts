@@ -45,13 +45,17 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             try {
                 const { name, refId, description, price, currentStock } = req.body;
                     
+                // TODO: change later, TEMP: all unit is piece
+                const unit = 'pc(s)'
+
                 const product = await prisma.product.create({
                     data: {
                         name,
                         refId,
                         description,
                         price,
-                        currentStock
+                        currentStock,
+                        unit
                     },
                 })
                 // console.log(product)

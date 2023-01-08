@@ -30,8 +30,7 @@ export async function getServerSideProps(context:any) {
 
 const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
-
-    const { purchases, isLoadingPurchases }:any = useFetchPurchases()
+    const { purchases, isLoadingPurchases } = useFetchPurchases()
     console.log(purchases)
 
     return (
@@ -73,10 +72,25 @@ const AdminAreaPage = () => {
                                 <Skeleton h={4} />
                             </Box>
                         :   
-                            purchases!.map((purchase:any) => {
+                            purchases!.map((purchase) => {
+                                const date = new Date(`${purchase.createdAt}`).toLocaleDateString('en-EN', { 
+                                    weekday: 'long', 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric'
+                                })
+                                const time = new Date(`${purchase.createdAt}`).toLocaleTimeString()
+                                
                                 return (
                                     <Box>
-                                        {purchase.createdAt}
+                                        <small>purchased on</small>
+                                        <Box>
+                                            {date}
+                                        </Box>
+                                        <Box>
+                                            {time}
+                                        </Box>
+                                        <Divider />
                                     </Box>
                                 )
                             })

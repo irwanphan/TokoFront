@@ -70,8 +70,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                 qty: order.quantity,
                                 unit: 'piece'
                         })),
-                    },
-                },
+                    }
+                    // createdAt: ((new Date()).toISOString()).toLocaleString()
+                }
             })
             console.log(purchase)
             res.status(200).json(purchase)
