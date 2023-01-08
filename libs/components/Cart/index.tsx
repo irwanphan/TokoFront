@@ -55,7 +55,7 @@ export const CartItems = () => {
         setIsLoading(false)
     }, [checkCart])
 
-    if (isLoading || isLoadingCheckCart) return (
+    if (isLoading) return (
         <Box>
             <Skeleton h={6} mb={2} />
             <Skeleton h={4} />
@@ -69,43 +69,51 @@ export const CartItems = () => {
     return (
         <Box>
             <List className="cart-items">
-                {checkCart.map((cartItem:CartItemCheckoutInterface) => {
-                    return (
-                        <ListItem key={cartItem.id} mb={2} >
-                            <Flex alignItems='center' mb={1}>
-                                {cartItem?.name}
-                                <Box 
-                                    ml={2} p={1} 
-                                    borderWidth='1px'
-                                    borderStyle='solid'
-                                    borderColor='gray.600'
-                                    cursor='pointer'
-                                    fontSize={12}
-                                    transition='0.3s ease all'
-                                    _hover={{ bgColor: 'orange.200' }}
-                                    onClick={() => {
-                                        setScope(cartItem)
-                                        onOpen()
-                                    }}
-                                ><FiTrash /></Box>
-                            </Flex>
-                            <Flex
-                                color='gray.600'
-                                fontSize={12}
-                                gap={1}
-                                justifyContent='space-between'
-                            >
-                                <Flex alignItems='center'>
-                                    {cartItem.quantity} <Box as={FiX}/> {cartItem.price}
+                {
+                    isLoadingCheckCart ?
+                    <Box>
+                        <Skeleton h={6} mb={2} />
+                        <Skeleton h={4} />
+                    </Box>
+                    :
+                    checkCart.map((cartItem:CartItemCheckoutInterface) => {
+                        return (
+                            <ListItem key={cartItem.id} mb={2} >
+                                <Flex alignItems='center' mb={1}>
+                                    {cartItem?.name}
+                                    <Box 
+                                        ml={2} p={1} 
+                                        borderWidth='1px'
+                                        borderStyle='solid'
+                                        borderColor='gray.600'
+                                        cursor='pointer'
+                                        fontSize={12}
+                                        transition='0.3s ease all'
+                                        _hover={{ bgColor: 'orange.200' }}
+                                        onClick={() => {
+                                            setScope(cartItem)
+                                            onOpen()
+                                        }}
+                                    ><FiTrash /></Box>
                                 </Flex>
-                                <Box fontWeight={600}>
-                                    {cartItem.subtotal}
-                                </Box>
-                            </Flex>
-                            <Divider />
-                        </ListItem>
-                    )
-                })}
+                                <Flex
+                                    color='gray.600'
+                                    fontSize={12}
+                                    gap={1}
+                                    justifyContent='space-between'
+                                >
+                                    <Flex alignItems='center'>
+                                        {cartItem.quantity} <Box as={FiX}/> {cartItem.price}
+                                    </Flex>
+                                    <Box fontWeight={600}>
+                                        {cartItem.subtotal}
+                                    </Box>
+                                </Flex>
+                                <Divider />
+                            </ListItem>
+                        )
+                    })
+                }
             </List>
 
             <CartTotal />

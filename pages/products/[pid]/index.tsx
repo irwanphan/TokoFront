@@ -14,6 +14,7 @@ import LoadingBlock from "@elements/LoadingBlock"
 
 const ProductDetailView = () => {
     const [ isLoadingProduct, setIsLoadingProduct ] = useState<boolean>(true)
+    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
     
     const router = useRouter()
     const { pid }:any = router.query
@@ -71,7 +72,6 @@ const ProductDetailView = () => {
     }
 
     // handling AddToCart
-    const [ cart, setCart ] = useRecoilState<CartItemInterface[]>(cartState)
     const handleAddToCart = (product:ItemInterface) => {
         if (inCart) {
             if (inCart + value > stock!) {
@@ -139,10 +139,6 @@ const ProductDetailView = () => {
                         onClick={ () => handleAddToCart(obj) } >
                         Add to Cart
                     </FormSubmitButton>
-
-                    <Button
-                        onClick={()=> console.log(store)}
-                    >check</Button>
                 </GridItem>
             </Grid>
         </MainLayout>

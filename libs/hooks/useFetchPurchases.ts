@@ -1,9 +1,9 @@
-import { ItemInterface } from "@interfaces//storeItem"
+import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
 export const useFetchPurchases = () => {
-    const [ purchases, setPurchases ] = useState()
+    const [ purchases, setPurchases ] = useState<CartItemCheckoutInterface[]>()
     const [ isLoadingPurchases, setIsLoadingPurchases ] = useState<boolean>(true)
 
     useEffect(() => {
