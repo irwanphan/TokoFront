@@ -15,7 +15,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const purchases = await prisma.purchase.findMany({
                 include: {
                     detail: true,
-                    shipment: true
+                    shipment: true,
+                    // user: true
                 }
             })
             console.log(purchases)
