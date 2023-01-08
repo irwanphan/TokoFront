@@ -31,7 +31,7 @@ export async function getServerSideProps(context:any) {
 const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
 
-    const { purchases, isLoadingPurchases } = useFetchPurchases()
+    const { purchases, isLoadingPurchases }:any = useFetchPurchases()
     console.log(purchases)
 
     return (
@@ -73,7 +73,13 @@ const AdminAreaPage = () => {
                                 <Skeleton h={4} />
                             </Box>
                         :   
-                            <p>asdf</p>
+                            purchases!.map((purchase:any) => {
+                                return (
+                                    <Box>
+                                        {purchase.createdAt}
+                                    </Box>
+                                )
+                            })
                         }
                 </Box>
             </BlockContainer>
