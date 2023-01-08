@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react"
-import { Box, List, ListItem, Flex, Divider, useToast, useDisclosure, Skeleton } from "@chakra-ui/react"
+import { Box, List, ListItem, Flex, Divider, useDisclosure, Skeleton } from "@chakra-ui/react"
 import { cartState, checkCartState, removeFromCart } from "@libs/contexts/cart"
 import { FiTrash, FiX } from "react-icons/fi"
-import BlockContainer from "@elements/BlockContainer"
 import ModalPopup from "@units/ModalPopup"
 
 import { useRecoilValue } from "recoil"
 import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import CartTotal from "@components/CartTotal"
+import { notify } from "@utils/notify"
 
 export const CartItems = () => {
     const cart = useRecoilValue<CartItemInterface[]>(cartState)
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
-
-    // handling notification
-    const toast = useToast()
-    const notify = (message:string) => {
-        toast({
-            duration: 1500,
-            position: 'bottom-right',
-            render: () => (
-                <BlockContainer py={4} px={6}>{message}</BlockContainer>
-            )
-        })
-    }
 
     // TODO: minus and plus item on cart
     const handleRemoveFromCart = (scope:CartItemCheckoutInterface|any) => {
