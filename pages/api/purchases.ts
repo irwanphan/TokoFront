@@ -32,18 +32,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const { address, city, province, postal, total, user, orders } = req.body
 
             // console.log(user)
-            const userId = 'c1e2cdb9-9285-4483-9856-6068da672c82'
-            // console.log(userId)
-            const checkuser = await prisma.users.findMany({
-                where: {
-                    id: userId
-                }
+            const qUser = await prisma.users.findUnique({
+                where: { email: user.email }
             })
-            // console.log(checkuser)
-
-            // TODO: TEMP: use irwanphan user id
+            // console.log(qUser)
+            const userId = qUser?.id
             const userEmail:any = user.email
-            // console.log(userEmail)
 
             // orders.map((order:any) => {
             //     console.log(order.id)
@@ -67,16 +61,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         }
                     },
                     detail: {
-                        create: 
-
-                            orders.map((order:any) => ({
+                        create: orders.map((order:any) => ({
                                 productId: order.id,
                                 purchasePrice: order.price,
                                 qty: order.quantity,
                                 unit: 'piece'
-                            })),
-                        
-
+                        })),
                     },
                 },
             })
