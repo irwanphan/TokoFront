@@ -7,13 +7,14 @@ import SessionProfile from "@units/SessionProfile"
 import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
 import useCartTotal from "@hooks/useCartTotal"
+import WarningBox from "@elements/WarningBox"
 
 interface UserInterface {
     email: string | null | undefined
@@ -30,15 +31,32 @@ interface IFormInput {
 }
 const resolver: Resolver<IFormInput> = async (values) => {
     return {
-        values: values.address ? values : {},
-        errors: !values.address
-            ? {
-                address: {
+        values: values.address ? values : 
+                values.city ? values :
+                values.province ? values :
+                values.postal ? values :
+                {},
+        errors: !values.address ?
+                { address: {
                     type: 'required',
-                    message: 'This is required.',
-                },
-            }
-        : {},
+                    message: 'Address is required.',
+                }}
+                : !values.city ?
+                { city: {
+                        type: 'required',
+                        message: 'City is required.',
+                }}
+                : !values.province ?
+                { province: {
+                        type: 'required',
+                        message: 'Province is required.',
+                }}
+                : !values.postal ?
+                { postal: {
+                        type: 'required',
+                        message: 'Postal code is required.',
+                }}
+                : {}
     }
 }
 
@@ -67,7 +85,7 @@ const CheckoutPage = () => {
     const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
     
-    const { setFocus, handleSubmit, register, formState: { errors } } = useForm({
+    const { handleSubmit, register, formState: { errors } } = useForm({
         defaultValues: {
             address: '',
             city: '',
@@ -79,16 +97,6 @@ const CheckoutPage = () => {
         },
         resolver
     })
-
-    // useEffect(() => {
-    //     const firstError = Object.keys(errors).reduce((field, a) => {
-    //       return !!errors[field] ? field : a;
-    //     }, null);
-      
-    //     if (firstError) {
-    //       setFocus(firstError);
-    //     }
-    //   }, [errors, setFocus]);
 
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
@@ -146,14 +154,7 @@ const CheckoutPage = () => {
                             placeholder="eg. Jalan Sudirman, no 72"
                             isDisabled={isDisabled}
                             register={register} />
-                            {   errors?.address && 
-                                <Box bgColor='red.600'
-                                    color='white'
-                                    fontSize='0.75rem'
-                                    fontWeight={600}
-                                    px={2} py={1.5}
-                                >{errors.address.message}</Box>
-                            }
+                            { errors?.address && <WarningBox>{errors.address.message}</WarningBox> }
                         <Flex gap={3}>
                             <Box>
                                 <FormInput 
@@ -162,6 +163,7 @@ const CheckoutPage = () => {
                                     placeholder="eg. Jakarta Pusat"
                                     isDisabled={isDisabled}
                                     register={register} />
+                                { errors?.city && <WarningBox>{errors.city.message}</WarningBox> }
                             </Box>
                             <Box>
                                 <FormInput 
@@ -170,6 +172,7 @@ const CheckoutPage = () => {
                                     placeholder="eg. DKI Jakarta"
                                     isDisabled={isDisabled}
                                     register={register} />
+                                { errors?.province && <WarningBox>{errors.province.message}</WarningBox> }
                             </Box>
                             <Box>
                                 <FormInput 
@@ -178,6 +181,7 @@ const CheckoutPage = () => {
                                     placeholder="eg. 12930"
                                     isDisabled={isDisabled}
                                     register={register} />
+                                { errors?.postal && <WarningBox>{errors.postal.message}</WarningBox> }
                             </Box>
                         </Flex>
 
