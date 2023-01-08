@@ -1,32 +1,8 @@
 import { Box, Flex, Skeleton } from "@chakra-ui/react"
-import { CartItemCheckoutInterface } from "@interfaces//cartItem"
-import { checkCartState } from "@libs/contexts/cart"
-import { useEffect, useState } from "react"
-import { useRecoilValue } from "recoil"
-
-export const totalValue = (checkCart:CartItemCheckoutInterface[]) => {
-    if(checkCart.length > 0) {
-        const total = checkCart?.reduce( (acc:number, {subtotal}:any) =>
-        acc + subtotal, 0
-        )
-        // console.log('total: ', total)
-        return total
-    }
-}
+import { useCartTotal } from "@libs/contexts/cart"
 
 const CartTotal = () => {
-    const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
-    const [ isLoadingTotal, setIsLoadingTotal ] = useState<boolean>(true)
-    const [ total, setTotal ] = useState<number>(0)
-
-    useEffect(() => {
-        const total = totalValue(checkCart)
-        setTotal(total!)
-    }, [checkCart])
-    useEffect(() => {
-        if (total) setIsLoadingTotal(false)
-    },[total])
-    // console.log('check cart (total): ', checkCart)
+    const { total, isLoadingTotal } = useCartTotal()
 
     if (isLoadingTotal) return (
         <Box>
