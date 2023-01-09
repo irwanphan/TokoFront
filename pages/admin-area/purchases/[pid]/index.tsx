@@ -67,12 +67,9 @@ const ProductDetailViewPage = () => {
 
     return (
         <MainLayout>
-            {
-                userCategory === 'admin' &&
-                <Flex gap={2}>
-                    <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
-                </Flex>
-            }
+            <Flex gap={2}>
+                <FormSubmitButton href="/admin-area">Dashboard</FormSubmitButton>
+            </Flex>
             <Box mt={4} />
 
             <BlockContainer>

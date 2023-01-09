@@ -38,7 +38,7 @@ const ManageProductsPage = () => {
     return (
         <MainLayout>
             <Flex gap={2}>
-                <FormSubmitButton href="/admin-area">Admin Dashboard</FormSubmitButton>
+                <FormSubmitButton href="/admin-area">Dashboard</FormSubmitButton>
             </Flex>
             <Box mt={4} />
 
