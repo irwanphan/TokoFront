@@ -39,22 +39,22 @@ const resolver: Resolver<IFormInput> = async (values) => {
         errors: !values.address ?
                 { address: {
                     type: 'required',
-                    message: 'Address is required.',
+                    message: 'Address is required.'
                 }}
                 : !values.city ?
                 { city: {
                         type: 'required',
-                        message: 'City is required.',
+                        message: 'City is required.'
                 }}
                 : !values.province ?
                 { province: {
                         type: 'required',
-                        message: 'Province is required.',
+                        message: 'Province is required.'
                 }}
                 : !values.postal ?
                 { postal: {
                         type: 'required',
-                        message: 'Postal code is required.',
+                        message: 'Postal code is required.'
                 }}
                 : {}
     }
@@ -138,7 +138,7 @@ const CheckoutPage = () => {
                 <GridItem>
                     <BlockContainer>
                         <Box>
-                            You're login as
+                            You&apos;re login as
                             <Box mt={1} mb={3}
                                 borderLeftColor='blue.300'
                                 borderLeftWidth='0.5rem'
