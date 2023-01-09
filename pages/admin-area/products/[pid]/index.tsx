@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, Grid, Skeleton, useToast, Text } from "@chakra-ui/react"
-import { productsState, loadProducts } from "@contexts/products"
+import { productsState } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
 import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -40,20 +40,6 @@ const ProductDetailViewPage = () => {
     const toast = useToast()
 
     useEffect(() => {
-        // TODO: API for get single product
-        const products = loadProducts()
-        .then(res => setStore(res))
-        // .then(() => setIsLoadingProducts(false))
-        .catch(e => {
-            toast({
-                title: 'Error',
-                description: `You're not connected to our server!`,
-                render: () => (
-                    <BlockContainer py={4} px={6} bgColor="green.100">You're not connected to our server!</BlockContainer>
-                )
-            })
-            // console.error(e.response.status)
-        })
         setQid(pid)
     }, [pid] )
     useEffect(() => {
