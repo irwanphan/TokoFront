@@ -2,7 +2,7 @@ import { Box, Divider, Flex, Grid, Skeleton, useToast, Text } from "@chakra-ui/r
 import { productsState } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
-import LoadingBlock from "@elements/LoadingBlock"
+import LoadingBlock, { LoadingBlockList } from "@elements/LoadingBlock"
 import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@layouts//MainLayout"
 import { useRouter } from "next/router"
@@ -63,15 +63,8 @@ const ProductDetailViewPage = () => {
 
     if (isLoadingPurchase) return (
         <MainLayout>
-            <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={4}>
-                <LoadingBlock />
-                <Box>
-                    <Skeleton h={12} mb={4} />
-                    <Skeleton h={6} mb={2} />
-                    <Skeleton h={4} mb={6} />
-                    <Skeleton h={8} w={40} />
-                </Box>
-            </Grid>
+            <Skeleton h={12} mb={4} />
+            <LoadingBlock />
         </MainLayout>
     )
 
@@ -97,7 +90,7 @@ const ProductDetailViewPage = () => {
                     </Text>
                     { purchase?.detail.map(item => {
                         return (
-                            <Box
+                            <Box key={item.id}
                                 border="1px solid lightgray"
                                 borderRadius={8}
                                 p={2}
@@ -124,7 +117,7 @@ const ProductDetailViewPage = () => {
                     TODO: mark delivered here is by admin only
 
                     <Flex gap={2} justifyContent='flex-end'>
-                        <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
+                        <FormSubmitButton href="/admin-area" >Back</FormSubmitButton>
                         <FormSubmitButton notLink 
                             buttonColor="green.100"
                             isDisabled={isDisabled}
