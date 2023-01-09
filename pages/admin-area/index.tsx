@@ -1,13 +1,15 @@
 import { useState } from "react"
-import { Box, Divider, Flex, Skeleton, Text } from "@chakra-ui/react"
+import { Box, Divider, Flex, List, ListItem, Skeleton, Text } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
-import { FiShoppingCart } from "react-icons/fi"
+import { FiEdit, FiShoppingCart, FiSlash } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
 import { useFetchPurchases } from "@hooks/useFetchPurchases"
 import { getSession } from 'next-auth/react'
+import TriggerBox from "@units/TriggerBox"
+import { useRouter } from "next/router"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
@@ -32,6 +34,7 @@ const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
     const { purchases, isLoadingPurchases } = useFetchPurchases()
     console.log(purchases)
+    const router = useRouter()
 
     return (
         <MainLayout>
@@ -66,35 +69,65 @@ const AdminAreaPage = () => {
                 </Flex>
                 <Divider />
                     <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
-                        {   isLoadingPurchases ?
-                            <Box>
-                                <Skeleton h={6} mb={2} />
-                                <Skeleton h={4} />
-                            </Box>
-                        :   
-                            purchases!.map((purchase) => {
-                                const date = new Date(`${purchase.createdAt}`).toLocaleDateString('en-EN', { 
-                                    weekday: 'long', 
-                                    year: 'numeric', 
-                                    month: 'long', 
-                                    day: 'numeric'
+                        <List className="purchase-items">
+                            {   isLoadingPurchases ?
+                                <Box>
+                                    <Skeleton h={6} mb={2} />
+                                    <Skeleton h={4} />
+                                </Box>
+                            :   
+                                purchases!.map((purchase) => {
+                                    const date = new Date(`${purchase.createdAt}`).toLocaleDateString('en-EN', { 
+                                        weekday: 'long', 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric'
+                                    })
+                                    const time = new Date(`${purchase.createdAt}`).toLocaleTimeString()
+                                    
+                                    return (
+                                        <ListItem key={purchase.id} 
+                                            mb={3} // seen from Divider 
+                                        >
+                                            <Flex alignItems='center' 
+                                                fontSize={14}
+                                            >
+                                                <Text>{date}</Text>                                            
+                                            </Flex>
+                                            <Flex
+                                                color='gray.600'
+                                                fontSize={12}
+                                                gap={1}
+                                                mb={4} // to Divider
+                                                justifyContent='space-between'
+                                            >
+                                                <Flex direction='column' >
+                                                    <Flex gap={2}>
+                                                        <Text>Type of items</Text>                                            
+                                                        <Text fontWeight={600}>{(purchase.detail).length}</Text>                                            
+                                                    </Flex>
+                                                    <Flex gap={2}>
+                                                        <Text>Total purchase</Text>                                            
+                                                        <Text fontWeight={600}>{purchase.total}</Text>                                            
+                                                    </Flex>
+                                                </Flex>
+                                                <Flex gap={2} alignItems='flex-end'>
+                                                    <TriggerBox
+                                                        icon={FiEdit}
+                                                        hoverColor='green.100'
+                                                        onClick={() => {
+                                                            router.replace(`/admin-area/products/${purchase.id}`)
+                                                        }}
+                                                    >View Detail
+                                                    </TriggerBox>
+                                                </Flex>
+                                            </Flex>
+                                            <Divider />
+                                        </ListItem>
+                                    )
                                 })
-                                const time = new Date(`${purchase.createdAt}`).toLocaleTimeString()
-                                
-                                return (
-                                    <Box>
-                                        <small>purchased on</small>
-                                        <Box>
-                                            {date}
-                                        </Box>
-                                        <Box>
-                                            {time}
-                                        </Box>
-                                        <Divider />
-                                    </Box>
-                                )
-                            })
-                        }
+                            }
+                        </List>
                 </Box>
             </BlockContainer>
         </MainLayout>

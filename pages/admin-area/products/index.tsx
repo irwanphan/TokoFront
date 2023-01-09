@@ -1,5 +1,5 @@
-import { Box, Flex, Divider, Text, useToast, List, ListItem, useDisclosure, Skeleton } from "@chakra-ui/react"
-import { productsState, loadProducts } from "@contexts/products"
+import { Box, Flex, Divider, Text, List, ListItem, useDisclosure, Skeleton } from "@chakra-ui/react"
+import { productsState } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { ItemInterface } from "@interfaces//storeItem"
@@ -7,32 +7,15 @@ import MainLayout from "@libs/layouts/MainLayout"
 import ModalPopup from "@units/ModalPopup"
 import TriggerBox from "@units/TriggerBox"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { FiEdit, FiPackage, FiSlash } from "react-icons/fi"
-import { useRecoilState } from "recoil"
+import { useRecoilValue } from "recoil"
 
 const ManageProductsPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
-    const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
+    const store = useRecoilValue<ItemInterface[]>(productsState)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
-    const toast = useToast()
     const router = useRouter()
-
-    useEffect(() => {
-        const products = loadProducts()
-        .then(res => setStore(res))
-        .then(() => setIsLoadingProducts(false))
-        .catch(e => {
-            toast({
-                title: 'Error',
-                description: `You're not connected to our server!`,
-                render: () => (
-                    <BlockContainer py={4} px={6} bgColor="green.100">You're not connected to our server!</BlockContainer>
-                )
-            })
-            // console.error(e.response.status)
-        })
-    }, [])
 
     // handling delete modal
     const { isOpen, onOpen, onClose } = useDisclosure()
