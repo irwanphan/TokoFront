@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 // import { PrismaClient } from '@prisma/client'
-import { prisma } from '@libs/prisma'
+import prisma from '@libs/prisma'
 // const prisma = new PrismaClient()
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
