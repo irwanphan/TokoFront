@@ -10,6 +10,7 @@ import { useFetchPurchases } from "@hooks/useFetchPurchases"
 import { getSession } from 'next-auth/react'
 import TriggerBox from "@units/TriggerBox"
 import { useRouter } from "next/router"
+import { LoadingBlockList } from "@elements/LoadingBlock"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
@@ -71,10 +72,7 @@ const AdminAreaPage = () => {
                     <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                         <List className="purchase-items">
                             {   isLoadingPurchases ?
-                                <Box>
-                                    <Skeleton h={6} mb={2} />
-                                    <Skeleton h={4} />
-                                </Box>
+                                <LoadingBlockList />
                             :   
                                 purchases!.map((purchase) => {
                                     const date = new Date(`${purchase.createdAt}`).toLocaleDateString('en-EN', { 
