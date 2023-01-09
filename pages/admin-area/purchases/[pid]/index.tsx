@@ -7,7 +7,7 @@ import { ItemInterface } from "@interfaces//storeItem"
 import MainLayout from "@layouts//MainLayout"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { FiEdit } from "react-icons/fi"
+import { FiFileText } from "react-icons/fi"
 import { useRecoilState } from "recoil"
 import axios from "axios"
 import LoadingOverlay from "@elements/LoadingOverlay"
@@ -78,8 +78,8 @@ const ProductDetailViewPage = () => {
             <BlockContainer>
                 <Box>
                     <Flex alignItems='center'>
-                        <Box as={FiEdit} mr={2} />
-                        <Text fontWeight={600} >Edit: {selected?.name}</Text>
+                        <Box as={FiFileText} mr={2} />
+                        <Text fontWeight={600} >Invoice #: TODO invoice code</Text>
                     </Flex>
                     <Divider/>
                 </Box>
