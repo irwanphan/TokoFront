@@ -7,18 +7,17 @@ const prisma = new PrismaClient()
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const session = await getSession({ req })
-    // if (!session) {
-    //     return res.status(401).json({ message: 'Unauthorized.' });
-    // }
+    if (!session) {
+        return res.status(401).json({ message: 'Unauthorized.' });
+    }
 
+    // get all products
     if (req.method === 'GET') {
-        // TODO: get specific product, or just leave it to global state
-        // get all products
         try {
             const products = await prisma.product.findMany({
                 // orderBy: { name: 'name' }
             })
-            console.log(products)
+            // console.log(products)
             res.status(200).json(products)
             return products
         }
@@ -46,7 +45,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 const { name, refId, description, price, currentStock } = req.body;
                     
                 // TODO: change later, TEMP: all unit is piece
-                const unit = 'pc(s)'
+                const unit = 'piece'
 
                 const product = await prisma.product.create({
                     data: {

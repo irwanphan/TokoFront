@@ -5,12 +5,12 @@ const prisma = new PrismaClient()
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const session = await getSession({ req })
-    // if (!session) {
-    //     return res.status(401).json({ message: 'Unauthorized.' });
-    // }
+    if (!session) {
+        return res.status(401).json({ message: 'Unauthorized.' });
+    }
 
+    // get all purchases
     if (req.method === 'GET') {
-        // get all purchases
         try {
             const purchases = await prisma.purchase.findMany({
                 include: {
