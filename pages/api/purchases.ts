@@ -17,6 +17,10 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     detail: true,
                     shipment: true,
                     // user: true
+                },
+                orderBy: {
+                    id: 'desc'
+                    // createdAt: { sort: 'asc' }
                 }
             })
             console.log(purchases)
