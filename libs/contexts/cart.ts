@@ -1,5 +1,5 @@
-import { atom, selector, useRecoilState, useSetRecoilState } from "recoil"
-import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
+import { atom, selector } from "recoil"
+import { CartItemInterface } from "@libs/interfaces/cartItem"
 import { ItemInterface } from "@interfaces//storeItem";
 import { productsState } from "./products";
 
