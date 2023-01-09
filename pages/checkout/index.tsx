@@ -15,6 +15,7 @@ import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
 import useCartTotal from "@hooks/useCartTotal"
 import WarningBox from "@elements/WarningBox"
+import { useRouter } from "next/router"
 
 interface UserInterface {
     email: string | null | undefined
@@ -102,6 +103,7 @@ const CheckoutPage = () => {
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
 
+    const router = useRouter()
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -115,11 +117,13 @@ const CheckoutPage = () => {
         data.user.email = session!.user.email
         data.user.name = session!.user.name
         // console.log(data)
-        await createPurchaseOrder(data)
+        const purchase = await createPurchaseOrder(data)
         localStorage.removeItem("cart")
         setCart([])
         toast({title:'Purchase order submitted', status:'success'})
+        toast({title:'Redirecting ...'})
         setIsLoading(false)
+        router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     return (
