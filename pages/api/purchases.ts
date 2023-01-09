@@ -13,8 +13,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const query:any = req.query
     const queryId:any = query.id
     const id = Number(queryId)
-    console.log('query id: ', queryId)
-    console.log('id: ', id)
+    // console.log('query id: ', queryId)
+    // console.log('id: ', id)
     
     // get all purchases
     if (id) {
