@@ -114,7 +114,7 @@ const AdminAreaPage = () => {
                                                         icon={FiEdit}
                                                         hoverColor='green.100'
                                                         onClick={() => {
-                                                            router.replace(`/admin-area/products/${purchase.id}`)
+                                                            router.replace(`/admin-area/purchases/${purchase.id}`)
                                                         }}
                                                     >View Detail
                                                     </TriggerBox>
