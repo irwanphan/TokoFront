@@ -34,7 +34,7 @@ export async function getServerSideProps(context:any) {
 const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
     const { purchases, isLoadingPurchases } = useFetchPurchases()
-    console.log(purchases)
+    // console.log(purchases)
     const router = useRouter()
 
     return (

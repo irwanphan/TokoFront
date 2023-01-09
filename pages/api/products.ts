@@ -2,8 +2,9 @@ import { PrismaClient } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getSession } from 'next-auth/react'
+import { prisma } from '@libs/prisma'
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const session = await getSession({ req })
@@ -19,7 +20,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             })
             // console.log(products)
             return res.status(200).json(products)
-            // return products
         }
         catch (e) {
             console.log(e)

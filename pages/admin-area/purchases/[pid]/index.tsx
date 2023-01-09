@@ -11,35 +11,53 @@ import { FiFileText } from "react-icons/fi"
 import { useRecoilState } from "recoil"
 import axios from "axios"
 import LoadingOverlay from "@elements/LoadingOverlay"
+import { useFetchPurchase, useFetchPurchases } from "@hooks/useFetchPurchases"
+import { PurchasesInterface } from "@interfaces//purchases"
 
 const ProductDetailViewPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
     const [ isLoading, setIsLoading ] = useState(false)
-    const [ isLoadingPurchase, setIsLoadingPurchase ] = useState<boolean>(true)
     const [ isDisabled, setDisabled ] = useState(false)
+    const [ selected, setSelected ] = useState<ItemInterface>()
+
+    const [ purchase, setPurchase ] = useState<PurchasesInterface>()
+    const [ isLoadingPurchase, setIsLoadingPurchase ] = useState<boolean>(true)
     
     const router = useRouter()
     const { pid }:any = router.query
-
     // handling ShowItem
-    const [ store, setStore ] = useRecoilState<ItemInterface[]>(productsState)
-    const [ selected, setSelected ] = useState<ItemInterface>()
     const [ qid, setQid ] = useState<number|any>()
     
     const toast = useToast()
 
     useEffect(() => {
-        setQid(pid)
+        console.log('pid:', pid)
+        if ( typeof pid === 'string' ) {
+            setQid(parseInt(pid))
+            console.log('qid :', qid)
+        }
     }, [pid] )
     useEffect(() => {
-        const selectedItem:ItemInterface|undefined = store.find( item => item.id === pid )
-        setSelected(selectedItem)
-    }, [store] )
+        if (qid) {
+            console.log('qid ready :', qid)
+            const fetchData = async () => {
+                try {
+                    const { data: response } = await axios.get(`/api/purchases/?id=${qid}`)
+                    console.log(response)
+                    setPurchase(response)
+                } catch (error) {
+                    console.log(error)
+                }
+                setIsLoadingPurchase(false)
+            }
+            fetchData()
+        }
+    }, [qid] )
     useEffect(() => {
-        console.log(selected)
-        setIsLoadingPurchase(false)
+        // console.log(selected)
+        // setIsLoadingPurchase(false)
     }, [selected])
-
+    
     const onSubmit = async (data:any) => {
         data.price = parseInt(data.price) // price was string
         setIsLoading(true)
