@@ -104,17 +104,17 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     // createdAt: ((new Date()).toISOString()).toLocaleString()
                 }
             })
-            console.log(purchase)
-            res.status(200).json(purchase)
+            // console.log(purchase)
+            return res.status(200).json(purchase)
 
         } catch (e:any) {
             console.log(e)
-            res.status(500).json({ message: `${e.status}` })
+            return res.status(500).json({ message: `${e.status}` })
         }
     }
     else {
         res.setHeader('Allow', ['POST']);
-        res
+        return res
             .status(405)
             .json({ message: `HTTP method ${req.method} is not supported.` })
     }

@@ -8,13 +8,14 @@ import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import FormInput from "@elements/FormInput"
 import { useState } from "react"
-import { CartItemCheckoutInterface } from "@interfaces//cartItem"
-import { useRecoilValue } from "recoil"
-import { checkCartState } from "@contexts/cart"
+import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
+import { cartState, checkCartState } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
 import useCartTotal from "@hooks/useCartTotal"
 import WarningBox from "@elements/WarningBox"
+import { useRouter } from "next/router"
 
 interface UserInterface {
     email: string | null | undefined
@@ -81,8 +82,9 @@ const CheckoutPage = () => {
     const { data: session } = useSession()
     // console.log(session)
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
+    const setCart = useSetRecoilState(cartState)
 
-    const [ isLoading, setIsLoading ] = useState(true)
+    const [ isLoading, setIsLoading ] = useState(false)
     const [ isDisabled, setDisabled ] = useState(false)
     
     const { handleSubmit, register, formState: { errors } } = useForm({
@@ -101,28 +103,32 @@ const CheckoutPage = () => {
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
 
+    const router = useRouter()
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         // TODO: disable form when submit
         setDisabled
         setIsLoading(true)
-        toast({title:'Saving...'})
+        toast({title:'Submitting ...'})
         // console.log(checkCart)
         data.orders = checkCart
         data.total = total!
         data.user.email = session!.user.email
         data.user.name = session!.user.name
         // console.log(data)
-        await createPurchaseOrder(data)
+        const purchase = await createPurchaseOrder(data)
+        localStorage.removeItem("cart")
+        setCart([])
+        toast({title:'Purchase order submitted', status:'success'})
+        toast({title:'Redirecting ...'})
         setIsLoading(false)
-        toast({title: data.address})
-        toast({title:'Saved', status:'success'})
+        router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     return (
         <MainLayout>
-            { isLoading ?? <LoadingOverlay /> }
+            { isLoading && <LoadingOverlay /> }
             <Box textAlign='left' mb={8}>
                 <Text fontSize={32}>
                     Your Cart
