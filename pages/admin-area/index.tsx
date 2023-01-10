@@ -2,17 +2,18 @@ import { useState } from "react"
 import { Box, Divider, Flex, List, ListItem, Text } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
-import { CartItems } from "@libs/components/Cart"
-import MainLayout from "@libs/layouts/MainLayout"
+import TriggerBox from "@units/TriggerBox"
+import { LoadingBlockList } from "@elements/LoadingBlock"
 import { FiEdit, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
+
+import MainLayout from "@libs/layouts/MainLayout"
+import { CartItems } from "@libs/components/Cart"
 import { useFetchPurchases } from "@hooks/useFetchPurchases"
-import { getSession } from 'next-auth/react'
-import TriggerBox from "@units/TriggerBox"
-import { useRouter } from "next/router"
-import { LoadingBlockList } from "@elements/LoadingBlock"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
+import { useRouter } from "next/router"
+import { getSession } from 'next-auth/react'
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route

@@ -3,6 +3,7 @@ export interface PurchasesInterface {
     userId: String
     userEmail: String
     total: number
+    note: String
     createdAt: String
     updatedAt: String
     shipment: PurchaseShipmentInterface

@@ -28,6 +28,7 @@ interface IFormInput {
     province: string
     postal: string
     total: number
+    note: string
     orders: CartItemCheckoutInterface[]
     user: UserInterface
 }
@@ -95,6 +96,7 @@ const CheckoutPage = () => {
             province: '',
             postal: '',
             total: 0,
+            note: '',
             orders: [],
             user: { email: '', name: '' }
         },
@@ -201,6 +203,14 @@ const CheckoutPage = () => {
                                     { errors?.postal && <WarningBox>{errors.postal.message}</WarningBox> }
                                 </Box>
                             </Flex>
+
+                            <FormInput 
+                                type="textarea"
+                                name='note'
+                                label='Note' 
+                                placeholder="eg. please cover the stuff with black plastic"
+                                isDisabled={isDisabled}
+                                register={register} />
 
                             <Divider mt={8} mb={4} />
 
