@@ -1,16 +1,19 @@
 import { useState } from "react"
-import { Box, Divider, Flex, List, ListItem, Skeleton, Text } from "@chakra-ui/react"
+import { Box, Divider, Flex, List, ListItem, Text } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
-import { CartItems } from "@libs/components/Cart"
-import MainLayout from "@libs/layouts/MainLayout"
-import { FiEdit, FiShoppingCart, FiSlash } from "react-icons/fi"
-import { TbFileInvoice } from "react-icons/tb"
-import { useFetchPurchases } from "@hooks/useFetchPurchases"
-import { getSession } from 'next-auth/react'
 import TriggerBox from "@units/TriggerBox"
-import { useRouter } from "next/router"
 import { LoadingBlockList } from "@elements/LoadingBlock"
+import { FiEdit, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
+import { TbFileInvoice } from "react-icons/tb"
+
+import MainLayout from "@libs/layouts/MainLayout"
+import { CartItems } from "@libs/components/Cart"
+import { useFetchPurchases } from "@hooks/useFetchPurchases"
+import { useRecoilValue } from "recoil"
+import { checkCartState } from "@contexts/cart"
+import { useRouter } from "next/router"
+import { getSession } from 'next-auth/react'
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
@@ -32,6 +35,7 @@ export async function getServerSideProps(context:any) {
 }
 
 const AdminAreaPage = () => {
+    const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
     const { purchases, isLoadingPurchases } = useFetchPurchases()
     // console.log(purchases)
@@ -56,9 +60,20 @@ const AdminAreaPage = () => {
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                     <CartItems />
                 </Box>
-                <Flex justifyContent='right' mt={4}>
-                    <FormSubmitButton href="/checkout" buttonColor="green.100" >Checkout</FormSubmitButton>
-                </Flex>
+                {
+                    checkCart.length > 0 ?
+                    <Flex justifyContent='right' mt={4}>
+                        <FormSubmitButton href="/checkout" buttonColor="green.100">
+                            Checkout
+                        </FormSubmitButton>
+                    </Flex>
+                    :
+                    <Flex justifyContent='right' mt={4}>
+                        <FormSubmitButton href="/products" buttonColor="green.100">
+                            <Box as={FiShoppingBag} mr={1} fontSize={20} />Go Shopping
+                        </FormSubmitButton>
+                    </Flex>
+                }
             </BlockContainer>
 
             <Box mt={4} />

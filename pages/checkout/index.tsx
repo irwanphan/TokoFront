@@ -16,6 +16,7 @@ import axios from "axios"
 import useCartTotal from "@hooks/useCartTotal"
 import WarningBox from "@elements/WarningBox"
 import { useRouter } from "next/router"
+import { FiShoppingBag } from "react-icons/fi"
 
 interface UserInterface {
     email: string | null | undefined
@@ -27,6 +28,7 @@ interface IFormInput {
     province: string
     postal: string
     total: number
+    note: string
     orders: CartItemCheckoutInterface[]
     user: UserInterface
 }
@@ -94,6 +96,7 @@ const CheckoutPage = () => {
             province: '',
             postal: '',
             total: 0,
+            note: '',
             orders: [],
             user: { email: '', name: '' }
         },
@@ -138,71 +141,90 @@ const CheckoutPage = () => {
                 <GridItem>
                     <BlockContainer>
                         <CartItems />
+                        {
+                            checkCart.length === 0 &&
+                            <Flex justifyContent='right' mt={4}>
+                                <FormSubmitButton href="/products" buttonColor="green.100">
+                                    <Box as={FiShoppingBag} mr={1} fontSize={20} />Go Shopping
+                                </FormSubmitButton>
+                            </Flex>
+                        }
                     </BlockContainer>
                 </GridItem>
 
                 <GridItem>
-                    <BlockContainer>
-                        <Box>
-                            You&apos;re login as
-                            <Box mt={1} mb={3}
-                                borderLeftColor='blue.300'
-                                borderLeftWidth='0.5rem'
-                                borderLeftStyle='solid'
-                                paddingLeft={2}>
-                                <SessionProfile session={session} />
-                            </Box>
-                        </Box>
-
-                        <FormInput 
-                            name='address'
-                            label='Shipping Address' 
-                            placeholder="eg. Jalan Sudirman, no 72"
-                            isDisabled={isDisabled}
-                            register={register} />
-                            { errors?.address && <WarningBox>{errors.address.message}</WarningBox> }
-                        <Flex gap={3}>
+                    {
+                        checkCart.length > 0 &&
+                        <BlockContainer>
                             <Box>
-                                <FormInput 
-                                    name='city'
-                                    label='City' 
-                                    placeholder="eg. Jakarta Pusat"
-                                    isDisabled={isDisabled}
-                                    register={register} />
-                                { errors?.city && <WarningBox>{errors.city.message}</WarningBox> }
+                                You&apos;re login as
+                                <Box mt={1} mb={3}
+                                    borderLeftColor='blue.300'
+                                    borderLeftWidth='0.5rem'
+                                    borderLeftStyle='solid'
+                                    paddingLeft={2}>
+                                    <SessionProfile session={session} />
+                                </Box>
                             </Box>
-                            <Box>
-                                <FormInput 
-                                    name='province'
-                                    label='Province' 
-                                    placeholder="eg. DKI Jakarta"
-                                    isDisabled={isDisabled}
-                                    register={register} />
-                                { errors?.province && <WarningBox>{errors.province.message}</WarningBox> }
-                            </Box>
-                            <Box>
-                                <FormInput 
-                                    name='postal'
-                                    label='Postal Code' 
-                                    placeholder="eg. 12930"
-                                    isDisabled={isDisabled}
-                                    register={register} />
-                                { errors?.postal && <WarningBox>{errors.postal.message}</WarningBox> }
-                            </Box>
-                        </Flex>
 
-                        <Divider mt={8} mb={4} />
-
-                        <Flex justifyContent='flex-end' gap={2}>
-                            <FormSubmitButton href="/" >Back to Store</FormSubmitButton>
-                            <FormSubmitButton notLink 
-                                buttonColor="green.100"
+                            <FormInput 
+                                name='address'
+                                label='Shipping Address' 
+                                placeholder="eg. Jalan Sudirman, no 72"
                                 isDisabled={isDisabled}
-                                onClick={handleSubmit(onSubmit)} >
-                                Proceed Order
-                            </FormSubmitButton>
-                        </Flex>
-                    </BlockContainer>
+                                register={register} />
+                                { errors?.address && <WarningBox>{errors.address.message}</WarningBox> }
+                            <Flex gap={3}>
+                                <Box>
+                                    <FormInput 
+                                        name='city'
+                                        label='City' 
+                                        placeholder="eg. Jakarta Pusat"
+                                        isDisabled={isDisabled}
+                                        register={register} />
+                                    { errors?.city && <WarningBox>{errors.city.message}</WarningBox> }
+                                </Box>
+                                <Box>
+                                    <FormInput 
+                                        name='province'
+                                        label='Province' 
+                                        placeholder="eg. DKI Jakarta"
+                                        isDisabled={isDisabled}
+                                        register={register} />
+                                    { errors?.province && <WarningBox>{errors.province.message}</WarningBox> }
+                                </Box>
+                                <Box>
+                                    <FormInput 
+                                        name='postal'
+                                        label='Postal Code' 
+                                        placeholder="eg. 12930"
+                                        isDisabled={isDisabled}
+                                        register={register} />
+                                    { errors?.postal && <WarningBox>{errors.postal.message}</WarningBox> }
+                                </Box>
+                            </Flex>
+
+                            <FormInput 
+                                type="textarea"
+                                name='note'
+                                label='Note' 
+                                placeholder="eg. please cover the stuff with black plastic"
+                                isDisabled={isDisabled}
+                                register={register} />
+
+                            <Divider mt={8} mb={4} />
+
+                            <Flex justifyContent='flex-end' gap={2}>
+                                <FormSubmitButton href="/" >Back to Store</FormSubmitButton>
+                                <FormSubmitButton notLink 
+                                    buttonColor="green.100"
+                                    isDisabled={isDisabled}
+                                    onClick={handleSubmit(onSubmit)} >
+                                    Proceed Order
+                                </FormSubmitButton>
+                            </Flex>
+                        </BlockContainer>
+                    }
                 </GridItem>
             </Grid>
         </MainLayout>

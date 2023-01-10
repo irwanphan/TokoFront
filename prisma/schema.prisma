@@ -31,6 +31,7 @@ model Purchase {
   userId        String            @db.Uuid
   userEmail     String
   total         Float
+  note          String?
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
   shipment      Shipment?

@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-// import { PrismaClient } from '@prisma/client'
 import prisma from '@libs/prisma'
-// const prisma = new PrismaClient()
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const session = await getSession({ req })
@@ -16,11 +14,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     // console.log('query id: ', queryId)
     // console.log('id: ', id)
     
-    // get all purchases
+    // get single purchase
     if (id) {
         if (req.method === 'GET') {
             try {
-                const purchases = await prisma.purchase.findUnique({
+                const purchase = await prisma.purchase.findUnique({
                     include: {
                         detail: true,
                         shipment: true,
@@ -29,8 +27,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         id: id
                     }
                 })
-                // console.log(purchases)
-                return res.status(200).json(purchases)
+                // console.log(purchase)
+                return res.status(200).json(purchase)
             }
             catch (e) {
                 console.log(e)
@@ -39,6 +37,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         }
     }
 
+    // get all purchases
     if (req.method === 'GET') {
         try {
             const purchases = await prisma.purchase.findMany({
@@ -62,8 +61,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'POST') {
         
         try {
-            const { address, city, province, postal, total, user, orders } = req.body
+            const { address, city, province, postal, total, note, user, orders } = req.body
 
+            // console.log(note)
             // console.log(user)
             const qUser = await prisma.users.findUnique({
                 where: { email: user.email }
@@ -85,6 +85,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     },
                     userEmail,
                     total,
+                    note,
                     shipment: {
                         create: {
                             address,

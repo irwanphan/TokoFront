@@ -37,7 +37,7 @@ const ProductDetailViewPage = () => {
             const fetchData = async () => {
                 try {
                     const { data: response } = await axios.get(`/api/purchases/?id=${qid}`)
-                    console.log(response)
+                    // console.log(response)
                     setPurchase(response)
                 } catch (error) {
                     console.log(error)
@@ -109,6 +109,13 @@ const ProductDetailViewPage = () => {
                     <Text>
                         Total : {purchase?.total}
                     </Text>
+
+                    {
+                        purchase?.note &&
+                        <Text fontSize={12} mt={2}>
+                            Note : {purchase?.note}
+                        </Text>
+                    }
 
                     <Divider mt={8} mb={4} />
 
