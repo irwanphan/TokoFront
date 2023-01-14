@@ -175,7 +175,9 @@ const CheckoutPage = () => {
                                 autoFocus
                                 register={register} />
                                 { errors?.address && <WarningBox>{errors.address.message}</WarningBox> }
-                            <Flex gap={3}>
+                            <Flex 
+                                gap={{ base: 0, md: 3 }} 
+                                direction={{ base: 'column', md: 'row' }}>
                                 <Box>
                                     <FormInput 
                                         name='city'
