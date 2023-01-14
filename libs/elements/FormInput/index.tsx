@@ -12,6 +12,7 @@ interface FormInputProps extends FlexProps {
     label? : string
     type? : string
     register: any
+    autoFocus?: boolean
     value? : string | number
     placeholder?: string
     options? : optionProps[]
@@ -20,7 +21,7 @@ interface FormInputProps extends FlexProps {
     isDisabled?: boolean
 }
 
-const FormInput = ({name, label, type, register, value, placeholder, options, icon, spaceAfter, isDisabled, children, ...rest}:FormInputProps) => {
+const FormInput = ({name, label, type, register, autoFocus, value, placeholder, options, icon, spaceAfter, isDisabled, children, ...rest}:FormInputProps) => {
     const FormInputManifest = () => {
         if (type === 'textarea') {
             return (
@@ -35,6 +36,7 @@ const FormInput = ({name, label, type, register, value, placeholder, options, ic
                     _hover={{ layerStyle: 'formInputHover' }}
                     mb={ spaceAfter ?? '2' }
                     isDisabled={isDisabled}
+                    autoFocus={autoFocus}
                 />
             )
         }
@@ -50,6 +52,7 @@ const FormInput = ({name, label, type, register, value, placeholder, options, ic
                         borderColor='gray.900'
                         _hover={{ layerStyle: 'formInputHover' }}
                         mb={ spaceAfter ?? '2' }
+                        autoFocus={autoFocus}
                     />
                 </NumberInput>
             )
@@ -64,6 +67,7 @@ const FormInput = ({name, label, type, register, value, placeholder, options, ic
                 borderColor='gray.900'
                 _hover={{ layerStyle: 'formInputHover' }}
                 mb={ spaceAfter ?? '2' }
+                autoFocus={autoFocus}
                 isDisabled={isDisabled}
             />
         )

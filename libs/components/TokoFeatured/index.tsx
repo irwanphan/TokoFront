@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil"
 
 const TokoFeatured = () => {
     const store = useRecoilValue(productsState)
-    const featuredProduct = store[3] //dummy here
+    const featuredProduct = store[2] //dummy here
     
     return (
         <Box>
