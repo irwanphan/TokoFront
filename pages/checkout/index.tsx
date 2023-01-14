@@ -172,15 +172,19 @@ const CheckoutPage = () => {
                                 label='Shipping Address' 
                                 placeholder="eg. Jalan Sudirman, no 72"
                                 isDisabled={isDisabled}
+                                autoFocus
                                 register={register} />
                                 { errors?.address && <WarningBox>{errors.address.message}</WarningBox> }
-                            <Flex gap={3}>
+                            <Flex 
+                                gap={{ base: 0, md: 3 }} 
+                                direction={{ base: 'column', md: 'row' }}>
                                 <Box>
                                     <FormInput 
                                         name='city'
                                         label='City' 
                                         placeholder="eg. Jakarta Pusat"
                                         isDisabled={isDisabled}
+                                        autoFocus
                                         register={register} />
                                     { errors?.city && <WarningBox>{errors.city.message}</WarningBox> }
                                 </Box>
@@ -190,6 +194,7 @@ const CheckoutPage = () => {
                                         label='Province' 
                                         placeholder="eg. DKI Jakarta"
                                         isDisabled={isDisabled}
+                                        autoFocus
                                         register={register} />
                                     { errors?.province && <WarningBox>{errors.province.message}</WarningBox> }
                                 </Box>
@@ -199,6 +204,7 @@ const CheckoutPage = () => {
                                         label='Postal Code' 
                                         placeholder="eg. 12930"
                                         isDisabled={isDisabled}
+                                        autoFocus
                                         register={register} />
                                     { errors?.postal && <WarningBox>{errors.postal.message}</WarningBox> }
                                 </Box>
