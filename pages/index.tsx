@@ -1,21 +1,12 @@
 import { Box, Text } from '@chakra-ui/react'
 import MainLayout from '@libs/layouts/MainLayout'
-import CatalogFullColumn from '@units/CatalogFullColumn'
-
-import { dummyItems } from '@libs/interfaces/storeItem'
-import TokoCatalog from '@libs/components/TokoCatalog'
-const featuredProduct = dummyItems[3]
+import TokoCatalog from '@components/TokoCatalog'
+import TokoFeatured from '@components/TokoFeatured'
 
 const Home = () => {
-  
   return (
     <MainLayout>
-      <CatalogFullColumn  
-        bgColor='green.100'
-        product={featuredProduct}
-        haveButton
-        buttonText='Shop Now'
-      />
+      <TokoFeatured />
 
       <Box textAlign='center' mt={12} mb={8}>
         <Text fontSize={32}>
