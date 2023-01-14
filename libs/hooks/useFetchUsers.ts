@@ -25,27 +25,3 @@ export const useFetchUsers = () => {
         isLoadingUsers
     }
 }
-
-export const useFetchUser = (email:any) => {
-    const [ user, setUser ] = useState()
-    const [ isLoadingUser, setIsLoadingUser ] = useState<boolean>(true)
-    // console.log(user)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data: response } = await axios.get(`/api/users/?email=${email}`)
-                setUser(response)
-            } catch (error) {
-                console.log(error)
-            }
-            setIsLoadingUser(false)
-        }
-        fetchData()
-    }, [])
-
-    return {
-        user,
-        isLoadingUser
-    }
-}
