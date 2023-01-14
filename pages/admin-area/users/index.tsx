@@ -67,6 +67,7 @@ const ManageProductsPage = () => {
                                                     fontSize={12}
                                                     gap={1}
                                                     justifyContent='space-between'
+                                                    direction={{ base: 'column', md: 'row' }}
                                                 >
                                                     <Flex direction='column' >
                                                         <Flex gap={2}>
@@ -78,7 +79,7 @@ const ManageProductsPage = () => {
                                                             <Text fontWeight={600}>{user.verified ? 'yes' : 'no'}</Text>                                            
                                                         </Flex>
                                                     </Flex>
-                                                    <Flex gap={2} alignItems='flex-end'>
+                                                    <Flex gap={2} alignItems='flex-end' justifyContent='flex-end'>
                                                         <TriggerBox
                                                             icon={FiEdit}
                                                             hoverColor='green.100'
