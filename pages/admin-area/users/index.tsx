@@ -1,15 +1,15 @@
-import { Box, Flex, Divider, Text, List, ListItem, useDisclosure, Skeleton } from "@chakra-ui/react"
-import { productsState } from "@contexts/products"
+import { Box, Flex, Divider, Text, List, ListItem, useDisclosure } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { useFetchUsers } from "@hooks/useFetchUsers"
 import { ItemInterface } from "@interfaces//storeItem"
+import { UserInterface } from "@interfaces//users"
 import MainLayout from "@libs/layouts/MainLayout"
 import ModalPopup from "@units/ModalPopup"
 import TriggerBox from "@units/TriggerBox"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { FiEdit, FiPackage, FiSlash } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
 
@@ -56,7 +56,7 @@ const ManageProductsPage = () => {
                         <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                             <Box>
                                 <List>
-                                    {users?.map((user:any) => {
+                                    {users!.map((user:UserInterface|any) => {
                                         return (
                                             <ListItem key={user.id} mb={2} >
                                                 <Flex alignItems='center' mb={1}>
@@ -76,7 +76,7 @@ const ManageProductsPage = () => {
                                                         </Flex>
                                                         <Flex gap={2}>
                                                             <Text>Email verified</Text>                                            
-                                                            <Text fontWeight={600}>{user.verified ? 'yes' : 'no'}</Text>                                            
+                                                            <Text fontWeight={600}>{user.emailVerified ? 'yes' : 'no'}</Text>                                            
                                                         </Flex>
                                                     </Flex>
                                                     <Flex gap={2} alignItems='flex-end' justifyContent='flex-end'>
