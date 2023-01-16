@@ -15,10 +15,10 @@ import axios from "axios"
 import LoadingOverlay from "@elements/LoadingOverlay"
 
 interface IFormInput {
-    name: string
-    refId: string | undefined | any
-    description: string
-    price: number | any
+    name?: string
+    refId?: string | undefined | any
+    description?: string
+    price?: number | any
     currentStock?: number | undefined | any
 }
 
@@ -152,7 +152,7 @@ const ProductDetailViewPage = () => {
                         <FormSubmitButton notLink 
                             buttonColor="green.100"
                             isDisabled={isDisabled}
-                            // onClick={handleSubmit(onSubmit)} 
+                            onClick={handleSubmit(onSubmit)} 
                             >
                             Save
                         </FormSubmitButton>
