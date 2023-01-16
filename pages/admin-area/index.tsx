@@ -47,6 +47,7 @@ const AdminAreaPage = () => {
                 userCategory === 'admin' &&
                 <Flex gap={2}>
                     <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/users">Manage Users</FormSubmitButton>
                 </Flex>
             }
             <Box mt={4} />

@@ -1,8 +1,9 @@
+import { UserInterface } from "@interfaces//users"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
 export const useFetchUsers = () => {
-    const [ users, setUsers ] = useState()
+    const [ users, setUsers ] = useState<UserInterface[]>()
     const [ isLoadingUsers, setIsLoadingUsers ] = useState<boolean>(true)
     // console.log(users)
 

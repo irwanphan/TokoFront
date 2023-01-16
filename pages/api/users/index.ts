@@ -9,17 +9,15 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
 
     const query:any = req.query
-    const id:any = query.id
-    // console.log('query id: ', queryId)
-    // console.log('id: ', id)
+    const email:any = query.email
     
     // get all purchases
-    if (id) {
+    if (email) {
         if (req.method === 'GET') {
             try {
                 const user = await prisma.users.findUnique({
                     where: {
-                        id: id
+                        email: email
                     }
                 })
                 // console.log(purchases)

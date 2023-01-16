@@ -137,7 +137,7 @@ const CheckoutPage = () => {
                     Your Cart
                 </Text>
             </Box>
-            <Grid templateColumns={{base: '1fr', md: '1fr 1fr'}} gap={4}>
+            <Grid templateColumns={{base: '100%', md: '1fr 1fr'}} gap={4}>
                 <GridItem>
                     <BlockContainer>
                         <CartItems />
