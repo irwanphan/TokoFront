@@ -84,7 +84,7 @@ const ManageProductsPage = () => {
                                                             icon={FiEdit}
                                                             hoverColor='green.100'
                                                             onClick={() => {
-                                                                router.replace(`/admin-area/user/${user.id}`)
+                                                                router.replace(`/admin-area/users/${user.id}`)
                                                             }}
                                                         >Edit
                                                         </TriggerBox>
