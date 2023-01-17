@@ -221,7 +221,9 @@ const CheckoutPage = () => {
 
                             <Divider mt={8} mb={4} />
 
-                            <Flex justifyContent='flex-end' gap={2}>
+                            <Flex justifyContent='flex-end' gap={2} alignItems='flex-end'
+                                direction={{ base: 'column', md: 'row' }}
+                            >
                                 <FormSubmitButton href="/" >Back to Store</FormSubmitButton>
                                 <FormSubmitButton notLink 
                                     buttonColor="green.100"
