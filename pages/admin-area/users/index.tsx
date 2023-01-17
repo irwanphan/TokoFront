@@ -16,7 +16,7 @@ import { useRecoilValue } from "recoil"
 const ManageProductsPage = () => {
     // const [ userCategory, setUserCategory ] = useState('admin')
     const { users, isLoadingUsers } = useFetchUsers()
-    console.log(users)
+    // console.log(users)
 
     const router = useRouter()
 
@@ -52,7 +52,7 @@ const ManageProductsPage = () => {
                     isLoadingUsers ?
                     <LoadingBlockList />
                 :   <>
-                        <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
+                        {/* <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton> */}
                         <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                             <Box>
                                 <List>
@@ -79,7 +79,9 @@ const ManageProductsPage = () => {
                                                             <Text fontWeight={600}>{user.emailVerified ? 'yes' : 'no'}</Text>                                            
                                                         </Flex>
                                                     </Flex>
-                                                    <Flex gap={2} alignItems='flex-end' justifyContent='flex-end'>
+                                                    <Flex gap={2} 
+                                                        flexWrap='wrap'
+                                                        alignItems='flex-end' justifyContent='flex-end'>
                                                         <TriggerBox
                                                             icon={FiEdit}
                                                             hoverColor='green.100'

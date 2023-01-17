@@ -141,14 +141,15 @@ const CheckoutPage = () => {
                 <GridItem>
                     <BlockContainer>
                         <CartItems />
-                        {
-                            checkCart.length === 0 &&
-                            <Flex justifyContent='right' mt={4}>
-                                <FormSubmitButton href="/products" buttonColor="green.100">
-                                    <Box as={FiShoppingBag} mr={1} fontSize={20} />Go Shopping
-                                </FormSubmitButton>
-                            </Flex>
-                        }
+                        <Flex justifyContent='right' mt={4}>
+                            <FormSubmitButton href="/products" buttonColor="green.100">
+                                <Box as={FiShoppingBag} mr={1} fontSize={20} />
+                                    {
+                                        checkCart.length === 0  ? 'Go Shopping'
+                                                                : 'Continue Shopping'
+                                    }
+                            </FormSubmitButton>
+                        </Flex>
                     </BlockContainer>
                 </GridItem>
 
@@ -220,7 +221,9 @@ const CheckoutPage = () => {
 
                             <Divider mt={8} mb={4} />
 
-                            <Flex justifyContent='flex-end' gap={2}>
+                            <Flex justifyContent='flex-end' gap={2} alignItems='flex-end'
+                                direction={{ base: 'column', md: 'row' }}
+                            >
                                 <FormSubmitButton href="/" >Back to Store</FormSubmitButton>
                                 <FormSubmitButton notLink 
                                     buttonColor="green.100"

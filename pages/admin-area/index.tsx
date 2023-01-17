@@ -45,7 +45,10 @@ const AdminAreaPage = () => {
         <MainLayout>
             {
                 userCategory === 'admin' &&
-                <Flex gap={2}>
+                <Flex 
+                    gap={2} maxW='full'
+                    direction={{ base: 'column', md: 'row' }}
+                >
                     <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
                     <FormSubmitButton href="/admin-area/users">Manage Users</FormSubmitButton>
                 </Flex>

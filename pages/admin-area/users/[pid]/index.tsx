@@ -120,7 +120,7 @@ const ProductDetailViewPage = () => {
                     <Divider mt={8} mb={4} />
 
                     <Flex gap={2} justifyContent='flex-end'>
-                        <FormSubmitButton href="/admin-area/products" >Back</FormSubmitButton>
+                        <FormSubmitButton href="/admin-area/users" >Back</FormSubmitButton>
                         <FormSubmitButton notLink 
                             buttonColor="green.100"
                             isDisabled={isDisabled}
