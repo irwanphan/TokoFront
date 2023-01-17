@@ -13,7 +13,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     
     if (req.method === 'GET') {
         try {
-            const user = await prisma.users.findUnique({
+            const user = await prisma.user.findUnique({
                 where: {
                     id: id
                 }

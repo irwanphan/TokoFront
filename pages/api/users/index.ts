@@ -37,7 +37,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     id: 'desc'
                 }
             })
-            console.log(users)
+            // console.log(users)
             return res.status(200).json(users)
         }
         catch (e) {
