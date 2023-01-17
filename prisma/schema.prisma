@@ -143,3 +143,6 @@ enum Role {
   @@map("roles")
   @@schema("public")
 }
+
+// user -> users table in public
+// users -> users table in next_auth

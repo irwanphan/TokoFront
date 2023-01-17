@@ -32,12 +32,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
     if (req.method === 'GET') {
         try {
-            const users = await prisma.users.findMany({
+            const users = await prisma.user.findMany({
                 orderBy: {
                     id: 'desc'
                 }
             })
-            // console.log(users)
+            console.log(users)
             return res.status(200).json(users)
         }
         catch (e) {

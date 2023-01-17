@@ -16,7 +16,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@next-auth/supabase-adapter": "^0.2.1",
-    "@prisma/client": "^4.8.1",
+    "@prisma/client": "^4.9.0",
     "@supabase/supabase-js": "^2.2.2",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/react": "18.0.26",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.17",
-    "prisma": "^4.8.1",
+    "prisma": "^4.9.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
   }
