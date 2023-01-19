@@ -38,7 +38,7 @@ const AdminAreaPage = () => {
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
     const { purchases, isLoadingPurchases } = useFetchPurchases()
-    // console.log(purchases)
+    console.log(purchases)
     const router = useRouter()
 
     return (
@@ -121,7 +121,7 @@ const AdminAreaPage = () => {
                                                 <Flex direction='column' >
                                                     <Flex gap={2}>
                                                         <Text>Type of items</Text>                                            
-                                                        <Text fontWeight={600}>{(purchase.detail).length}</Text>                                            
+                                                        <Text fontWeight={600}>{purchase?.detail?.length}</Text>                                            
                                                     </Flex>
                                                     <Flex gap={2}>
                                                         <Text>Total purchase</Text>                                            

@@ -13,10 +13,10 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'GET') {
         try {
             const purchases = await prisma.purchase.findMany({
-                // include: {
-                //     detail: true,
-                //     shipment: true,
-                // },
+                include: {
+                    detail: true,
+                    shipment: true,
+                },
                 orderBy: {
                     id: 'desc'
                 }

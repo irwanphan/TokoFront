@@ -36,7 +36,7 @@ const ProductDetailViewPage = () => {
             // console.log('qid ready :', qid)
             const fetchData = async () => {
                 try {
-                    const { data: response } = await axios.get(`/api/purchases/?id=${qid}`)
+                    const { data: response } = await axios.get(`/api/purchase/get-by-id/?id=${qid}`)
                     // console.log(response)
                     setPurchase(response)
                 } catch (error) {
