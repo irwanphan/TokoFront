@@ -21,8 +21,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 }
             })
             const updateData = JSON.stringify(purchases)
-            
-            return res.send(updateData)
+            console.log('update', updateData)
+            return res.status(200).json(purchases)
         }
         catch (e) {
             console.log(e)
