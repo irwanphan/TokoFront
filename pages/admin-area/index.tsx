@@ -39,7 +39,7 @@ const AdminAreaPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
     const { purchases, isLoadingPurchases } = useFetchPurchases()
     const router = useRouter()
-
+    console.log('purchase', purchases)
     return (
         <MainLayout>
             {
