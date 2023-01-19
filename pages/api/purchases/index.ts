@@ -1,6 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
 import prisma from '@libs/prisma'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     // const session = await getSession({ req })
@@ -21,8 +20,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     id: 'desc'
                 }
             })
+            const updateData = JSON.stringify(purchases, (_key, value) => {
+                typeof value === 'bigint' ? value = value.toString() : value
+            })
             console.log(purchases)
-            return res.status(200).json(purchases)
+            return res.status(200).json(updateData)
         }
         catch (e) {
             console.log(e)
