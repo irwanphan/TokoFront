@@ -20,11 +20,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     id: 'desc'
                 }
             })
-            // const updateData = purchases.map((purchase) => {
-            //     typeof purchase === 'bigint' ? purchase = purchase.toString() : purchase
-            // })
-            // console.log('purchases', updateData)
-            return res.send(purchases)
+            const updateData = JSON.stringify(purchases)
+            
+            return res.send(updateData)
         }
         catch (e) {
             console.log(e)

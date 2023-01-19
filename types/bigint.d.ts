@@ -1,3 +1,4 @@
 bigint.prototype.toJSON = function () {
-    return this.toString()
+    const int = Number.parseInt(this.toString())
+    return int ?? this.toString()
 }
