@@ -62,7 +62,7 @@ const AdminAreaPage = () => {
                 </Flex>
                 <Divider />
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
-                    <CartItems />
+                    {/* <CartItems /> */}
                 </Box>
                 {
                     checkCart.length > 0 ?

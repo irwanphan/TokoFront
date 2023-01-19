@@ -71,7 +71,7 @@ model accounts {
   providerAccountId  String
   refresh_token      String?
   access_token       String?
-  expires_at         BigInt?
+  expires_at         Int?
   token_type         String?
   scope              String?
   id_token           String?
