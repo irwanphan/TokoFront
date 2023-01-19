@@ -4,52 +4,24 @@ import prisma from '@libs/prisma'
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const session = await getSession({ req })
+    console.log('running api')
     if (!session) {
         return res.status(401).json({ message: 'Unauthorized.' });
-    }
-
-    const query:any = req.query
-    const queryId:any = query.id
-    const id = Number(queryId)
-    // console.log('query id: ', queryId)
-    // console.log('id: ', id)
-    
-    // get single purchase
-    if (id) {
-        if (req.method === 'GET') {
-            try {
-                const purchase = await prisma.purchase.findUnique({
-                    include: {
-                        detail: true,
-                        shipment: true,
-                    },
-                    where: {
-                        id: id
-                    }
-                })
-                // console.log(purchase)
-                return res.status(200).json(purchase)
-            }
-            catch (e) {
-                console.log(e)
-                return res.status(500).json({ message: `${e}` })
-            }
-        }
     }
 
     // get all purchases
     if (req.method === 'GET') {
         try {
             const purchases = await prisma.purchase.findMany({
-                include: {
-                    detail: true,
-                    shipment: true,
-                },
+                // include: {
+                //     detail: true,
+                //     shipment: true,
+                // },
                 orderBy: {
                     id: 'desc'
                 }
             })
-            // console.log(purchases)
+            console.log(purchases)
             return res.status(200).json(purchases)
         }
         catch (e) {
@@ -59,18 +31,19 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
     
     if (req.method === 'POST') {
-        
+        console.log('post data')
         try {
             const { address, city, province, postal, total, note, user, orders } = req.body
-
+            console.log('request body', req.body)
             // console.log(note)
-            // console.log(user)
+            // console.log(user)s
             const qUser = await prisma.users.findUnique({
                 where: { email: user.email }
             })
             // console.log(qUser)
             const userId = qUser?.id
             const userEmail:any = user.email
+            console.log(userId)
 
             // orders.map((order:any) => {
             //     console.log(order.id)
@@ -105,7 +78,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     // createdAt: ((new Date()).toISOString()).toLocaleString()
                 }
             })
-            // console.log(purchase)
+            console.log(purchase)
             return res.status(200).json(purchase)
 
         } catch (e:any) {

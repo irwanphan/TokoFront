@@ -110,7 +110,8 @@ const CheckoutPage = () => {
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        // TODO: disable form when submit
+        // TODO: disable form when submit'
+        console.log('running', data)
         setDisabled
         setIsLoading(true)
         toast({title:'Submitting ...'})
@@ -121,6 +122,8 @@ const CheckoutPage = () => {
         data.user.name = session!.user.name
         // console.log(data)
         const purchase = await createPurchaseOrder(data)
+        
+        console.log('purchase', purchase)
         localStorage.removeItem("cart")
         setCart([])
         toast({title:'Purchase order submitted', status:'success'})

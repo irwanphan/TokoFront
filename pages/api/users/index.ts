@@ -8,28 +8,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         return res.status(401).json({ message: 'Unauthorized.' });
     }
 
-    const query:any = req.query
-    const email:any = query.email
-    
-    // get all purchases
-    if (email) {
-        if (req.method === 'GET') {
-            try {
-                const user = await prisma.users.findUnique({
-                    where: {
-                        email: email
-                    }
-                })
-                // console.log(purchases)
-                return res.status(200).json(user)
-            }
-            catch (e) {
-                console.log(e)
-                return res.status(500).json({ message: `${e}` })
-            }
-        }
-    }
-
     if (req.method === 'GET') {
         try {
             const users = await prisma.user.findMany({
