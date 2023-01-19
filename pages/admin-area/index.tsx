@@ -93,7 +93,7 @@ const AdminAreaPage = () => {
                             {   isLoadingPurchases ?
                                 <LoadingBlockList />
                             :   
-                                purchases!.map((purchase) => {
+                                purchases?.map((purchase) => {
                                     const date = new Date(`${purchase.createdAt}`).toLocaleDateString('en-EN', { 
                                         weekday: 'long', 
                                         year: 'numeric', 
