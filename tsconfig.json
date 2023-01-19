@@ -30,6 +30,6 @@
       "@api/*": ["pages/api/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "bigint.d.ts"],
   "exclude": ["node_modules"]
 }
