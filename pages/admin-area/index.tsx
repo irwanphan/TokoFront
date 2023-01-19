@@ -37,8 +37,7 @@ export async function getServerSideProps(context:any) {
 const AdminAreaPage = () => {
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
-    const { purchases, isLoadingPurchases } = useFetchPurchases()
-    console.log(purchases)
+    // const { purchases, isLoadingPurchases } = useFetchPurchases()
     const router = useRouter()
 
     return (
