@@ -62,7 +62,7 @@ const AdminAreaPage = () => {
                 </Flex>
                 <Divider />
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
-                    {/* <CartItems /> */}
+                    <CartItems />
                 </Box>
                 {
                     checkCart.length > 0 ?
@@ -82,7 +82,7 @@ const AdminAreaPage = () => {
 
             <Box mt={4} />
 
-            <BlockContainer>
+            {/* <BlockContainer>
                 <Flex alignItems='center'>
                     <Box as={TbFileInvoice} mr={2}/>
                     <Text fontWeight={600} >Shopping history</Text>
@@ -146,7 +146,7 @@ const AdminAreaPage = () => {
                             }
                         </List>
                 </Box>
-            </BlockContainer>
+            </BlockContainer> */}
         </MainLayout>
     )
 }
