@@ -37,7 +37,7 @@ export async function getServerSideProps(context:any) {
 const AdminAreaPage = () => {
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
-    // const { purchases, isLoadingPurchases } = useFetchPurchases()
+    const { purchases, isLoadingPurchases } = useFetchPurchases()
     const router = useRouter()
 
     return (
@@ -81,7 +81,7 @@ const AdminAreaPage = () => {
 
             <Box mt={4} />
 
-            {/* <BlockContainer>
+            <BlockContainer>
                 <Flex alignItems='center'>
                     <Box as={TbFileInvoice} mr={2}/>
                     <Text fontWeight={600} >Shopping history</Text>
@@ -145,7 +145,7 @@ const AdminAreaPage = () => {
                             }
                         </List>
                 </Box>
-            </BlockContainer> */}
+            </BlockContainer>
         </MainLayout>
     )
 }
