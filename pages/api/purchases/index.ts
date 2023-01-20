@@ -12,11 +12,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     // get all purchases
     if (req.method === 'GET') {
         try {
-            const purchases = await prisma.purchase.findMany({
-                include: {
-                    detail: true,
-                    // shipment: true,
-                },
+            const purchases = await prisma.shipment.findMany({
+                // include: {
+                //     detail: true,
+                //     shipment: true,
+                // },
                 // orderBy: {
                 //     id: 'desc'
                 // }

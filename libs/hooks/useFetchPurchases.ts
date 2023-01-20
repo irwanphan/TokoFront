@@ -9,8 +9,7 @@ export const useFetchPurchases = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // const { data: response } = await axios.get('/api/purchases')
-                const { data: response } = await axios.get('https://tokofront.vercel.app/api/purchases')
+                const { data: response } = await axios.get('/api/purchases')
                 setPurchases(response)
                 // console.log ('response: ', response)
             } catch (error) {
