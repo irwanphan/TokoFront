@@ -16,8 +16,8 @@ model Product {
   unit            String
   name            String
   description     String
-  price           Decimal            @default(0)
-  currentStock    Decimal            @default(0)
+  price           Float              @default(0)
+  currentStock    Float              @default(0)
   isActive        Boolean            @default(true)
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
@@ -27,7 +27,7 @@ model Product {
 }
 
 model Purchase {
-  id              String            @id @db.Uuid
+  id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   userId          String            @db.Uuid
   userEmail       String
   total           Float
@@ -43,11 +43,11 @@ model Purchase {
 }
 
 model PurchaseDetail {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   purchaseId    String   @db.Uuid
   productId     String
-  purchasePrice Decimal
-  qty           Decimal
+  purchasePrice Float
+  qty           Float
   unit          String
   purchase      Purchase @relation(fields: [purchaseId], references: [id])
   
@@ -56,7 +56,7 @@ model PurchaseDetail {
 }
 
 model Shipment {
-  id            String          @id @db.Uuid
+  id            String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   address       String
   city          String
   province      String
@@ -118,7 +118,7 @@ model users {
 }
 
 model User {
-  id        String     @id @db.Uuid
+  id        String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name      String?
   email     String?    @unique
   image     String?
