@@ -5,3 +5,14 @@ export interface UserInterface {
     emailVerified: boolean
     image: string
 }
+
+export interface UserAddresses {
+    id: string
+    name: string
+    address: string
+    city: string
+    province: string
+    postal: string
+    note?: string
+    userId: string
+}

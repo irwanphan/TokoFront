@@ -21,8 +21,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     id: 'desc'
                 }
             })
-            const updateData = JSON.stringify(purchases)
-            console.log('update', updateData)
+            // const updateData = JSON.stringify(purchases)
+            // console.log('update', updateData)
+            console.log(purchases)
             return res.status(200).json(purchases)
         }
         catch (e) {
