@@ -27,7 +27,7 @@ model Product {
 }
 
 model Purchase {
-  id              Int               @id @default(autoincrement())
+  id              String            @id @db.Uuid
   userId          String            @db.Uuid
   userEmail       String
   total           Float
@@ -44,7 +44,7 @@ model Purchase {
 
 model PurchaseDetail {
   id            Int      @id @default(autoincrement())
-  purchaseId    Int
+  purchaseId    String   @db.Uuid
   productId     String
   purchasePrice Decimal
   qty           Decimal
@@ -56,12 +56,12 @@ model PurchaseDetail {
 }
 
 model Shipment {
-  id            Int             @id @default(autoincrement())
+  id            String          @id @db.Uuid
   address       String
   city          String
   province      String
   postal        String
-  purchaseId    Int             @unique
+  purchaseId    String          @db.Uuid @unique
   purchase      Purchase        @relation(fields: [purchaseId], references: [id])
 
   @@map("shipments")
