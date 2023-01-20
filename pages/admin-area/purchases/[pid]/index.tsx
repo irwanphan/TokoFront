@@ -8,14 +8,14 @@ import { useEffect, useState } from "react"
 import { FiFileText } from "react-icons/fi"
 import axios from "axios"
 import LoadingOverlay from "@elements/LoadingOverlay"
-import { PurchasesInterface } from "@interfaces//purchases"
+import { PurchaseInterface } from "@interfaces//purchases"
 
-const ProductDetailViewPage = () => {
+const PurchaseDetailViewPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isDisabled, setDisabled ] = useState(false)
 
-    const [ purchase, setPurchase ] = useState<PurchasesInterface>()
+    const [ purchase, setPurchase ] = useState<PurchaseInterface>()
     const [ isLoadingPurchase, setIsLoadingPurchase ] = useState<boolean>(true)
     
     const router = useRouter()
@@ -139,4 +139,4 @@ const ProductDetailViewPage = () => {
     )
 }
 
-export default ProductDetailViewPage
+export default PurchaseDetailViewPage

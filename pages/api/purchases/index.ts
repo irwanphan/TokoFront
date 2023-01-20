@@ -5,24 +5,23 @@ import { getSession } from 'next-auth/react';
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const session = await getSession({ req })
     // console.log('running api')
-    if (!session) {
-        return res.status(401).json({ message: 'Unauthorized.' });
-    }
+    // if (!session) {
+    //     return res.status(401).json({ message: 'Unauthorized.' });
+    // }
 
     // get all purchases
     if (req.method === 'GET') {
         try {
             const purchases = await prisma.purchase.findMany({
-                include: {
-                    detail: true,
-                    shipment: true,
-                },
-                orderBy: {
-                    id: 'desc'
-                }
+                // include: {
+                //     detail: true,
+                //     shipment: true,
+                // },
+                // orderBy: {
+                //     id: 'desc'
+                // }
             })
-            const updateData = JSON.stringify(purchases)
-            console.log('update', updateData)
+            console.log(purchases)
             return res.status(200).json(purchases)
         }
         catch (e) {

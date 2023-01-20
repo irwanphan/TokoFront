@@ -1,4 +1,4 @@
-export interface PurchasesInterface {
+export interface PurchaseInterface {
     id: number
     userId: String
     userEmail: String
