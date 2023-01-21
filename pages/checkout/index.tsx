@@ -129,7 +129,7 @@ const CheckoutPage = () => {
         toast({title:'Purchase order submitted', status:'success'})
         toast({title:'Redirecting ...'})
         setIsLoading(false)
-        router.push(`/admin-area/purchases/${purchase.data.id}`)
+        // router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     return (

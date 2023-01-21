@@ -35,6 +35,7 @@ export default NextAuth({
                 }
                 session.supabaseAccessToken = jwt.sign(payload, signingSecret)
             }
+            console.log(session)
             return session
         },
     },

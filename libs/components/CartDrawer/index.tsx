@@ -6,6 +6,8 @@ import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { CartItems } from "../Cart"
 import { useSession, signIn } from "next-auth/react"
 import TokoAuth from "@components/TokoAuth"
+import { supabase } from "@libs/connections/supabase"
+import { signInWithGoogle } from "@libs/connections/signIn"
 
 const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
@@ -50,7 +52,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                         </FormSubmitButton>
                       :
                         <FormSubmitButton 
-                            onClick={() => signInWithGoogleCheckout()}
+                            onClick={() => signInWithGoogle()}
                             href="/" buttonColor="green.50" >
                             <Box as={FcGoogle} mr={1} fontSize={20} />Login to Checkout
                         </FormSubmitButton>

@@ -1,4 +1,4 @@
-import prisma from '@libs/prisma'
+import prisma from '@libs/connections/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react';
 
@@ -44,16 +44,25 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const userId = qUser?.id
             const userEmail:any = user.email
             console.log(userId)
+            console.log(userEmail)
 
             // orders.map((order:any) => {
             //     console.log(order.id)
             // })
                 
             const purchase = await prisma.purchase.create({
+                include: {
+                    detail: true
+                },
                 data: {
+                    // user: {
+                    //     connect: {
+                    //         id: userId
+                    //     }
+                    // },
                     user: {
                         connect: {
-                            id: userId
+                            id: 'bdafb04a-d239-4136-928d-460e7155f1df'
                         }
                     },
                     userEmail,

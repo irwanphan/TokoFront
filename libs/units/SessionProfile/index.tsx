@@ -12,15 +12,15 @@ const SessionProfile = ({session}:any) => {
                     bgColor='gray.300'
                     mr={2}
                     >
-                    <Img src={session?.user?.image!} referrerPolicy="no-referrer" />
+                    <Img src={session?.user_metadata?.picture!} referrerPolicy="no-referrer" />
                 </Circle>
                 <Text fontWeight={600}>
-                    {session?.user?.name}
+                    {session?.user_metadata?.full_name}
                 </Text>
                 
             </Flex>
             <Text fontSize={12}>
-                {session?.user?.email}
+                {session?.email}
             </Text>
         </Box>
     )

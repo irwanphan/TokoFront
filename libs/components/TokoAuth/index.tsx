@@ -4,18 +4,27 @@ import FormSubmitButton from "@elements/FormSubmit"
 import ModalPopup from "@units/ModalPopup"
 import { FcGoogle } from "react-icons/fc"
 import { RxExit } from "react-icons/rx"
-import { useSession, signOut, signIn } from "next-auth/react"
 import SessionProfile from "@units/SessionProfile"
+import { supabase } from "@libs/connections/supabase"
+import { LoadingBlockList } from "@elements/LoadingBlock"
+import { signInWithGoogle } from "@libs/connections/signIn"
 
 const TokoAuth = () => {
+    const [ isLoading, setIsLoading ] = useState<Boolean>(true)
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
-    const { data: session } = useSession()
-    // console.log(session)
+
+    const [ currentUser, setCurrentUser ] = useState<any>()
+    
     useEffect(() => {
-        if (session) {
-            setIsLogin(true)
-        }
-    })
+        const user = supabase.auth.getUser()
+            .then(res => setCurrentUser(res.data.user))
+    }, [])
+    console.log('user: ',currentUser)
+        
+    useEffect(() => {
+        if (currentUser) { setIsLogin(true) }
+        setIsLoading(false)
+    }, [currentUser] )
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
@@ -26,18 +35,24 @@ const TokoAuth = () => {
         action: () => {
             onModalClose(),
             setIsLogin(false),
-            signOut()
+            supabase.auth.signOut()
         }
     }
 
     // handle signinWithGoogle
     const toast = useToast()
-    const signInWithGoogle = () => {
-        toast({title:'Redirecting...'})
-        // Perform sign in
-        signIn('google', {
-            callbackUrl: window.location.href,
-        })
+    // const signInWithGoogle = () => {
+    //     toast({title:'Redirecting...'})
+    //     // Perform sign in
+    //     signIn('google', {
+    //         callbackUrl: window.location.href,
+    //     })
+    // }
+
+    if (isLoading) {
+        return (
+            <LoadingBlockList />
+        )
     }
 
     if (isLogin) {
@@ -51,7 +66,7 @@ const TokoAuth = () => {
                     borderLeftWidth='0.5rem'
                     borderLeftStyle='solid'
                     paddingLeft={2}>
-                    <SessionProfile session={session}/>
+                    <SessionProfile session={currentUser}/>
                 </Box>
                 <FormSubmitButton href="/admin-area" mr={2} px={3} >
                     Admin Area
@@ -75,8 +90,8 @@ const TokoAuth = () => {
                 {/* <FormSubmitButton href="/register">
                     <Box as={GiNewBorn} mr={1} fontSize={20} />register
                 </FormSubmitButton> */}
-                <FormSubmitButton 
-                    onClick={() => signInWithGoogle()} notLink >
+                <FormSubmitButton notLink
+                    onClick={() => signInWithGoogle()} >
                     <Box as={FcGoogle} mr={1} fontSize={20} />Login
                 </FormSubmitButton>
             </Flex>
