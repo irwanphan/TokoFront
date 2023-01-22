@@ -9,6 +9,7 @@ import { type Session } from '@supabase/gotrue-js/src/lib/types'
 // import { SessionProvider } from "next-auth/react"
 import { useEffect, useState } from 'react'
 import { PageProps } from 'types/types'
+import { AuthProvider } from '@contexts/authContext'
 
 // export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 export default function App({ Component, pageProps }: AppProps<PageProps>) {
@@ -20,6 +21,7 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
     // const user = supabase.auth.getUser()
     //   .then(res => setCurrentUser(res.data.user))
     //   .then(() => sessionStorage.setItem("sessionUser", currentUser))
+
     const supabaseSession = supabase.auth.getSession()
       .then(res => setSession(res.data.session))
   }
@@ -42,15 +44,17 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
   }, [])
 
   // console.log('user: ', currentUser)
-  console.log('session: ', session)
+  // console.log('session: ', session)
       
   return (
     // <SessionProvider session={session}>
+    <AuthProvider>
       <RecoilRoot>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} session={session} user={session?.user} />
         </ChakraProvider>
       </RecoilRoot>
+    </AuthProvider>
     // </SessionProvider>
   ) 
 }

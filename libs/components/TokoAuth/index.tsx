@@ -8,23 +8,28 @@ import SessionProfile from "@units/SessionProfile"
 import { supabase } from "@libs/connections/supabase"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { signInWithGoogle } from "@libs/connections/signIn"
+import { PageProps } from "types/types"
 
-const TokoAuth = () => {
+const TokoAuth = ({session}: PageProps) => {
     const [ isLoading, setIsLoading ] = useState<Boolean>(true)
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
 
     const [ currentUser, setCurrentUser ] = useState<any>()
+    console.log("TokoAuth: ", session)
     
     useEffect(() => {
-        const user = supabase.auth.getUser()
-            .then(res => setCurrentUser(res.data.user))
+        if (session) {
+            setCurrentUser(session.user)
+            setIsLogin(true)
+        }
+        setIsLoading(false)
     }, [])
     console.log('user: ',currentUser)
         
-    useEffect(() => {
-        if (currentUser) { setIsLogin(true) }
-        setIsLoading(false)
-    }, [currentUser] )
+    // useEffect(() => {
+    //     if (currentUser) { setIsLogin(true) }
+    //     setIsLoading(false)
+    // }, [currentUser] )
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
