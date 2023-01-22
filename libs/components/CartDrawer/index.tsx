@@ -4,29 +4,28 @@ import FormSubmitButton from "@elements/FormSubmit"
 import { FcGoogle } from "react-icons/fc"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { CartItems } from "../Cart"
-import { useSession, signIn } from "next-auth/react"
+// import { useSession, signIn } from "next-auth/react"
 import TokoAuth from "@components/TokoAuth"
-import { supabase } from "@libs/connections/supabase"
 import { signInWithGoogle } from "@libs/connections/signIn"
 
 const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
-    const { data: session } = useSession()
+    // const { data: session } = useSession()
     // console.log(session)
-    useEffect(() => {
-        if (session) {
-            setIsLogin(true)
-        }
-    })
+    // useEffect(() => {
+    //     if (session) {
+    //         setIsLogin(true)
+    //     }
+    // })
 
     // handle signinWithGoogle to Checkout
     const toast = useToast()
     const signInWithGoogleCheckout = () => {
         toast({title:'Redirecting...'})
         // Perform sign in
-        signIn('google', {
-            callbackUrl: '/checkout',
-        })
+        // signIn('google', {
+        //     callbackUrl: '/checkout',
+        // })
     }
     
     return (
