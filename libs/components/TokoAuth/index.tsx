@@ -8,28 +8,19 @@ import SessionProfile from "@units/SessionProfile"
 import { supabase } from "@libs/connections/supabase"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { signInWithGoogle } from "@libs/connections/signIn"
-import { PageProps } from "types/types"
+import { useAuth } from "@contexts/authContext"
 
-const TokoAuth = ({session}: PageProps) => {
+const TokoAuth = () => {
+    const { session, user } = useAuth()
     const [ isLoading, setIsLoading ] = useState<Boolean>(true)
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
 
-    const [ currentUser, setCurrentUser ] = useState<any>()
-    console.log("TokoAuth: ", session)
-    
+    // console.log ('session', session)
+    // console.log ('user', user)
     useEffect(() => {
-        if (session) {
-            setCurrentUser(session.user)
-            setIsLogin(true)
-        }
+        if (session) setIsLogin(true)
         setIsLoading(false)
-    }, [])
-    console.log('user: ',currentUser)
-        
-    // useEffect(() => {
-    //     if (currentUser) { setIsLogin(true) }
-    //     setIsLoading(false)
-    // }, [currentUser] )
+    }, [session] )
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
@@ -71,7 +62,7 @@ const TokoAuth = ({session}: PageProps) => {
                     borderLeftWidth='0.5rem'
                     borderLeftStyle='solid'
                     paddingLeft={2}>
-                    <SessionProfile session={currentUser}/>
+                    <SessionProfile session={user}/>
                 </Box>
                 <FormSubmitButton href="/admin-area" mr={2} px={3} >
                     Admin Area

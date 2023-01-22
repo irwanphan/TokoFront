@@ -33,7 +33,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
             <DrawerOverlay />
             <DrawerContent borderLeft='2px solid black'>
                 <DrawerHeader>
-                    {/* <TokoAuth /> */}
+                    <TokoAuth />
                     <Divider />
                     Your Cart
                 </DrawerHeader>
