@@ -3,5 +3,5 @@ import { Session } from "@supabase/supabase-js"
 
 export const sessionState = atom({
     key: 'session',
-    default: {} as Session
+    default: null as Session | null
 })

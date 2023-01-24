@@ -8,15 +8,11 @@ type authContextType = {
     isLoadingSession: boolean
     session: Session | null
     user: any
-    // login: () => void
-    // logout: () => void
 }
 const authContextDefaultValues: authContextType = {
     isLoadingSession: true,
     session: null,
     user: null,
-    // login: () => {},
-    // logout: () => {},
 }
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues)
@@ -44,12 +40,6 @@ export function AuthProvider({ children }: Props) {
     }
 
     useEffect(() => {
-        // let mounted = true
-        // let sessionUser = sessionStorage.getItem("sessionUser")
-        // if (session) {
-        //   // TODO: set to global later
-        //   // setCurrentUser(sessionUser)
-        // }
         const fetchSession = async () => {
             try {
                 if (!session) {
@@ -75,9 +65,7 @@ export function AuthProvider({ children }: Props) {
     const value = {
         isLoadingSession,
         session,
-        user,
-        // login,
-        // logout,
+        user
     }
   
     return (

@@ -9,26 +9,15 @@ import { supabase } from "@libs/connections/supabase"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { signInWithGoogle } from "@libs/connections/signIn"
 import { useAuth } from "@contexts/authContext"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState } from "recoil"
 import { sessionState } from "@contexts/session"
 import { type Session } from '@supabase/gotrue-js/src/lib/types'
 
 const TokoAuth = () => {
     const { session, user, isLoadingSession } = useAuth()
-    // const session = useRecoilState<Session>(sessionState)
-    const [ isLoading, setIsLoading ] = useState<Boolean>(true)
-    const [ isLogin, setIsLogin ] = useState<boolean>(false)
-
-    console.log(isLoadingSession)
-
+    const setSession = useSetRecoilState(sessionState)
     console.log('session in TokoAuth:', session)
-
-    // console.log ('session', session)
     // console.log ('user', user)
-    useEffect(() => {
-        if (session) setIsLogin(true)
-        setIsLoading(false)
-    }, [session] )
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
@@ -38,7 +27,7 @@ const TokoAuth = () => {
         button: 'See You',
         action: () => {
             onModalClose(),
-            setIsLogin(false),
+            setSession(null),
             supabase.auth.signOut()
         }
     }
@@ -59,7 +48,7 @@ const TokoAuth = () => {
         )
     }
 
-    if (isLogin) {
+    if (session) {
         return (
             <Box>
                 <Text fontSize={12}>
