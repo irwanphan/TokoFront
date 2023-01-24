@@ -9,11 +9,19 @@ import { supabase } from "@libs/connections/supabase"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { signInWithGoogle } from "@libs/connections/signIn"
 import { useAuth } from "@contexts/authContext"
+import { useRecoilState } from "recoil"
+import { sessionState } from "@contexts/session"
+import { type Session } from '@supabase/gotrue-js/src/lib/types'
 
 const TokoAuth = () => {
-    const { session, user } = useAuth()
+    const { session, user, isLoadingSession } = useAuth()
+    // const session = useRecoilState<Session>(sessionState)
     const [ isLoading, setIsLoading ] = useState<Boolean>(true)
     const [ isLogin, setIsLogin ] = useState<boolean>(false)
+
+    console.log(isLoadingSession)
+
+    console.log('session in TokoAuth:', session)
 
     // console.log ('session', session)
     // console.log ('user', user)
@@ -45,7 +53,7 @@ const TokoAuth = () => {
     //     })
     // }
 
-    if (isLoading) {
+    if (isLoadingSession) {
         return (
             <LoadingBlockList />
         )

@@ -48,13 +48,13 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
       
   return (
     // <SessionProvider session={session}>
-    <AuthProvider>
-      <RecoilRoot>
+    <RecoilRoot>
+      <AuthProvider>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} session={session} user={session?.user} />
         </ChakraProvider>
-      </RecoilRoot>
-    </AuthProvider>
+      </AuthProvider>
+    </RecoilRoot>
     // </SessionProvider>
   ) 
 }
