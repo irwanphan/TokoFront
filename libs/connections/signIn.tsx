@@ -1,7 +1,7 @@
-import { supabase } from "./supabase";
+import { supabase } from "./supabase"
 
 export default async function signIn(supabaseClient:any) {
-    const { error } = await supabaseClient.auth.signIn({ provider: "google" });
+    const { error } = await supabaseClient.auth.signIn({ provider: "google" })
     if (error) console.log(error);
 }
 

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import { Box, useDisclosure, useToast, Flex, Text } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import ModalPopup from "@units/ModalPopup"
@@ -9,15 +8,19 @@ import { supabase } from "@libs/connections/supabase"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { signInWithGoogle } from "@libs/connections/signIn"
 import { useAuth } from "@contexts/authContext"
-import { useRecoilState, useSetRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 import { sessionState } from "@contexts/session"
 import { type Session } from '@supabase/gotrue-js/src/lib/types'
+import { signOut } from "@libs/connections/signOut"
+import { useRef } from "react"
 
 const TokoAuth = () => {
     const { session, user, isLoadingSession } = useAuth()
     const setSession = useSetRecoilState(sessionState)
-    console.log('session in TokoAuth:', session)
+    // console.log('session in TokoAuth:', session)
     // console.log ('user', user)
+    const toast = useToast()
+    const toastIdRef = useRef<string | any>()
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
@@ -26,21 +29,13 @@ const TokoAuth = () => {
         texts: 'Come back safely',
         button: 'See You',
         action: () => {
+            toastIdRef.current = toast({ title:'Logging Out...' })
             onModalClose(),
             setSession(null),
-            supabase.auth.signOut()
+            signOut()
+            toast.update(toastIdRef.current, { description: 'Logged Out' })
         }
     }
-
-    // handle signinWithGoogle
-    const toast = useToast()
-    // const signInWithGoogle = () => {
-    //     toast({title:'Redirecting...'})
-    //     // Perform sign in
-    //     signIn('google', {
-    //         callbackUrl: window.location.href,
-    //     })
-    // }
 
     if (isLoadingSession) {
         return (
@@ -84,7 +79,10 @@ const TokoAuth = () => {
                     <Box as={GiNewBorn} mr={1} fontSize={20} />register
                 </FormSubmitButton> */}
                 <FormSubmitButton notLink
-                    onClick={() => signInWithGoogle()} >
+                    onClick={() => {
+                        toast({title:'Redirecting...'})
+                        signInWithGoogle()
+                    }}>
                     <Box as={FcGoogle} mr={1} fontSize={20} />Login
                 </FormSubmitButton>
             </Flex>
