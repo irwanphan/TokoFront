@@ -27,10 +27,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 where: { email: email }
             })
             console.log(existingUser)
+
+            const code = id
+
             if (!existingUser) {
                 const user = await prisma.user.create({
                     data: {
-                        code: id,
+                        code,
                         email,
                         name,
                         image
