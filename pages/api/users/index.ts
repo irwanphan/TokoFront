@@ -2,11 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@libs/connections/prisma'
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    // const session = await getSession({ req })
-    // if (!session) {
-    //     return res.status(401).json({ message: 'Unauthorized.' });
-    // }
-
     if (req.method === 'GET') {
         try {
             const users = await prisma.user.findMany({

@@ -1,14 +1,7 @@
 import prisma from '@libs/connections/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
-// import { getSession } from 'next-auth/react';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    // const session = await getSession({ req })
-    // console.log('running api')
-    // if (!session) {
-    //     return res.status(401).json({ message: 'Unauthorized.' });
-    // }
-
     // get all purchases
     if (req.method === 'GET') {
         try {

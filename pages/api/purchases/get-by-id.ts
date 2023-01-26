@@ -2,11 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@libs/connections/prisma'
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    // const session = await getSession({ req })
-    // if (!session) {
-    //     return res.status(401).json({ message: 'Unauthorized.' });
-    // }
-
     const query:any = req.query
     const queryId:any = query.id
     const id = Number(queryId)
