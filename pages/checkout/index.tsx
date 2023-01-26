@@ -20,7 +20,6 @@ import { useAuth } from "@contexts/authContext"
 import LoadingBlock from "@elements/LoadingBlock"
 import { IFormInput, UserInterface } from "@interfaces//checkout"
 
-
 const resolver: Resolver<IFormInput> = async (values) => {
     return {
         values: values.address ? values : 
@@ -74,10 +73,12 @@ const CheckoutPage = () => {
     // console.log(session)
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
     const setCart = useSetRecoilState(cartState)
+    const { total, isLoadingTotal } = useCartTotal()
+    // console.log(total)
 
     const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
-    
+    // handling form
     const { handleSubmit, register, formState: { errors } } = useForm({
         defaultValues: {
             address: '',
@@ -91,9 +92,6 @@ const CheckoutPage = () => {
         },
         resolver
     })
-
-    const { total, isLoadingTotal } = useCartTotal()
-    // console.log(total)
 
     useEffect(() => {
         if(session !== null) {
@@ -126,15 +124,16 @@ const CheckoutPage = () => {
         const user = await createUserIfNotExist(userData)
         // console.log('user: ', user)
 
-        // const purchase = await createPurchaseOrder(data)
+        const purchase = await createPurchaseOrder(data)
         // console.log('purchase: ', purchase)
         
-        // localStorage.removeItem("cart")
-        // setCart([])
+        // TEST: comment localstorage.remove, setCart([]), and router.push
+        localStorage.removeItem("cart")
+        setCart([])
         toast({title:'Purchase order submitted', status:'success'})
         toast({title:'Redirecting ...'})
         setIsLoading(false)
-        // router.push(`/admin-area/purchases/${purchase.data.id}`)
+        router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     if (isLoading) {

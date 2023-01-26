@@ -1,9 +1,9 @@
 import prisma from '@libs/connections/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react';
+// import { getSession } from 'next-auth/react';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    const session = await getSession({ req })
+    // const session = await getSession({ req })
     // console.log('running api')
     // if (!session) {
     //     return res.status(401).json({ message: 'Unauthorized.' });
@@ -37,58 +37,60 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             console.log('request body', req.body)
             // console.log(note)
             // console.log(user)s
-            const qUser = await prisma.users.findUnique({
+            const existingUser = await prisma.user.findUnique({
                 where: { email: user.email }
             })
-            // console.log(qUser)
-            const userId = qUser?.id
+            // console.log(existingUser)
+            const userId = existingUser?.id
             const userEmail:any = user.email
             console.log(userId)
             console.log(userEmail)
-
+            // NOTE: check orders
             // orders.map((order:any) => {
             //     console.log(order.id)
             // })
                 
-            const purchase = await prisma.purchase.create({
-                include: {
-                    detail: true
-                },
-                data: {
-                    // user: {
-                    //     connect: {
-                    //         id: userId
-                    //     }
-                    // },
-                    user: {
-                        connect: {
-                            id: 'bdafb04a-d239-4136-928d-460e7155f1df'
-                        }
+            if (existingUser) {
+                const purchase = await prisma.purchase.create({
+                    include: {
+                        detail: true
                     },
-                    userEmail,
-                    total,
-                    note,
-                    shipment: {
-                        create: {
-                            address,
-                            city,
-                            province,
-                            postal
+                    data: {
+                        // user: {
+                        //     connect: {
+                        //         id: userId
+                        //     }
+                        // },
+                        user: {
+                            connect: {
+                                id: existingUser.id
+                            }
+                        },
+                        userEmail,
+                        total,
+                        note,
+                        // shipment: {
+                        //     create: {
+                        //         address,
+                        //         city,
+                        //         province,
+                        //         postal
+                        //     }
+                        // },
+                        detail: {
+                            create: orders.map((order:any) => ({
+                                    productId: order.id,
+                                    purchasePrice: order.price,
+                                    qty: order.quantity,
+                                    unit: 'piece'
+                            })),
                         }
-                    },
-                    detail: {
-                        create: orders.map((order:any) => ({
-                                productId: order.id,
-                                purchasePrice: order.price,
-                                qty: order.quantity,
-                                unit: 'piece'
-                        })),
+                        // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
-                    // createdAt: ((new Date()).toISOString()).toLocaleString()
-                }
-            })
-            console.log(purchase)
-            return res.status(200).json(purchase)
+                })
+                console.log(purchase)
+                return res.status(200).json(purchase)
+            }
 
         } catch (e:any) {
             console.log(e)
