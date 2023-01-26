@@ -7,8 +7,8 @@ import SessionProfile from "@units/SessionProfile"
 import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import FormInput from "@elements/FormInput"
 import { useEffect, useState } from "react"
-import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
+import { CartItemCheckoutInterface } from "@interfaces//cartItem"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { cartState, checkCartState } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
@@ -17,23 +17,10 @@ import WarningBox from "@elements/WarningBox"
 import { useRouter } from "next/router"
 import { FiShoppingBag } from "react-icons/fi"
 import { useAuth } from "@contexts/authContext"
-import LoadingBlock, { LoadingBlockList } from "@elements/LoadingBlock"
+import LoadingBlock from "@elements/LoadingBlock"
+import { IFormInput, UserInterface } from "@interfaces//checkout"
 
-interface UserInterface {
-    id: string | null | undefined
-    email: string | null | undefined
-    name: string | null | undefined
-}
-interface IFormInput {
-    address: string
-    city: string
-    province: string
-    postal: string
-    total: number
-    note: string
-    orders: CartItemCheckoutInterface[]
-    user: UserInterface
-}
+
 const resolver: Resolver<IFormInput> = async (values) => {
     return {
         values: values.address ? values : 
@@ -85,7 +72,6 @@ const resolver: Resolver<IFormInput> = async (values) => {
 const CheckoutPage = () => {
     const { session, isLoadingSession } = useAuth()
     // console.log(session)
-
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
     const setCart = useSetRecoilState(cartState)
 
@@ -109,10 +95,6 @@ const CheckoutPage = () => {
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
 
-    // if ()
-    // const { user:currentUser, isLoadingUser } = useFetchUser(user.id)
-    // console.log(currentUser)
-
     useEffect(() => {
         if(session !== null) {
             setIsLoading(false)
@@ -124,12 +106,10 @@ const CheckoutPage = () => {
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data)
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        // TODO: disable form when submit'
         console.log('running', data)
         setDisabled
         setIsLoading(true)
         toast({title:'Submitting ...'})
-        // console.log(checkCart)
         data.orders = checkCart
         data.total = total!
         data.user.email = session!.user.email
@@ -143,9 +123,8 @@ const CheckoutPage = () => {
             name: session!.user.user_metadata.name,
             image: session!.user.user_metadata.picture
         }
-
         const user = await createUserIfNotExist(userData)
-        console.log('user: ', user)
+        // console.log('user: ', user)
 
         // const purchase = await createPurchaseOrder(data)
         // console.log('purchase: ', purchase)
@@ -160,7 +139,9 @@ const CheckoutPage = () => {
 
     if (isLoading) {
         return (
-            <LoadingBlock />
+            <MainLayout>
+                <LoadingBlock />
+            </MainLayout>
         )
     }
 
