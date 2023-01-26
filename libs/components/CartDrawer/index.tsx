@@ -1,34 +1,17 @@
-import { useState, useEffect } from "react"
 import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Divider, DrawerBody, DrawerFooter } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import { FcGoogle } from "react-icons/fc"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { CartItems } from "../Cart"
-// import { useSession, signIn } from "next-auth/react"
 import TokoAuth from "@components/TokoAuth"
 import { signInWithGoogle } from "@libs/connections/signIn"
 import { useAuth } from "@contexts/authContext"
 
 const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
-    const { session, isLoadingSession } = useAuth()
-    const [ isLogin, setIsLogin ] = useState<boolean>(false)
+    const { session } = useAuth()
     // const { data: session } = useSession()
-    // console.log(session)
-    // useEffect(() => {
-    //     if (session) {
-    //         setIsLogin(true)
-    //     }
-    // })
 
-    // handle signinWithGoogle to Checkout
     const toast = useToast()
-    const signInWithGoogleCheckout = () => {
-        toast({title:'Redirecting...'})
-        // Perform sign in
-        // signIn('google', {
-        //     callbackUrl: '/checkout',
-        // })
-    }
     
     return (
         <Drawer placement={placement} onClose={onClose!} isOpen={isOpen!} size="md">
@@ -51,7 +34,7 @@ const CartDrawer = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                         <FormSubmitButton href="/checkout" buttonColor="green.100" >
                             Checkout
                         </FormSubmitButton>
-                      :
+                    :
                         <FormSubmitButton 
                             onClick={() => {
                                 toast({title:'Redirecting...'})

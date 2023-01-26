@@ -4,13 +4,11 @@ import ModalPopup from "@units/ModalPopup"
 import { FcGoogle } from "react-icons/fc"
 import { RxExit } from "react-icons/rx"
 import SessionProfile from "@units/SessionProfile"
-import { supabase } from "@libs/connections/supabase"
 import { LoadingBlockList } from "@elements/LoadingBlock"
 import { signInWithGoogle } from "@libs/connections/signIn"
 import { useAuth } from "@contexts/authContext"
 import { useSetRecoilState } from "recoil"
 import { sessionState } from "@contexts/session"
-import { type Session } from '@supabase/gotrue-js/src/lib/types'
 import { signOut } from "@libs/connections/signOut"
 import { useRef } from "react"
 

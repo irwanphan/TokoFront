@@ -42,7 +42,6 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
     }).data
     mounted = false
   }, [])
-
   // console.log('user: ', currentUser)
   // console.log('session: ', session)
       
