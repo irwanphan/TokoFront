@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import { FiEdit } from "react-icons/fi"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useFetchUserById } from "@hooks/useFetchUserById"
-import { UserInterface } from "@interfaces//users"
+import { UserInterface } from "@interfaces//user"
 
 interface IFormInput {
     name?: string | any

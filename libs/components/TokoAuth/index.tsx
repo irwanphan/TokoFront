@@ -52,7 +52,7 @@ const TokoAuth = () => {
                     borderLeftWidth='0.5rem'
                     borderLeftStyle='solid'
                     paddingLeft={2}>
-                    <SessionProfile session={user}/>
+                    <SessionProfile session={session}/>
                 </Box>
                 <FormSubmitButton href="/admin-area" mr={2} px={3} >
                     Admin Area

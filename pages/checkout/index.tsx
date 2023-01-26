@@ -4,10 +4,9 @@ import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
 import SessionProfile from "@units/SessionProfile"
-import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import { cartState, checkCartState } from "@contexts/cart"
@@ -17,8 +16,11 @@ import useCartTotal from "@hooks/useCartTotal"
 import WarningBox from "@elements/WarningBox"
 import { useRouter } from "next/router"
 import { FiShoppingBag } from "react-icons/fi"
+import { useAuth } from "@contexts/authContext"
+import LoadingBlock, { LoadingBlockList } from "@elements/LoadingBlock"
 
 interface UserInterface {
+    id: string | null | undefined
     email: string | null | undefined
     name: string | null | undefined
 }
@@ -63,30 +65,31 @@ const resolver: Resolver<IFormInput> = async (values) => {
     }
 }
 
-export async function getServerSideProps(context:any) {
-    // Check if user is authenticated
-    const session = await getSession(context);
-    // If not, redirect to the homepage
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-    return {
-        props: {}
-    }
-}
+// export async function getServerSideProps(context:any) {
+//     // Check if user is authenticated
+//     const { session } = useAuth()
+//     // If not, redirect to the homepage
+//     if (!session) {
+//         return {
+//             redirect: {
+//                 destination: '/',
+//                 permanent: false,
+//             },
+//         }
+//     }
+//     return {
+//         props: {}
+//     }
+// }
 
 const CheckoutPage = () => {
-    const { data: session } = useSession()
+    const { session, isLoadingSession } = useAuth()
     // console.log(session)
+
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
     const setCart = useSetRecoilState(cartState)
 
-    const [ isLoading, setIsLoading ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
     
     const { handleSubmit, register, formState: { errors } } = useForm({
@@ -106,6 +109,16 @@ const CheckoutPage = () => {
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
 
+    // if ()
+    // const { user:currentUser, isLoadingUser } = useFetchUser(user.id)
+    // console.log(currentUser)
+
+    useEffect(() => {
+        if(session !== null) {
+            setIsLoading(false)
+        }
+    }, [session])
+
     const router = useRouter()
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
     const toast = useToast()
@@ -119,22 +132,28 @@ const CheckoutPage = () => {
         data.orders = checkCart
         data.total = total!
         data.user.email = session!.user.email
-        data.user.name = session!.user.name
-        // console.log(data)
-        const purchase = await createPurchaseOrder(data)
+        data.user.name = session!.user.user_metadata.full_name
+        data.user.id = session!.user.id
+        console.log(data)
+        // const purchase = await createPurchaseOrder(data)
         
-        console.log('purchase', purchase)
-        localStorage.removeItem("cart")
-        setCart([])
+        // console.log('purchase', purchase)
+        // localStorage.removeItem("cart")
+        // setCart([])
         toast({title:'Purchase order submitted', status:'success'})
         toast({title:'Redirecting ...'})
         setIsLoading(false)
         // router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
+    if (isLoading) {
+        return (
+            <LoadingBlock />
+        )
+    }
+
     return (
         <MainLayout>
-            { isLoading && <LoadingOverlay /> }
             <Box textAlign='left' mb={8}>
                 <Text fontSize={32}>
                     Your Cart
@@ -158,7 +177,7 @@ const CheckoutPage = () => {
 
                 <GridItem>
                     {
-                        checkCart.length > 0 &&
+                        checkCart.length > 0 ?
                         <BlockContainer>
                             <Box>
                                 You&apos;re login as
@@ -236,6 +255,7 @@ const CheckoutPage = () => {
                                 </FormSubmitButton>
                             </Flex>
                         </BlockContainer>
+                        : <></>
                     }
                 </GridItem>
             </Grid>
