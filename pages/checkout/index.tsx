@@ -120,7 +120,8 @@ const CheckoutPage = () => {
     }, [session])
 
     const router = useRouter()
-    const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
+    const createUserIfNotExist = (data:any) => axios.post('/api/users', data)
+    const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data)
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         // TODO: disable form when submit'
@@ -132,12 +133,23 @@ const CheckoutPage = () => {
         data.orders = checkCart
         data.total = total!
         data.user.email = session!.user.email
-        data.user.name = session!.user.user_metadata.full_name
+        data.user.name = session!.user.user_metadata.name
         data.user.id = session!.user.id
         console.log(data)
+
+        const userData = {
+            id: session!.user.id,
+            email: session!.user.email,
+            name: session!.user.user_metadata.name,
+            image: session!.user.user_metadata.picture
+        }
+
+        const user = await createUserIfNotExist(userData)
+        console.log('user: ', user)
+
         // const purchase = await createPurchaseOrder(data)
+        // console.log('purchase: ', purchase)
         
-        // console.log('purchase', purchase)
         // localStorage.removeItem("cart")
         // setCart([])
         toast({title:'Purchase order submitted', status:'success'})
