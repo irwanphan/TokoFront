@@ -1,4 +1,4 @@
-import { UserInterface } from "@interfaces//users"
+import { UserInterface } from "@interfaces//user"
 import axios from "axios"
 import { useState, useEffect } from "react"
 

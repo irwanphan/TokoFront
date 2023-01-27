@@ -13,13 +13,13 @@ import { useFetchPurchases } from "@hooks/useFetchPurchases"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
 import { useRouter } from "next/router"
-import { getSession } from 'next-auth/react'
+// import { getSession } from 'next-auth/react'
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
 export async function getServerSideProps(context:any) {
     // Check if user is authenticated
-    const session = await getSession(context);
+    // const session = await getSession(context);
     // If not, redirect to the homepage
     // if (!session) {
     //     return {

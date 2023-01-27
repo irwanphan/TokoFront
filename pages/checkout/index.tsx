@@ -4,12 +4,11 @@ import FormSubmitButton from "@elements/FormSubmit"
 import { CartItems } from "@libs/components/Cart"
 import MainLayout from "@libs/layouts/MainLayout"
 import SessionProfile from "@units/SessionProfile"
-import { getSession, useSession } from "next-auth/react"
 import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import FormInput from "@elements/FormInput"
-import { useState } from "react"
-import { CartItemCheckoutInterface, CartItemInterface } from "@interfaces//cartItem"
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
+import { useEffect, useState } from "react"
+import { CartItemCheckoutInterface } from "@interfaces//cartItem"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { cartState, checkCartState } from "@contexts/cart"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
@@ -17,21 +16,10 @@ import useCartTotal from "@hooks/useCartTotal"
 import WarningBox from "@elements/WarningBox"
 import { useRouter } from "next/router"
 import { FiShoppingBag } from "react-icons/fi"
+import { useAuth } from "@contexts/authContext"
+import LoadingBlock from "@elements/LoadingBlock"
+import { IFormInput, UserInterface } from "@interfaces//checkout"
 
-interface UserInterface {
-    email: string | null | undefined
-    name: string | null | undefined
-}
-interface IFormInput {
-    address: string
-    city: string
-    province: string
-    postal: string
-    total: number
-    note: string
-    orders: CartItemCheckoutInterface[]
-    user: UserInterface
-}
 const resolver: Resolver<IFormInput> = async (values) => {
     return {
         values: values.address ? values : 
@@ -63,32 +51,34 @@ const resolver: Resolver<IFormInput> = async (values) => {
     }
 }
 
-export async function getServerSideProps(context:any) {
-    // Check if user is authenticated
-    const session = await getSession(context);
-    // If not, redirect to the homepage
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-    return {
-        props: {}
-    }
-}
+// export async function getServerSideProps(context:any) {
+//     // Check if user is authenticated
+//     const { session } = useAuth()
+//     // If not, redirect to the homepage
+//     if (!session) {
+//         return {
+//             redirect: {
+//                 destination: '/',
+//                 permanent: false,
+//             },
+//         }
+//     }
+//     return {
+//         props: {}
+//     }
+// }
 
 const CheckoutPage = () => {
-    const { data: session } = useSession()
+    const { session, isLoadingSession } = useAuth()
     // console.log(session)
     const checkCart = useRecoilValue<CartItemCheckoutInterface[]|any>(checkCartState)
     const setCart = useSetRecoilState(cartState)
+    const { total, isLoadingTotal } = useCartTotal()
+    // console.log(total)
 
-    const [ isLoading, setIsLoading ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
-    
+    // handling form
     const { handleSubmit, register, formState: { errors } } = useForm({
         defaultValues: {
             address: '',
@@ -103,27 +93,41 @@ const CheckoutPage = () => {
         resolver
     })
 
-    const { total, isLoadingTotal } = useCartTotal()
-    // console.log(total)
+    useEffect(() => {
+        if(session !== null) {
+            setIsLoading(false)
+        }
+    }, [session])
 
     const router = useRouter()
-    const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data);
+    const createUserIfNotExist = (data:any) => axios.post('/api/users', data)
+    const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data)
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        // TODO: disable form when submit'
         console.log('running', data)
         setDisabled
         setIsLoading(true)
         toast({title:'Submitting ...'})
-        // console.log(checkCart)
         data.orders = checkCart
         data.total = total!
         data.user.email = session!.user.email
-        data.user.name = session!.user.name
-        // console.log(data)
+        data.user.name = session!.user.user_metadata.name
+        data.user.id = session!.user.id
+        console.log(data)
+
+        const userData = {
+            id: session!.user.id,
+            email: session!.user.email,
+            name: session!.user.user_metadata.name,
+            image: session!.user.user_metadata.picture
+        }
+        const user = await createUserIfNotExist(userData)
+        // console.log('user: ', user)
+
         const purchase = await createPurchaseOrder(data)
+        // console.log('purchase: ', purchase)
         
-        console.log('purchase', purchase)
+        // TEST: comment localstorage.remove, setCart([]), and router.push
         localStorage.removeItem("cart")
         setCart([])
         toast({title:'Purchase order submitted', status:'success'})
@@ -132,9 +136,16 @@ const CheckoutPage = () => {
         router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
+    if (isLoading) {
+        return (
+            <MainLayout>
+                <LoadingBlock />
+            </MainLayout>
+        )
+    }
+
     return (
         <MainLayout>
-            { isLoading && <LoadingOverlay /> }
             <Box textAlign='left' mb={8}>
                 <Text fontSize={32}>
                     Your Cart
@@ -158,7 +169,7 @@ const CheckoutPage = () => {
 
                 <GridItem>
                     {
-                        checkCart.length > 0 &&
+                        checkCart.length > 0 ?
                         <BlockContainer>
                             <Box>
                                 You&apos;re login as
@@ -236,6 +247,7 @@ const CheckoutPage = () => {
                                 </FormSubmitButton>
                             </Flex>
                         </BlockContainer>
+                        : <></>
                     }
                 </GridItem>
             </Grid>

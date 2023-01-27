@@ -1,21 +1,24 @@
-import { useState, useEffect } from "react"
 import { Box, useDisclosure, useToast, Flex, Text } from "@chakra-ui/react"
 import FormSubmitButton from "@elements/FormSubmit"
 import ModalPopup from "@units/ModalPopup"
 import { FcGoogle } from "react-icons/fc"
 import { RxExit } from "react-icons/rx"
-import { useSession, signOut, signIn } from "next-auth/react"
 import SessionProfile from "@units/SessionProfile"
+import { LoadingBlockList } from "@elements/LoadingBlock"
+import { signInWithGoogle } from "@libs/connections/signIn"
+import { useAuth } from "@contexts/authContext"
+import { useSetRecoilState } from "recoil"
+import { sessionState } from "@contexts/session"
+import { signOut } from "@libs/connections/signOut"
+import { useRef } from "react"
 
 const TokoAuth = () => {
-    const [ isLogin, setIsLogin ] = useState<boolean>(false)
-    const { data: session } = useSession()
-    // console.log(session)
-    useEffect(() => {
-        if (session) {
-            setIsLogin(true)
-        }
-    })
+    const { session, user, isLoadingSession } = useAuth()
+    const setSession = useSetRecoilState(sessionState)
+    // console.log('session in TokoAuth:', session)
+    // console.log ('user', user)
+    const toast = useToast()
+    const toastIdRef = useRef<string | any>()
 
     // handling logout modal
     const { isOpen:isModalOpen, onOpen:onModalOpen, onClose:onModalClose } = useDisclosure()
@@ -24,23 +27,21 @@ const TokoAuth = () => {
         texts: 'Come back safely',
         button: 'See You',
         action: () => {
+            toastIdRef.current = toast({ title:'Logging Out...' })
             onModalClose(),
-            setIsLogin(false),
+            setSession(null),
             signOut()
+            toast.update(toastIdRef.current, { description: 'Logged Out' })
         }
     }
 
-    // handle signinWithGoogle
-    const toast = useToast()
-    const signInWithGoogle = () => {
-        toast({title:'Redirecting...'})
-        // Perform sign in
-        signIn('google', {
-            callbackUrl: window.location.href,
-        })
+    if (isLoadingSession) {
+        return (
+            <LoadingBlockList />
+        )
     }
 
-    if (isLogin) {
+    if (session) {
         return (
             <Box>
                 <Text fontSize={12}>
@@ -75,8 +76,11 @@ const TokoAuth = () => {
                 {/* <FormSubmitButton href="/register">
                     <Box as={GiNewBorn} mr={1} fontSize={20} />register
                 </FormSubmitButton> */}
-                <FormSubmitButton 
-                    onClick={() => signInWithGoogle()} notLink >
+                <FormSubmitButton notLink
+                    onClick={() => {
+                        toast({title:'Redirecting...'})
+                        signInWithGoogle()
+                    }}>
                     <Box as={FcGoogle} mr={1} fontSize={20} />Login
                 </FormSubmitButton>
             </Flex>
