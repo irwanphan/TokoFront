@@ -1,9 +1,9 @@
-import { useState } from "react"
-import { Box, Divider, Flex, List, ListItem, Text } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
+import { Box, Divider, Flex, List, ListItem, Text, useToast } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import TriggerBox from "@units/TriggerBox"
-import { LoadingBlockList } from "@elements/LoadingBlock"
+import LoadingBlock, { LoadingBlockList } from "@elements/LoadingBlock"
 import { FiEdit, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
 
@@ -13,7 +13,9 @@ import { useFetchPurchases } from "@hooks/useFetchPurchases"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
 import { useRouter } from "next/router"
-// import { getSession } from 'next-auth/react'
+import { currentUserState } from "@contexts/user"
+import { useAuth } from "@contexts/authContext"
+import { supabase } from "@libs/connections/supabase"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
@@ -35,11 +37,27 @@ export async function getServerSideProps(context:any) {
 }
 
 const AdminAreaPage = () => {
+    const { session, isLoadingSession } = useAuth()
+    const router = useRouter()
+    const toast = useToast()
+    useEffect(() => {
+        if (!session) {
+            toast({title:'Redirecting ...', description:'User Unauthorized'})
+            router.push('/')
+        }
+    }, [ session, isLoadingSession ])
+
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
     const { purchases, isLoadingPurchases } = useFetchPurchases()
-    const router = useRouter()
-    console.log('purchase', purchases)
+    // console.log('purchase', purchases)
+
+    if (isLoadingSession) {
+        <MainLayout>
+            <LoadingBlock/>
+        </MainLayout>
+    }
+
     return (
         <MainLayout>
             {
