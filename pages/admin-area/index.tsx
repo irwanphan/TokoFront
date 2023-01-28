@@ -9,32 +9,14 @@ import { TbFileInvoice } from "react-icons/tb"
 
 import MainLayout from "@libs/layouts/MainLayout"
 import { CartItems } from "@libs/components/Cart"
-import { useFetchPurchases } from "@hooks/useFetchPurchases"
+import { useFetchPurchasesByUserId } from "@hooks/useFetchPurchasesByUserId"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
 import { useRouter } from "next/router"
-import { currentUserState } from "@contexts/user"
 import { useAuth } from "@contexts/authContext"
-import { supabase } from "@libs/connections/supabase"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
-export async function getServerSideProps(context:any) {
-    // Check if user is authenticated
-    // const session = await getSession(context);
-    // If not, redirect to the homepage
-    // if (!session) {
-    //     return {
-    //         redirect: {
-    //             destination: '/',
-    //             permanent: false,
-    //         },
-    //     }
-    // }
-    return {
-        props: {}
-    }
-}
 
 const AdminAreaPage = () => {
     const { session, isLoadingSession } = useAuth()
@@ -42,14 +24,14 @@ const AdminAreaPage = () => {
     const toast = useToast()
     useEffect(() => {
         if (!session) {
-            toast({title:'Redirecting ...', description:'User Unauthorized'})
+            toast({title:'Redirecting ...', description:'User Unauthorized', status:'warning'})
             router.push('/')
         }
     }, [ session, isLoadingSession ])
 
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
-    const { purchases, isLoadingPurchases } = useFetchPurchases()
+    const { purchases, isLoadingPurchases } = useFetchPurchasesByUserId(session?.user.id)
     // console.log('purchase', purchases)
 
     if (isLoadingSession) {

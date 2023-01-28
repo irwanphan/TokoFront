@@ -17,7 +17,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     id: 'desc'
                 }
             })
-            console.log(purchases)
+            // console.log(purchases)
             return res.status(200).json(purchases)
         }
         catch (e) {
