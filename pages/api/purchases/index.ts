@@ -8,7 +8,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const purchases = await prisma.purchase.findMany({
                 include: {
                     detail: true,
-                //     shipment: true,
+                    shipments: true
                 },
                 orderBy: {
                     id: 'desc'
@@ -57,14 +57,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         userEmail,
                         total,
                         note,
-                        // shipment: {
-                        //     create: {
-                        //         address,
-                        //         city,
-                        //         province,
-                        //         postal
-                        //     }
-                        // },
+                        shipments: {
+                            create: {
+                                address,
+                                city,
+                                province,
+                                postal
+                            }
+                        },
                         detail: {
                             create: orders.map((order:any) => ({
                                     productId: order.id,

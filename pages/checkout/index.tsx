@@ -128,12 +128,12 @@ const CheckoutPage = () => {
         console.log('purchase: ', purchase)
         
         // TEST: comment localstorage.remove, setCart([]), and router.push
-        // localStorage.removeItem("cart")
-        // setCart([])
+        localStorage.removeItem("cart")
+        setCart([])
         toast({title:'Purchase order submitted', status:'success'})
         toast({title:'Redirecting ...'})
         setIsLoading(false)
-        // router.push(`/admin-area/purchases/${purchase.data.id}`)
+        router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     if (isLoading) {

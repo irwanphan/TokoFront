@@ -8,6 +8,7 @@ export const useFetchUser = (email:any) => {
     // console.log(user)
 
     useEffect(() => {
+        if (email === undefined ) return
         const fetchData = async () => {
             try {
                 const { data: response } = await axios.get(`/api/users/get-by-email/?email=${email}`)

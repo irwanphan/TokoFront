@@ -27,10 +27,8 @@ const PurchaseDetailViewPage = () => {
     const toast = useToast()
 
     useEffect(() => {
-        if ( typeof pid === 'string' ) {
-            setQid(parseInt(pid))
-        }
-        // setQid(pid)
+        pid === undefined   ? console.log('waiting ...')
+                            : setQid(pid)
         setIsLoadingId(false)
     }, [pid] )
     const { purchase, isLoadingPurchase } = useFetchPurchaseById(qid)
@@ -39,11 +37,6 @@ const PurchaseDetailViewPage = () => {
         if (purchase) setSelected(purchase)
     }, [purchase])
     // console.log(selected)
-    useEffect(() => {
-        if (selected) {
-            // console.log(selected)
-        }
-    }, [selected])
     
     const onSubmit = async (data:any) => {
         data.price = parseInt(data.price) // price was string

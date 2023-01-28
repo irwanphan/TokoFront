@@ -6,10 +6,16 @@ export const useFetchPurchaseById = (id:any) => {
     const [ purchase, setPurchase ] = useState<PurchaseInterface>()
     const [ isLoadingPurchase, setIsLoadingPurchase ] = useState<boolean>(true)
 
+    const [ qid, setQid ] = useState()
+
+    useEffect(() => {
+        id === undefined    ? console.log('waiting ...')
+                            : setQid(id)
+    }, [id])
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data: response } = await axios.get(`/api/purchases/get-by-id/?id=${id}`)
+                const { data: response } = await axios.get(`/api/purchases/get-by-id/?id=${qid}`)
                 setPurchase(response)
             } catch (error) {
                 console.log(error)
@@ -17,7 +23,7 @@ export const useFetchPurchaseById = (id:any) => {
             setIsLoadingPurchase(false)
         }
         fetchData()
-    }, [])
+    }, [qid])
 
     return {
         purchase,
