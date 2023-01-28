@@ -9,44 +9,41 @@ import { FiFileText } from "react-icons/fi"
 import axios from "axios"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import { PurchaseInterface } from "@interfaces//purchases"
+import { useFetchPurchaseById } from "@hooks/useFetchPurchaseById"
 
 const PurchaseDetailViewPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
+
+    // handling show item
+    const [ selected, setSelected ] = useState<PurchaseInterface>()
+    const [ qid, setQid ] = useState<number|any>()
+
+    const router = useRouter()
+    const { pid }:any = router.query
+    const [ isLoadingId, setIsLoadingId ] = useState<boolean>(true)
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isDisabled, setDisabled ] = useState(false)
 
-    const [ purchase, setPurchase ] = useState<PurchaseInterface>()
-    const [ isLoadingPurchase, setIsLoadingPurchase ] = useState<boolean>(true)
-    
-    const router = useRouter()
-    const { pid }:any = router.query
-    // handling ShowItem
-    const [ qid, setQid ] = useState<number|any>()
-    
     const toast = useToast()
 
     useEffect(() => {
-        // console.log('pid:', pid)
         if ( typeof pid === 'string' ) {
             setQid(parseInt(pid))
         }
+        // setQid(pid)
+        setIsLoadingId(false)
     }, [pid] )
+    const { purchase, isLoadingPurchase } = useFetchPurchaseById(qid)
+
     useEffect(() => {
-        if (qid) {
-            // console.log('qid ready :', qid)
-            const fetchData = async () => {
-                try {
-                    const { data: response } = await axios.get(`/api/purchase/get-by-id/?id=${qid}`)
-                    // console.log(response)
-                    setPurchase(response)
-                } catch (error) {
-                    console.log(error)
-                }
-                setIsLoadingPurchase(false)
-            }
-            fetchData()
+        if (purchase) setSelected(purchase)
+    }, [purchase])
+    // console.log(selected)
+    useEffect(() => {
+        if (selected) {
+            // console.log(selected)
         }
-    }, [qid] )
+    }, [selected])
     
     const onSubmit = async (data:any) => {
         data.price = parseInt(data.price) // price was string
@@ -57,7 +54,6 @@ const PurchaseDetailViewPage = () => {
         setDisabled
         toast({title:'Saved', status:'success'})
     }
-
 
     if (isLoadingPurchase) return (
         <MainLayout>

@@ -2,8 +2,8 @@ import { PurchaseInterface } from "@interfaces//purchases"
 import axios from "axios"
 import { useState, useEffect } from "react"
 // query single purchase
-export const useFetchPurchase = (id:any) => {
-    const [ purchase, setPurchase ] = useState<PurchaseInterface[]>()
+export const useFetchPurchaseById = (id:any) => {
+    const [ purchase, setPurchase ] = useState<PurchaseInterface>()
     const [ isLoadingPurchase, setIsLoadingPurchase ] = useState<boolean>(true)
 
     useEffect(() => {

@@ -5,14 +5,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     // get all purchases
     if (req.method === 'GET') {
         try {
-            const purchases = await prisma.shipment.findMany({
-                // include: {
-                //     detail: true,
+            const purchases = await prisma.purchase.findMany({
+                include: {
+                    detail: true,
                 //     shipment: true,
-                // },
-                // orderBy: {
-                //     id: 'desc'
-                // }
+                },
+                orderBy: {
+                    id: 'desc'
+                }
             })
             console.log(purchases)
             return res.status(200).json(purchases)
@@ -49,11 +49,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         detail: true
                     },
                     data: {
-                        // user: {
-                        //     connect: {
-                        //         id: userId
-                        //     }
-                        // },
                         user: {
                             connect: {
                                 id: existingUser.id
