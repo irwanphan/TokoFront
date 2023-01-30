@@ -16,7 +16,7 @@ const TokoCatalog = ({ isTrending }:TokoCatalogProps) => {
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
 
     const storeTrending = useRecoilValue<ItemInterface[]>(productsTrendingState)
-    console.log(storeTrending)
+    // console.log(storeTrending)
 
     useEffect(() => {
         setIsLoadingProducts(false)
@@ -29,11 +29,21 @@ const TokoCatalog = ({ isTrending }:TokoCatalogProps) => {
     return (
         <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
             {
-                store?.map((item:ItemInterface) => {
+                isTrending ?
+                storeTrending?.map((item:ItemInterface) => {
                     return (
                         <GridItem key={item.id}>
                             <BlockContainerLink href={`/products/${item.id}`} 
-                            product={item}
+                                product={item}
+                            />
+                        </GridItem>
+                    )
+                })
+            :   store?.map((item:ItemInterface) => {
+                    return (
+                        <GridItem key={item.id}>
+                            <BlockContainerLink href={`/products/${item.id}`} 
+                                product={item}
                             />
                         </GridItem>
                     )
