@@ -17,6 +17,12 @@ const Home = () => {
         </Text>
       </Box>
 
+      <Box textAlign='center' mt={12} mb={8}>
+        <Text fontSize={32}>
+          All Products
+        </Text>
+      </Box>
+
       <TokoCatalog />
 
     </MainLayout>

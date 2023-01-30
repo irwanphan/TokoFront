@@ -1,13 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Product {
@@ -20,16 +18,9 @@ model Product {
   price             Float              @default(0)
   currentStock      Float              @default(0)
   isActive          Boolean            @default(true)
-  isTrending        Boolean            @default(false)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   @@map("products")
-}
-
-model ProductView {
-  id                Int                @id @default(autoincrement())
-  productId         String
-  @@map("product_views")
 }
 
 model Purchase {
@@ -58,7 +49,7 @@ model PurchaseDetail {
 }
 
 model Shipment {
-  id                String             @id @default(uuid())
+  id                String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   address           String
   city              String
   province          String
@@ -69,7 +60,7 @@ model Shipment {
 }
 
 model UserAddress {
-  id                String             @id @default(uuid())
+  id                String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name              String?
   address           String?
   city              String?
@@ -82,13 +73,13 @@ model UserAddress {
 }
 
 model User {
-  id                String             @id @default(uuid()) @db.Uuid
+  id                String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   code              String             @unique
   email             String?            @unique
   isActive          Boolean            @default(true)
   name              String
-  firstName         String?            @db.VarChar(30)
-  lastName          String?            @db.VarChar(30)
+  // firstName         String             @db.VarChar(30)
+  // lastName          String?            @db.VarChar(30)
   dateOfBirth       DateTime?          @db.Date
   phone             String?            @db.VarChar(15)
   lastAccess        DateTime?

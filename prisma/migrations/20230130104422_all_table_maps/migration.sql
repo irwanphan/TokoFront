@@ -1,22 +1,45 @@
+/*
+  Warnings:
+
+  - You are about to drop the `Purchase` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `PurchaseDetail` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `Shipment` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `UserAddress` table. If the table is not empty, all the data it contains will be lost.
+
+*/
 -- CreateEnum
 CREATE TYPE "roles" AS ENUM ('user', 'admin');
 
--- CreateTable
-CREATE TABLE "products" (
-    "id" TEXT NOT NULL,
-    "refId" TEXT,
-    "image" TEXT,
-    "unit" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL DEFAULT 0,
-    "currentStock" DOUBLE PRECISION NOT NULL DEFAULT 0,
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+-- DropForeignKey
+ALTER TABLE "Purchase" DROP CONSTRAINT "Purchase_userId_fkey";
 
-    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
-);
+-- DropForeignKey
+ALTER TABLE "PurchaseDetail" DROP CONSTRAINT "PurchaseDetail_purchaseId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Shipment" DROP CONSTRAINT "Shipment_purchaseId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "UserAddress" DROP CONSTRAINT "UserAddress_userId_fkey";
+
+-- DropTable
+DROP TABLE "Purchase";
+
+-- DropTable
+DROP TABLE "PurchaseDetail";
+
+-- DropTable
+DROP TABLE "Shipment";
+
+-- DropTable
+DROP TABLE "User";
+
+-- DropTable
+DROP TABLE "UserAddress";
+
+-- DropEnum
+DROP TYPE "Role";
 
 -- CreateTable
 CREATE TABLE "purchases" (
@@ -45,7 +68,7 @@ CREATE TABLE "purchase_details" (
 
 -- CreateTable
 CREATE TABLE "shipments" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "province" TEXT NOT NULL,
@@ -57,7 +80,7 @@ CREATE TABLE "shipments" (
 
 -- CreateTable
 CREATE TABLE "user_addresses" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT NOT NULL,
     "name" TEXT,
     "address" TEXT,
     "city" TEXT,
@@ -71,11 +94,13 @@ CREATE TABLE "user_addresses" (
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL,
     "code" TEXT NOT NULL,
     "email" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "name" TEXT NOT NULL,
+    "firstName" VARCHAR(30),
+    "lastName" VARCHAR(30),
     "dateOfBirth" DATE,
     "phone" VARCHAR(15),
     "lastAccess" TIMESTAMP(3),
@@ -87,9 +112,6 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "products_refId_key" ON "products"("refId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "shipments_purchaseId_key" ON "shipments"("purchaseId");

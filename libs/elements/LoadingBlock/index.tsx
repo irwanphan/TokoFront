@@ -1,4 +1,4 @@
-import { Box, FlexProps, Skeleton } from "@chakra-ui/react"
+import { Box, FlexProps, Grid, Skeleton } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 
 const LoadingBlock = ({children}: FlexProps) => {
@@ -9,6 +9,17 @@ const LoadingBlock = ({children}: FlexProps) => {
             <Skeleton h={3} mb={3} />
             {children}
         </BlockContainer>
+    )
+}
+
+export const LoadingCatalog = () => {
+    return (
+        <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
+            <LoadingBlock />
+            <LoadingBlock />
+            <LoadingBlock />
+            <LoadingBlock />
+        </Grid>
     )
 }
 
