@@ -1,15 +1,22 @@
 import { Grid, GridItem } from "@chakra-ui/react"
 import { useEffect, useState } from 'react'
-import { productsState } from '@libs/contexts/products'
+import { productsState, productsTrendingState } from '@libs/contexts/products'
 import { useRecoilValue } from 'recoil'
 import { BlockContainerLink } from "@elements/BlockContainer"
 import { ItemInterface } from "@libs/interfaces/storeItem"
-import LoadingBlock, { LoadingCatalog } from "@elements/LoadingBlock"
+import { LoadingCatalog } from "@elements/LoadingBlock"
 
-const TokoCatalog = () => {
+interface TokoCatalogProps {
+    isTrending?: boolean
+}
+
+const TokoCatalog = ({ isTrending }:TokoCatalogProps) => {
     const store = useRecoilValue<ItemInterface[]>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
+
+    const storeTrending = useRecoilValue<ItemInterface[]>(productsTrendingState)
+    console.log(storeTrending)
 
     useEffect(() => {
         setIsLoadingProducts(false)
