@@ -17,6 +17,8 @@ const Home = () => {
         </Text>
       </Box>
 
+      <TokoCatalog isTrending />
+
       <Box textAlign='center' mt={12} mb={8}>
         <Text fontSize={32}>
           All Products
