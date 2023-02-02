@@ -10,7 +10,6 @@ import { useEffect, useState } from "react"
 import { CartItemCheckoutInterface } from "@interfaces//cartItem"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { cartState, checkCartState } from "@contexts/cart"
-import LoadingOverlay from "@elements/LoadingOverlay"
 import axios from "axios"
 import useCartTotal from "@hooks/useCartTotal"
 import WarningBox from "@elements/WarningBox"
@@ -18,7 +17,7 @@ import { useRouter } from "next/router"
 import { FiShoppingBag } from "react-icons/fi"
 import { useAuth } from "@contexts/authContext"
 import LoadingBlock from "@elements/LoadingBlock"
-import { IFormInput, UserInterface } from "@interfaces//checkout"
+import { IFormInput } from "@interfaces//checkout"
 
 const resolver: Resolver<IFormInput> = async (values) => {
     return {
@@ -125,7 +124,7 @@ const CheckoutPage = () => {
         // console.log('user: ', user)
 
         const purchase = await createPurchaseOrder(data)
-        console.log('purchase: ', purchase)
+        // console.log('purchase: ', purchase)
         
         // TEST: comment localstorage.remove, setCart([]), and router.push
         localStorage.removeItem("cart")
