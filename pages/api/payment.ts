@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const midtransClient = require('midtrans-client');
-const { env } = require('process');
+
 // Create Snap API instance
 let snap = new midtransClient.Snap({
     // Set to true if you want Production Environment (accept real transaction).
     isProduction : false,
-    serverKey : "SB-Mid-server-VObmpV75qs9aM13rbzuvD0u4"
+    serverKey : process.env.MID_SERVER_KEY_SANDBOX,
+    clientKey : process.env.MID_CLIENT_KEY_SANDBOX,
 });
     
 let parameter = {
@@ -23,28 +24,27 @@ let parameter = {
         "email": "budi.pra@example.com",
         "phone": "08111222333"
     }
-};
-    
+}
 
-
-
-export default function handler(
+export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
 ) {
-    
-        // .then((transaction: any)=>{
-        //     // transaction token
-        //     let transactionToken = transaction.token;
-        //     // console.log('transactionToken:', transactionToken);
-        // })
-
-    const getTransactionToken = async () => {
-        var response = await snap.createTransaction(parameter)
-        console.log('response from snap sdk', response)
-        // return response.token
-        res.status(200).json({ token: response.token })
+    // const getTransactionToken = async () => {
+        
+    if (req.method === 'GET') {
+        try {
+            var response = await snap.createTransaction(parameter)
+            console.log('response from snap sdk', response)
+            // return response.token
+            return res.status(200).json({ token: response.token })
+        }
+        catch (e) {
+            console.log(e)
+            return res.status(500).json({ message: `${e}` })
+        }
     }
+    // }
 
-    getTransactionToken()
+    // getTransactionToken()
 }
