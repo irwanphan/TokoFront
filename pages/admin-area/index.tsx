@@ -70,13 +70,17 @@ const AdminAreaPage = () => {
                             Checkout
                         </FormSubmitButton>
                     </Flex>
-                    :
-                    <Flex justifyContent='right' mt={4}>
-                        <FormSubmitButton href="/products" buttonColor="green.100">
-                            <Box as={FiShoppingBag} mr={1} fontSize={20} />Go Shopping
-                        </FormSubmitButton>
-                    </Flex>
+                    : <></>
                 }
+                <Flex justifyContent='right' mt={4}>
+                    <FormSubmitButton href="/products" buttonColor="green.100">
+                        <Box as={FiShoppingBag} mr={1} fontSize={20} />
+                        {
+                            checkCart.length === 0  ? 'Go Shopping'
+                                                    : 'Continue Shopping'
+                        }
+                    </FormSubmitButton>
+                </Flex>
             </BlockContainer>
 
             <Box mt={4} />
