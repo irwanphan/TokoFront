@@ -1,22 +1,18 @@
 import { Button } from "@chakra-ui/react"
 import { useMidtrans } from "@hooks/useMidtrans"
 import MainLayout from "@layouts//MainLayout"
+import axios from "axios"
 
 const TestPage = () => {
-    const { token, isLoadingToken } = useMidtrans()
-
-    // getting token
-    if (isLoadingToken) {
-        return (
-            <MainLayout>
-                ... getting token
-            </MainLayout>
-        )
+    const testMid = () => {
+        const res:any = axios.get('/api/payment')
+            .then((res) => console.log(res.data))
+            .catch((e) => {throw(e)})
     }
-
+    
     return (
         <MainLayout>
-            <Button onClick={() => console.log(token)} >Check</Button>
+            <Button onClick={() => testMid()} >Run</Button>
         </MainLayout>
     )
 }

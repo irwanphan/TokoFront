@@ -17,55 +17,21 @@ import { useRouter } from "next/router"
 import { FiShoppingBag } from "react-icons/fi"
 import { useAuth } from "@contexts/authContext"
 import LoadingBlock from "@elements/LoadingBlock"
-import { IFormInput } from "@interfaces//checkout"
+import { checkoutResolver, IFormInput } from "@interfaces//checkout"
+
+// import { MidtransClient } from "midtrans-node-client"
+// let snap = new MidtransClient.Snap({
+//     // Set to true if production.
+//     isProduction : false,
+//     serverKey : process.env.MID_SERVER_KEY_SANDBOX,
+//     clientKey : process.env.MID_CLIENT_KEY_SANDBOX,
+// })
 
 const resolver: Resolver<IFormInput> = async (values) => {
-    return {
-        values: values.address ? values : 
-                values.city ? values :
-                values.province ? values :
-                values.postal ? values :
-                {},
-        errors: !values.address ?
-                { address: {
-                    type: 'required',
-                    message: 'Address is required.'
-                }}
-                : !values.city ?
-                { city: {
-                        type: 'required',
-                        message: 'City is required.'
-                }}
-                : !values.province ?
-                { province: {
-                        type: 'required',
-                        message: 'Province is required.'
-                }}
-                : !values.postal ?
-                { postal: {
-                        type: 'required',
-                        message: 'Postal code is required.'
-                }}
-                : {}
-    }
+    return checkoutResolver(values)
 }
 
-// export async function getServerSideProps(context:any) {
-//     // Check if user is authenticated
-//     const { session } = useAuth()
-//     // If not, redirect to the homepage
-//     if (!session) {
-//         return {
-//             redirect: {
-//                 destination: '/',
-//                 permanent: false,
-//             },
-//         }
-//     }
-//     return {
-//         props: {}
-//     }
-// }
+// TODO: Check if user is authenticated
 
 const CheckoutPage = () => {
     const { session, isLoadingSession } = useAuth()
@@ -74,7 +40,6 @@ const CheckoutPage = () => {
     const setCart = useSetRecoilState(cartState)
     const { total, isLoadingTotal } = useCartTotal()
     // console.log(total)
-
     const [ isLoading, setIsLoading ] = useState(true)
     const [ isDisabled, setDisabled ] = useState(false)
     // handling form
@@ -98,12 +63,39 @@ const CheckoutPage = () => {
         }
     }, [session])
 
+    // get snap.js on <script/> for Midtrans Client
+    // useEffect(() => {
+    //     // TODO: change to MID_URL when PRODUCTION
+    //     const midtransScriptUrl = process.env.MID_URL_SANDBOX 
+    //     const myMidtransClientKey = process.env.MID_CLIENT_KEY
+      
+    //     let scriptTag:any = document.createElement('script')
+    //     scriptTag.src = midtransScriptUrl
+    //     // optional if you want to set script attribute
+    //     // for example snap.js have data-client-key attribute
+    //     scriptTag.setAttribute('data-client-key', myMidtransClientKey);
+      
+    //     document.body.appendChild(scriptTag);
+    //     return () => {
+    //         document.body.removeChild(scriptTag);
+    //     }
+    // }, [])
+
+    // const getMidToken = async () => {
+    //     const res:any = axios.get('/api/payment')
+    //         .then((res) => {
+    //                 // console.log(res.data.token)
+    //                 router.push(res.data.token)       
+    //         })
+    //         .catch((e) => {throw(e)})
+    // }
+
     const router = useRouter()
     const createUserIfNotExist = (data:any) => axios.post('/api/users', data)
     const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data)
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        console.log('running', data)
+        // console.log('running', data)
         setDisabled
         setIsLoading(true)
         toast({title:'Submitting ...'})
@@ -120,6 +112,10 @@ const CheckoutPage = () => {
             name: session!.user.user_metadata.name,
             image: session!.user.user_metadata.picture
         }
+
+        // toast({title:'Creating Transaction', status:'success'})
+        // const token = getMidToken()
+
         const user = await createUserIfNotExist(userData)
         // console.log('user: ', user)
 

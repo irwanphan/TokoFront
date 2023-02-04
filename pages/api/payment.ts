@@ -1,10 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { MidtransClient } from 'midtrans-node-client'
+// import { v4 as uuidv4 } from 'uuid'
 
-const midtransClient = require('midtrans-client');
+// Sandbox	    POST	https://app.sandbox.midtrans.com/snap/v1/transactions
+// Production	POST	https://app.midtrans.com/snap/v1/transactions
 
 // Create Snap API instance
-let snap = new midtransClient.Snap({
-    // Set to true if you want Production Environment (accept real transaction).
+let snap = new MidtransClient.Snap({
+    // Set to true if production.
     isProduction : false,
     serverKey : process.env.MID_SERVER_KEY_SANDBOX,
     clientKey : process.env.MID_CLIENT_KEY_SANDBOX,
@@ -34,10 +37,10 @@ export default async function handler(
         
     if (req.method === 'GET') {
         try {
-            var response = await snap.createTransaction(parameter)
+            var response = await snap.createTransactionRedirectUrl(parameter)
             console.log('response from snap sdk', response)
             // return response.token
-            return res.status(200).json({ token: response.token })
+            return res.status(200).json({ token: response })
         }
         catch (e) {
             console.log(e)
