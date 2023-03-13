@@ -1,9 +1,11 @@
 import { Box, Flex, HStack, useDisclosure } from "@chakra-ui/react"
+import TokoSearch from "@components/TokoSearch"
 import AnchorMenuIcon, { AnchorMenuIconTrigger, AnchorMenuText } from "@elements/AnchorMenu"
 import CartDrawer from "@libs/components/CartDrawer"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { AiOutlineShop } from "react-icons/ai"
+import { FiSearch } from "react-icons/fi"
 import { RiShoppingCartFill } from "react-icons/ri"
 import { InView } from "react-intersection-observer"
 
@@ -12,7 +14,9 @@ const AnchorMenuNav = () => {
     const path = router.pathname
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: searchIsOpen, onOpen: searchOnOpen, onClose: searchOnClose } = useDisclosure()
     const [ placement, setPlacement ] = useState<string|any>('right')
+    const [ searchPlacement, setSearchPlacement ] = useState<string|any>('bottom')
     
     return (
         <Box>
@@ -49,6 +53,9 @@ const AnchorMenuNav = () => {
                             <AnchorMenuText href='/products'>
                                 All Products
                             </AnchorMenuText>
+                            <AnchorMenuIconTrigger mb={-1} tooltip='search product' onOpen={searchOnOpen}>
+                                <FiSearch />
+                            </AnchorMenuIconTrigger>
                         </HStack>
                         {/* <Box position='fixed' top={0} right={0}>{inView.toString()}</Box> */}
 
@@ -66,6 +73,7 @@ const AnchorMenuNav = () => {
         </InView>
 
             <CartDrawer placement={placement} onClose={onClose} isOpen={isOpen} />
+            <TokoSearch placement={searchPlacement} onClose={searchOnClose} isOpen={searchIsOpen} />
         </Box>
     )
 }
