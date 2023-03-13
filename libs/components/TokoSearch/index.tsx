@@ -17,7 +17,7 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                     Search Product
                 </DrawerHeader>
                 <DrawerBody>
-                    <CartItems />
+                    
                 </DrawerBody>
 
                 <DrawerFooter>
