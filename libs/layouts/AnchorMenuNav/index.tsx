@@ -47,12 +47,17 @@ const AnchorMenuNav = () => {
                             <AnchorMenuIcon href="/" mb={-1}>
                                 <AiOutlineShop />
                             </AnchorMenuIcon>
-                            <AnchorMenuText href='/'>
-                                Home
-                            </AnchorMenuText>
-                            <AnchorMenuText href='/products'>
-                                All Products
-                            </AnchorMenuText>
+                            <Flex>
+                                <AnchorMenuText href='/'
+                                    mr={{base: 0, md: 4}}
+                                    display={{base: 'none', md: 'inherit'}}
+                                >
+                                    Home
+                                </AnchorMenuText>
+                                <AnchorMenuText href='/products'>
+                                    All Products
+                                </AnchorMenuText>
+                            </Flex>
                             <AnchorMenuIconTrigger mb={-1} tooltip='search product' onOpen={searchOnOpen}>
                                 <FiSearch />
                             </AnchorMenuIconTrigger>
