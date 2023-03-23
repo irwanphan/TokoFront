@@ -1,4 +1,4 @@
-import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Input, InputGroup, InputRightElement, Grid, GridItem } from "@chakra-ui/react"
+import { useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Input, InputGroup, InputRightElement, Grid, GridItem, DrawerCloseButton } from "@chakra-ui/react"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { FiSearch } from "react-icons/fi"
 import axios from "axios"
@@ -10,9 +10,8 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ search, setSearch ] = useState('')
     const [ searchResult, setSearchResult ] = useState<ItemInterface[]>()
 
-    const toast = useToast()
+    // const toast = useToast()
     const searchByKeyword = (keyword:any) => axios.get(`/api/products/get-by-keyword/?keyword=${search}`, keyword)
-    
     const onSubmit = async (keyword:string) => {
         const products:ItemInterface[]|any = await searchByKeyword(keyword)
         // console.log(products.data)
@@ -37,8 +36,8 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                         </InputGroup>
                     </form>
                 </DrawerHeader>
+                <DrawerCloseButton />
                 <DrawerBody>
-
                     <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
                         {
                             searchResult?.map((item:ItemInterface) => {
@@ -52,12 +51,8 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                             })
                         }
                     </Grid>
-
                 </DrawerBody>
-
-                <DrawerFooter>
-
-                </DrawerFooter>
+                {/* <DrawerFooter></DrawerFooter> */}
             </DrawerContent>
         </Drawer>
     )
