@@ -1,24 +1,21 @@
-import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, Divider, DrawerBody, DrawerFooter, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
-import FormSubmitButton from "@elements/FormSubmit"
+import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
-import { CartItems } from "../Cart"
-import TokoAuth from "@components/TokoAuth"
-import { useAuth } from "@contexts/authContext"
 import { FiSearch } from "react-icons/fi"
 import axios from "axios"
 import { useState } from "react"
-import { useFetchCatalogSearch } from "@hooks/useFetchCatalogSearch"
+import { ItemInterface } from "@interfaces//storeItem"
 
 const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ search, setSearch ] = useState('')
+    const [ searchResult, setSearchResult ] = useState<ItemInterface[]>()
 
     const toast = useToast()
     const searchByKeyword = (keyword:any) => axios.get(`/api/products/get-by-keyword/?keyword=${search}`, keyword)
     
     const onSubmit = async (keyword:string) => {
-        console.log(keyword)
-        const products = await searchByKeyword(keyword)
-        console.log(products.data)
+        const products:ItemInterface[]|any = await searchByKeyword(keyword)
+        // console.log(products.data)
+        setSearchResult(products.data)
     }
 
     return (
@@ -31,7 +28,6 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                 <DrawerBody>
                     <form onSubmit={(e) => {
                         e.preventDefault()
-                        console.log(search)
                         onSubmit(search)
                     }}>
                         <InputGroup>
@@ -42,6 +38,13 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                         </InputGroup>
                     </form>
 
+                    {
+                        searchResult?.map((item) => {
+                            return(
+                                <Box>{item.name}</Box>
+                            )
+                        })
+                    }
 
                 </DrawerBody>
 
