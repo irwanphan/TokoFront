@@ -32,8 +32,6 @@ const AdminAreaPage = () => {
 
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
-    // const { purchases, isLoadingPurchases } = useFetchPurchasesByUserId(session?.user.id)
-    // console.log('purchase', purchases)
 
     if (isLoadingSession) {
         <MainLayout>
