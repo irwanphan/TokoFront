@@ -1,9 +1,10 @@
-import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
+import { Box, useToast, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Input, InputGroup, InputRightElement, Grid, GridItem } from "@chakra-ui/react"
 import { CartDrawerInterface } from "@libs/interfaces/cartDrawer"
 import { FiSearch } from "react-icons/fi"
 import axios from "axios"
 import { useState } from "react"
 import { ItemInterface } from "@interfaces//storeItem"
+import { BlockContainerLink } from "@elements/BlockContainer"
 
 const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
     const [ search, setSearch ] = useState('')
@@ -24,8 +25,6 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
             <DrawerContent borderLeft='2px solid black'>
                 <DrawerHeader>
                     Search Product
-                </DrawerHeader>
-                <DrawerBody>
                     <form onSubmit={(e) => {
                         e.preventDefault()
                         onSubmit(search)
@@ -37,14 +36,22 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                             <Input onChange={(e) => setSearch(e.target.value)} />
                         </InputGroup>
                     </form>
+                </DrawerHeader>
+                <DrawerBody>
 
-                    {
-                        searchResult?.map((item) => {
-                            return(
-                                <Box>{item.name}</Box>
-                            )
-                        })
-                    }
+                    <Grid templateColumns={{base: '1fr', sm:'1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'}} gap={4}>
+                        {
+                            searchResult?.map((item:ItemInterface) => {
+                                return (
+                                    <GridItem key={item.id}>
+                                        <BlockContainerLink href={`/products/${item.id}`} 
+                                            product={item}
+                                        />
+                                    </GridItem>
+                                )
+                            })
+                        }
+                    </Grid>
 
                 </DrawerBody>
 
