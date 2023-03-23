@@ -10,7 +10,7 @@ export const useFetchCatalog = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data: response } = await axios.get('/api/products')
+                const { data: response } = await axios.get('/api/products/get-all-products')
                 setCatalog(response)
             } catch (error) {
                 console.log(error)

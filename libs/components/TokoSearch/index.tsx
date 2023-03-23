@@ -5,11 +5,22 @@ import { CartItems } from "../Cart"
 import TokoAuth from "@components/TokoAuth"
 import { useAuth } from "@contexts/authContext"
 import { FiSearch } from "react-icons/fi"
+import axios from "axios"
+import { useState } from "react"
+import { useFetchCatalogSearch } from "@hooks/useFetchCatalogSearch"
 
 const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
+    const [ search, setSearch ] = useState('')
 
     const toast = useToast()
+    const searchByKeyword = (keyword:any) => axios.get(`/api/products/get-by-keyword/?keyword=${search}`, keyword)
     
+    const onSubmit = async (keyword:string) => {
+        console.log(keyword)
+        const products = await searchByKeyword(keyword)
+        console.log(products.data)
+    }
+
     return (
         <Drawer placement={placement} onClose={onClose!} isOpen={isOpen!} size="full">
             <DrawerOverlay />
@@ -18,14 +29,19 @@ const TokoSearch = ({placement, onClose, isOpen}: CartDrawerInterface) => {
                     Search Product
                 </DrawerHeader>
                 <DrawerBody>
-                    <form>
+                    <form onSubmit={(e) => {
+                        e.preventDefault()
+                        console.log(search)
+                        onSubmit(search)
+                    }}>
                         <InputGroup>
                             <InputRightElement>
                                 <FiSearch />
                             </InputRightElement>
-                            <Input />
+                            <Input onChange={(e) => setSearch(e.target.value)} />
                         </InputGroup>
                     </form>
+
 
                 </DrawerBody>
 
