@@ -107,3 +107,12 @@ enum Role {
   admin
   @@map("roles")
 }
+
+model Setting {
+  id                Int                @id @default(autoincrement())
+  description       String
+  value             String             @default("")
+  updatedAt         DateTime           @updatedAt
+  updatedBy         String
+  @@map("settings")
+}
