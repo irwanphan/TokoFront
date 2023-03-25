@@ -6,9 +6,33 @@ async function main() {
   // seed business settings
   const settingBusinessName = await prisma.setting.create({
     data: {
-      name: "businessName",
+      name: "settingBusinessName",
       description: "business name",
       value: "TokoFront",
+      updatedBy: "Setup Event"
+    }
+  })
+  const settingBusinessDescription = await prisma.setting.create({
+    data: {
+      name: "settingBusinessDescription",
+      description: "business description",
+      value: "A Place To Find Your Wonder Moment",
+      updatedBy: "Setup Event"
+    }
+  })
+  const settingSalesOrderingModeEnable = await prisma.setting.create({
+    data: {
+      name: "settingSalesOrderingModeEnable",
+      description: "sales ordering mode enable",
+      value: "no",
+      updatedBy: "Setup Event"
+    }
+  })
+  const settingMainPageMode = await prisma.setting.create({
+    data: {
+      name: "settingMainPageMode",
+      description: "main page mode",
+      value: "store",
       updatedBy: "Setup Event"
     }
   })
