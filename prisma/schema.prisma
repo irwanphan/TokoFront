@@ -110,9 +110,10 @@ enum Role {
 
 model Setting {
   id                Int                @id @default(autoincrement())
+  name              String
   description       String
   value             String             @default("")
   updatedAt         DateTime           @updatedAt
-  updatedBy         String
+  updatedBy         String             @default("")
   @@map("settings")
 }

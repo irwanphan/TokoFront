@@ -3,6 +3,18 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
+  // seed business settings
+  const settingBusinessName = await prisma.setting.create({
+    data: {
+      name: "businessName",
+      description: "business name",
+      value: "TokoFront",
+      updatedBy: "Setup Event"
+    }
+  })
+
+  // seed sample products
+  // 
   const item1 = await prisma.product.create({
     data: {
       name: "Something", 
