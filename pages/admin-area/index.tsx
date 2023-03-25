@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
-import { Box, Divider, Flex, List, ListItem, Text, useToast } from "@chakra-ui/react"
+import { BaseSyntheticEvent, useEffect, useState } from "react"
+import { Box, Divider, Flex, FormLabel, List, ListItem, Select, Text, useToast } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import TriggerBox from "@units/TriggerBox"
 import LoadingBlock, { LoadingBlockList } from "@elements/LoadingBlock"
-import { FiEdit, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
+import { FiEdit, FiSettings, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
 
 import MainLayout from "@libs/layouts/MainLayout"
@@ -32,6 +32,10 @@ const AdminAreaPage = () => {
 
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
+
+    const handleSettingChange = (event:BaseSyntheticEvent) => {
+        console.log(event.target.value)
+    }
 
     if (isLoadingSession) {
         <MainLayout>
@@ -85,6 +89,36 @@ const AdminAreaPage = () => {
             <Box mt={4} />
 
             <TokoShoppingHistory userId={session?.user.id} />
+
+            <Box mt={4} />
+
+            <BlockContainer>
+                <Flex alignItems='center'>
+                    <Box as={FiSettings} mr={2} />
+                    <Text fontWeight={600} >Business Settings</Text>
+                </Flex>
+                <Divider />
+
+                <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
+                    <Box>
+                        <FormLabel>
+                            Sales Ordering Mode Enable
+                        </FormLabel>
+                        <Select onChange={handleSettingChange}>
+                            <option value='yes'>Yes</option>
+                            <option value='no'>No</option>
+                        </Select>
+
+                        <FormLabel>
+                            Main Page Mode
+                        </FormLabel>
+                        <Select onChange={handleSettingChange}>
+                            <option value='store'>Store</option>
+                            <option value='sales'>Sales Ordering</option>
+                        </Select>
+                    </Box>
+                </Box>
+            </BlockContainer>
             
         </MainLayout>
     )
