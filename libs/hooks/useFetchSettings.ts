@@ -1,10 +1,10 @@
-import { UserInterface } from "@interfaces//user"
+import { SettingInterface } from "@interfaces//setting"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
-export const useFetchUsers = () => {
-    const [ settings, setSettings ] = useState<UserInterface[]>()
-    const [ isLoadingUsers, setIsLoadingUsers ] = useState<boolean>(true)
+export const useFetchSettings = () => {
+    const [ settings, setSettings ] = useState<SettingInterface[]>()
+    const [ isLoadingSettings, setIsLoadingSettings ] = useState<boolean>(true)
     // console.log(settings)
 
     useEffect(() => {
@@ -15,13 +15,13 @@ export const useFetchUsers = () => {
             } catch (error) {
                 console.log(error)
             }
-            setIsLoadingUsers(false)
+            setIsLoadingSettings(false)
         }
         fetchData()
     }, [])
 
     return {
         settings,
-        isLoadingUsers
+        isLoadingSettings
     }
 }

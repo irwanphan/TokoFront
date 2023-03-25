@@ -15,8 +15,8 @@ import { ItemInterface } from "@interfaces//storeItem"
 
 const MainLayout = ({children, ...rest}: FlexProps) => {
     const { catalog, isLoadingCatalog } = useFetchCatalog()
-    const toast = useToast()
 
+    const toast = useToast()
     const notify = (message:string) => {
         toast({
             duration: 1500,
