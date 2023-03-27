@@ -8,16 +8,23 @@ export const useFetchSettings = () => {
     // console.log(settings)
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data: response } = await axios.get('/api/settings')
-                setSettings(response)
-            } catch (error) {
-                console.log(error)
-            }
+        const storedSettings = window.sessionStorage.getItem('tokoSettings')
+        if (storedSettings) {
+            setSettings(JSON.parse(storedSettings))
             setIsLoadingSettings(false)
+        } else {
+            const fetchData = async () => {
+                try {
+                    const { data: response } = await axios.get('/api/settings')
+                    setSettings(response)
+                    sessionStorage.setItem("tokoSettings", JSON.stringify(response))
+                } catch (error) {
+                    console.log(error)
+                }
+                setIsLoadingSettings(false)
+            }
+            fetchData()
         }
-        fetchData()
     }, [])
 
     return {

@@ -11,12 +11,13 @@ import { useEffect, useState } from 'react'
 import { PageProps } from 'types/types'
 import { AuthProvider } from '@contexts/authContext'
 import axios from 'axios'
+import { useFetchSettings } from '@hooks/useFetchSettings'
 
 // export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 export default function App({ Component, pageProps }: AppProps<PageProps>) {
   const [ session, setSession ] = useState<Session | null | any>(null)
   // const [ currentUser, setCurrentUser ] = useState<any>()
-  const [ settings, setSettings ] = useState(null)
+  // const [ settings, setSettings ] = useState(null)
   
   const getInitialSession = () => {
     // NOTE: there's already session.user on session
@@ -47,22 +48,7 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
   // console.log('user: ', currentUser)
   // console.log('session: ', session)
 
-  useEffect(() => {
-    const storedSettings = window.sessionStorage.getItem('tokoSettings')
-    if (storedSettings) {
-      setSettings(JSON.parse(storedSettings));
-    } else {
-      const fetchData = async () => {
-        try { const { data: response } = await axios.get('/api/settings')
-              setSettings(response)
-              sessionStorage.setItem("tokoSettings", JSON.stringify(response))
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      fetchData()
-    }
-  }, [])
+  const { settings, isLoadingSettings } = useFetchSettings()
       
   return (
     // <SessionProvider session={session}>
@@ -74,6 +60,7 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
             session={session} 
             user={session?.user} 
             settings={settings}
+            isLoadingSettings={isLoadingSettings}
           />
         </ChakraProvider>
       </AuthProvider>
