@@ -2,9 +2,26 @@ import { Box, Text } from '@chakra-ui/react'
 import MainLayout from '@libs/layouts/MainLayout'
 import TokoCatalog from '@components/TokoCatalog'
 import TokoFeatured from '@components/TokoFeatured'
+import { SettingInterface } from '@interfaces//setting'
+import LoadingOverlay from '@elements/LoadingOverlay'
 
-const Home = ({settings}:any) => {
-  // console.log(settings)
+type HomeTypes = {
+  settings: SettingInterface[],
+  isLoadingSettings: boolean
+}
+
+const Home = ({settings, isLoadingSettings}: HomeTypes) => {
+  console.log(isLoadingSettings)
+  console.log(settings)
+
+  if (isLoadingSettings) {
+    return (
+      <MainLayout>
+        <LoadingOverlay />
+      </MainLayout>
+    )
+  }
+
   return (
     <MainLayout>
       <TokoFeatured />
