@@ -1,4 +1,5 @@
 import { SettingInterface } from "@interfaces//setting"
+import { iterateAndMapSettings } from "@utils/helper"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
@@ -16,8 +17,10 @@ export const useFetchSettings = () => {
             const fetchData = async () => {
                 try {
                     const { data: response } = await axios.get('/api/settings')
-                    setSettings(response)
-                    sessionStorage.setItem("tokoSettings", JSON.stringify(response))
+                    // console.log(response)
+                    const newSettings = iterateAndMapSettings(response) 
+                    setSettings(newSettings)
+                    sessionStorage.setItem("tokoSettings", JSON.stringify(newSettings))
                 } catch (error) {
                     console.log(error)
                 }
