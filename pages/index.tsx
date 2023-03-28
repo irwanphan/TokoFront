@@ -12,7 +12,7 @@ type HomeTypes = {
 
 const Home = ({settings, isLoadingSettings}: HomeTypes) => {
   // console.log(isLoadingSettings)
-  // console.log(settings)
+  console.log(settings)
 
   if (isLoadingSettings) {
     return (

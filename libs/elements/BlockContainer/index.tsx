@@ -1,4 +1,4 @@
-import { Box, FlexProps, Img, Text } from "@chakra-ui/react"
+import { Box, Circle, Flex, FlexProps, Img, Text } from "@chakra-ui/react"
 import { ItemInterface } from "@libs/interfaces/storeItem"
 import NextLink from 'next/link'
 
@@ -72,21 +72,63 @@ const ProductBlock = ({product}: ProductBlockProps ) => (
     </>
 )
 
+const ProductBlockSlim = ({product}: ProductBlockProps ) => (
+    <Flex gap={2}>
+        <Box>
+            <Circle size={14} overflow="hidden">
+                <Img
+                    minW="full" minH="full" w="auto"
+                    src={product?.image}
+                    alt={product?.name ?? "An image of something"}
+                />
+            </Circle>
+        </Box>
+        <Box>
+            <Text fontSize={16} mb={0.25} fontWeight={600} >
+                {product?.name ?? ""}
+            </Text>
+            <Text fontSize={12} color='blackAlpha.800'>
+                {product?.description}
+            </Text>
+        </Box>
+    </Flex>
+)
+
 export const BlockContainerLink = ({ href, product, title, description, bgColor }:BlockContainerLinkProps) => {
     return (
         <NextLink href={href}>
-            {/* TODO: retrieve image here */}
-                {
-                    product ?
-                    <BlockContainer bgColor={bgColor}>
-                        <ProductBlock product={product} />
-                    </BlockContainer>
-                    :
-                    <BlockContainer bgColor={bgColor}>
-                        <TitleAndDescription title={title} description={description} />
-                    </BlockContainer>
-                }
+            {
+                product ?
+                <BlockContainer bgColor={bgColor}>
+                    <ProductBlock product={product} />
+                </BlockContainer>
+                :
+                <BlockContainerTitleDescription href={href} bgColor={bgColor} title={title} description={description} />
+            }
         </NextLink>
+    )
+}
+
+export const BlockContainerSlimLink = ({ href, product, title, description, bgColor }:BlockContainerLinkProps) => {
+    return (
+        <NextLink href={href}>
+            {
+                product ?
+                <BlockContainer bgColor={bgColor}>
+                    <ProductBlockSlim product={product} />
+                </BlockContainer>
+                :
+                <BlockContainerTitleDescription href={href} bgColor={bgColor} title={title} description={description} />
+            }
+        </NextLink>
+    )
+}
+
+export const BlockContainerTitleDescription = ({ title, description, bgColor }:BlockContainerLinkProps) => {
+    return (
+        <BlockContainer bgColor={bgColor}>
+            <TitleAndDescription title={title} description={description} />
+        </BlockContainer>
     )
 }
 
