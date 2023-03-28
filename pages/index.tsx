@@ -17,7 +17,7 @@ const Home = ({settings, isLoadingSettings}: HomeTypes) => {
   if (isLoadingSettings) {
     return (
       <MainLayout>
-        <LoadingOverlay />
+        <LoadingOverlay isLoading={isLoadingSettings} />
       </MainLayout>
     )
   }
