@@ -35,7 +35,7 @@ const Home = ({settings, isLoadingSettings}: HomeTypes) => {
         </Text>
       </Box>
 
-      <TokoCatalog isTrending />
+      {/* <TokoCatalog isTrending /> */}
 
       <Box textAlign='center' mt={12} mb={8}>
         <Text fontSize={32}>
@@ -43,7 +43,7 @@ const Home = ({settings, isLoadingSettings}: HomeTypes) => {
         </Text>
       </Box>
 
-      <TokoCatalog />
+      <TokoCatalog settings={settings} />
 
     </MainLayout>
   )

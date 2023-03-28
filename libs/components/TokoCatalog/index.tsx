@@ -2,15 +2,16 @@ import { Grid, GridItem } from "@chakra-ui/react"
 import { useEffect, useState } from 'react'
 import { productsState, productsTrendingState } from '@libs/contexts/products'
 import { useRecoilValue } from 'recoil'
-import { BlockContainerLink } from "@elements/BlockContainer"
+import { BlockContainerLink, BlockContainerSlimLink } from "@elements/BlockContainer"
 import { ItemInterface } from "@libs/interfaces/storeItem"
 import { LoadingCatalog } from "@elements/LoadingBlock"
 
 interface TokoCatalogProps {
     isTrending?: boolean
+    settings: any
 }
 
-const TokoCatalog = ({ isTrending }:TokoCatalogProps) => {
+const TokoCatalog = ({ isTrending, settings }:TokoCatalogProps) => {
     const store = useRecoilValue<ItemInterface[]>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
@@ -41,11 +42,19 @@ const TokoCatalog = ({ isTrending }:TokoCatalogProps) => {
                 })
             :   store?.map((item:ItemInterface) => {
                     return (
+                        settings.settingMainPageMode === "store" ?
                         <GridItem key={item.id}>
                             <BlockContainerLink href={`/products/${item.id}`} 
                                 product={item}
                             />
-                        </GridItem>
+                        </GridItem> :
+                        settings.settingMainPageMode === "sales" ?
+                        <GridItem key={item.id}>
+                            <BlockContainerSlimLink href={`/products/${item.id}`} 
+                                product={item}
+                            />
+                        </GridItem> :
+                        <></>
                     )
                 })
             }

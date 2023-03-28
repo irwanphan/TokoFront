@@ -84,7 +84,7 @@ const ProductBlockSlim = ({product}: ProductBlockProps ) => (
             </Circle>
         </Box>
         <Box>
-            <Text fontSize={16} mb={0.25} fontWeight={600} >
+            <Text fontSize={16} mt={0.375} mb={0.25} fontWeight={600} >
                 {product?.name ?? ""}
             </Text>
             <Text fontSize={12} color='blackAlpha.800'>
