@@ -58,9 +58,12 @@ const AnchorMenuNav = () => {
                                     All Products
                                 </AnchorMenuText>
                             </Flex>
-                            <AnchorMenuIconTrigger mb={-1} tooltip='search product' onOpen={searchOnOpen}>
-                                <FiSearch />
-                            </AnchorMenuIconTrigger>
+                            {
+                                path == '/checkout' ? '' :
+                                <AnchorMenuIconTrigger mb={-1} tooltip='search product' onOpen={searchOnOpen}>
+                                    <FiSearch />
+                                </AnchorMenuIconTrigger>
+                            }
                         </HStack>
                         {/* <Box position='fixed' top={0} right={0}>{inView.toString()}</Box> */}
 
