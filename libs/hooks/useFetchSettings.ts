@@ -4,7 +4,7 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 
 export const useFetchSettings = () => {
-    const [ settings, setSettings ] = useState<SettingInterface[]>()
+    const [ settings, setSettings ] = useState<any>()
     const [ isLoadingSettings, setIsLoadingSettings ] = useState<boolean>(true)
     // console.log(settings)
 

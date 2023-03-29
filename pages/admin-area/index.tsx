@@ -15,12 +15,17 @@ import { checkCartState } from "@contexts/cart"
 import { useRouter } from "next/router"
 import { useAuth } from "@contexts/authContext"
 import TokoShoppingHistory from "@components/TokoShoppingHistory"
+import { useFetchSettings } from "@hooks/useFetchSettings"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
 
 const AdminAreaPage = () => {
     const { session, isLoadingSession } = useAuth()
+    const { settings, isLoadingSettings } = useFetchSettings()
+
+    const [ isLoading, setIsLoading ] = useState(true)
+
     const router = useRouter()
     const toast = useToast()
     useEffect(() => {
@@ -37,7 +42,14 @@ const AdminAreaPage = () => {
         console.log(event.target.value)
     }
 
-    if (isLoadingSession) {
+    useEffect(() => {
+        if (session && settings) {
+            console.log("settings: ", settings)
+            setIsLoading(false)
+        }
+    }, [ isLoadingSession, isLoadingSettings ])
+
+    if (isLoading) {
         <MainLayout>
             <LoadingBlock/>
         </MainLayout>
@@ -112,7 +124,7 @@ const AdminAreaPage = () => {
                         <FormLabel>
                             Main Page Mode
                         </FormLabel>
-                        <Select onChange={handleSettingChange}>
+                        <Select onChange={handleSettingChange} value={settings?.settingMainPageMode} >
                             <option value='store'>Store</option>
                             <option value='sales'>Sales Ordering</option>
                         </Select>
