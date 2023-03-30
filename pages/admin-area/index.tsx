@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, useEffect, useState } from "react"
-import { Box, Divider, Flex, FormLabel, List, ListItem, Select, Text, useToast } from "@chakra-ui/react"
+import { Box, Divider, Flex, FormLabel, Input, List, ListItem, Select, Text, useToast } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import TriggerBox from "@units/TriggerBox"
@@ -16,13 +16,10 @@ import { useRouter } from "next/router"
 import { useAuth } from "@contexts/authContext"
 import TokoShoppingHistory from "@components/TokoShoppingHistory"
 import { useFetchSettings } from "@hooks/useFetchSettings"
+import { AdminSettingInterface } from "@interfaces//setting"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
-
-interface adminSettingsProps {
-    mainPageMode: string
-}
 
 const AdminAreaPage = () => {
     const { session, isLoadingSession } = useAuth()
@@ -30,8 +27,11 @@ const AdminAreaPage = () => {
 
     const [ isLoading, setIsLoading ] = useState(true)
 
-    const [ adminSettings, setAdminSettings ] = useState<adminSettingsProps>({
-        mainPageMode: ''
+    const [ adminSettings, setAdminSettings ] = useState<AdminSettingInterface>({
+        settingBusinessName: '',
+        settingBusinessDescription: '',
+        settingSalesOrderingModeEnable: '',
+        settingMainPageMode: ''
     })
 
     const router = useRouter()
@@ -52,7 +52,7 @@ const AdminAreaPage = () => {
 
     useEffect(() => {
         if (settings && settings !== undefined) {
-            adminSettings.mainPageMode = settings.settingMainPageMode
+            setAdminSettings(settings)
         }
     }, [settings])
 
@@ -128,9 +128,19 @@ const AdminAreaPage = () => {
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                     <Box>
                         <FormLabel>
+                            Business Name
+                        </FormLabel>
+                        <Input value={adminSettings.settingBusinessName} />
+
+                        <FormLabel>
+                            Business Description
+                        </FormLabel>
+                        <Input value={adminSettings.settingBusinessDescription} />
+
+                        <FormLabel>
                             Sales Ordering Mode Enable
                         </FormLabel>
-                        <Select onChange={handleSettingChange}>
+                        <Select onChange={handleSettingChange} value={adminSettings.settingSalesOrderingModeEnable}>
                             <option value='yes'>Yes</option>
                             <option value='no'>No</option>
                         </Select>
@@ -138,7 +148,7 @@ const AdminAreaPage = () => {
                         <FormLabel>
                             Main Page Mode
                         </FormLabel>
-                        <Select onChange={handleSettingChange} value={adminSettings.mainPageMode} >
+                        <Select onChange={handleSettingChange} value={adminSettings.settingMainPageMode} >
                             <option value='store'>Store</option>
                             <option value='sales'>Sales Ordering</option>
                         </Select>

@@ -6,3 +6,10 @@ export interface SettingInterface {
     createdAt: String
     createdBy: String
 }
+
+export interface AdminSettingInterface {
+    settingBusinessName: string
+    settingBusinessDescription: string
+    settingSalesOrderingModeEnable: string
+    settingMainPageMode: string
+}

@@ -1,10 +1,10 @@
-import { SettingInterface } from "@interfaces//setting"
+import { AdminSettingInterface } from "@interfaces//setting"
 import { iterateAndMapSettings } from "@utils/helper"
 import axios from "axios"
 import { useState, useEffect } from "react"
 
 export const useFetchSettings = () => {
-    const [ settings, setSettings ] = useState<any>()
+    const [ settings, setSettings ] = useState<AdminSettingInterface>()
     const [ isLoadingSettings, setIsLoadingSettings ] = useState<boolean>(true)
     // console.log(settings)
 
