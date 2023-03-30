@@ -20,11 +20,19 @@ import { useFetchSettings } from "@hooks/useFetchSettings"
 // TODO: apply middleware to all admin-area
 // protect admin-area route
 
+interface adminSettingsProps {
+    mainPageMode: string
+}
+
 const AdminAreaPage = () => {
     const { session, isLoadingSession } = useAuth()
     const { settings, isLoadingSettings } = useFetchSettings()
 
     const [ isLoading, setIsLoading ] = useState(true)
+
+    const [ adminSettings, setAdminSettings ] = useState<adminSettingsProps>({
+        mainPageMode: ''
+    })
 
     const router = useRouter()
     const toast = useToast()
@@ -41,6 +49,12 @@ const AdminAreaPage = () => {
     const handleSettingChange = (event:BaseSyntheticEvent) => {
         console.log(event.target.value)
     }
+
+    useEffect(() => {
+        if (settings && settings !== undefined) {
+            adminSettings.mainPageMode = settings.settingMainPageMode
+        }
+    }, [settings])
 
     useEffect(() => {
         if (session && settings) {
@@ -124,7 +138,7 @@ const AdminAreaPage = () => {
                         <FormLabel>
                             Main Page Mode
                         </FormLabel>
-                        <Select onChange={handleSettingChange} value={settings?.settingMainPageMode} >
+                        <Select onChange={handleSettingChange} value={adminSettings.mainPageMode} >
                             <option value='store'>Store</option>
                             <option value='sales'>Sales Ordering</option>
                         </Select>
