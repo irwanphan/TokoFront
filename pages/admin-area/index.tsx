@@ -4,7 +4,7 @@ import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
 import TriggerBox from "@units/TriggerBox"
 import LoadingBlock, { LoadingBlockList } from "@elements/LoadingBlock"
-import { FiEdit, FiSettings, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
+import { FiEdit, FiSave, FiSettings, FiShoppingBag, FiShoppingCart } from "react-icons/fi"
 import { TbFileInvoice } from "react-icons/tb"
 
 import MainLayout from "@libs/layouts/MainLayout"
@@ -72,7 +72,7 @@ const AdminAreaPage = () => {
     return (
         <MainLayout>
             {
-                userCategory === 'admin' &&
+                userCategory == 'admin' ?
                 <Flex 
                     gap={2} maxW='full'
                     direction={{ base: 'column', md: 'row' }}
@@ -80,6 +80,7 @@ const AdminAreaPage = () => {
                     <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
                     <FormSubmitButton href="/admin-area/users">Manage Users</FormSubmitButton>
                 </Flex>
+                : <></>
             }
             <Box mt={4} />
 
@@ -154,6 +155,13 @@ const AdminAreaPage = () => {
                         </Select>
                     </Box>
                 </Box>
+
+                <Flex justifyContent='right' mt={4}>
+                    <FormSubmitButton notLink buttonColor="orange.100">
+                        <Box as={FiSave} mr={1} fontSize={20} />
+                        Apply Settings
+                    </FormSubmitButton>
+                </Flex>
             </BlockContainer>
             
         </MainLayout>

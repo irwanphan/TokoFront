@@ -31,6 +31,24 @@ const Input: ComponentStyleConfig = {
         }
     }
 }
+const Select: ComponentStyleConfig = {
+    defaultProps: {
+        colorScheme: 'yellow',
+        variant: 'outline'
+    },
+    baseStyle: {
+        bgColor: 'whiteAlpha.900'
+    },
+    variants: {
+        outline: {
+            field: {
+                borderColor: 'gray.900',
+                _focusVisible: { boxShadow: '0 0 0 1px yellow.500' },
+                _hover: { borderColor: 'gray.900' }
+            }
+        }
+    }
+}
 const Textarea: ComponentStyleConfig = {
     defaultProps: {
         colorScheme: 'yellow',
@@ -87,6 +105,7 @@ const theme = extendTheme({
         Divider,
         Checkbox,
         Input,
+        Select,
         FormLabel,
         Textarea
     },
