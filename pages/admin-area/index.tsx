@@ -16,7 +16,7 @@ import { useRouter } from "next/router"
 import { useAuth } from "@contexts/authContext"
 import TokoShoppingHistory from "@components/TokoShoppingHistory"
 import { useFetchSettings } from "@hooks/useFetchSettings"
-import { AdminSettingInterface } from "@interfaces//setting"
+import TokoBusinessSetting from "@components/TokoBusinessSetting"
 
 // TODO: apply middleware to all admin-area
 // protect admin-area route
@@ -26,13 +26,6 @@ const AdminAreaPage = () => {
     const { settings, isLoadingSettings } = useFetchSettings()
 
     const [ isLoading, setIsLoading ] = useState(true)
-
-    const [ adminSettings, setAdminSettings ] = useState<AdminSettingInterface>({
-        settingBusinessName: '',
-        settingBusinessDescription: '',
-        settingSalesOrderingModeEnable: '',
-        settingMainPageMode: ''
-    })
 
     const router = useRouter()
     const toast = useToast()
@@ -45,16 +38,6 @@ const AdminAreaPage = () => {
 
     const checkCart = useRecoilValue(checkCartState)
     const [ userCategory, setUserCategory ] = useState('admin')
-
-    const handleSettingChange = (event:BaseSyntheticEvent) => {
-        console.log(event.target.value)
-    }
-
-    useEffect(() => {
-        if (settings && settings !== undefined) {
-            setAdminSettings(settings)
-        }
-    }, [settings])
 
     useEffect(() => {
         if (session && settings) {
@@ -119,50 +102,7 @@ const AdminAreaPage = () => {
 
             <Box mt={4} />
 
-            <BlockContainer>
-                <Flex alignItems='center'>
-                    <Box as={FiSettings} mr={2} />
-                    <Text fontWeight={600} >Business Settings</Text>
-                </Flex>
-                <Divider />
-
-                <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
-                    <Box>
-                        <FormLabel>
-                            Business Name
-                        </FormLabel>
-                        <Input value={adminSettings.settingBusinessName} />
-
-                        <FormLabel>
-                            Business Description
-                        </FormLabel>
-                        <Input value={adminSettings.settingBusinessDescription} />
-
-                        <FormLabel>
-                            Sales Ordering Mode Enable
-                        </FormLabel>
-                        <Select onChange={handleSettingChange} value={adminSettings.settingSalesOrderingModeEnable}>
-                            <option value='yes'>Yes</option>
-                            <option value='no'>No</option>
-                        </Select>
-
-                        <FormLabel>
-                            Main Page Mode
-                        </FormLabel>
-                        <Select onChange={handleSettingChange} value={adminSettings.settingMainPageMode} >
-                            <option value='store'>Store</option>
-                            <option value='sales'>Sales Ordering</option>
-                        </Select>
-                    </Box>
-                </Box>
-
-                <Flex justifyContent='right' mt={4}>
-                    <FormSubmitButton notLink buttonColor="orange.100">
-                        <Box as={FiSave} mr={1} fontSize={20} />
-                        Apply Settings
-                    </FormSubmitButton>
-                </Flex>
-            </BlockContainer>
+            <TokoBusinessSetting settings={settings} />
             
         </MainLayout>
     )
