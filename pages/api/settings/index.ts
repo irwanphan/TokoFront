@@ -25,6 +25,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             } = req.body
 
             console.log(settingBusinessName)
+            const updateUser = await prisma.setting.update({
+                where: {
+                    name : 'settingBusinessName'
+                },
+                data: {
+                    value : settingBusinessName
+                }
+            })
 
             return res.status(200)
 
