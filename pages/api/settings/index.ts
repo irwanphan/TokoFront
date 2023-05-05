@@ -24,17 +24,34 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 settingMainPageMode
             } = req.body
 
-            console.log(settingBusinessName)
-            const updateUser = await prisma.setting.update({
-                where: {
-                    name : 'settingBusinessName'
-                },
-                data: {
-                    value : settingBusinessName
-                }
+            console.log(`req.body: ${req.body}`)
+
+            // const settings = await prisma.setting.findMany()
+            // console.log(settings)
+            // .then((res) => {
+            // settings.map(item => {
+            //     // console.log(item)
+            //     if (item.name === 'settingBusinessName' && item.value !== settingBusinessName) {
+            //         prisma.setting.update({
+            //             where:  { name  : 'settingBusinessName' },
+            //             data:   { value : settingBusinessName  }
+            //         })
+            //         console.log('asdf')
+            //     }
+            // })
+            // })
+
+            // console.log(settingBusinessName)
+            const updateSettingBusinessName = await prisma.setting.update({
+                where: { name : 'settingBusinessName' },
+                data: { value : settingBusinessName }
+            })
+            const updateSettingBusinessDescription = await prisma.setting.update({
+                where: { name : 'settingBusinessDescription' },
+                data: { value : settingBusinessDescription }
             })
 
-            return res.status(200)
+            return res.status(200).json(req.body)
 
         } catch (e:any) {
             console.log(e)
