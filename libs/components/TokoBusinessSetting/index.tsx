@@ -12,6 +12,13 @@ interface TokoBusinessSettingProps {
     settings: AdminSettingInterface | undefined
 }
 
+interface IFormInput {
+    settingBusinessName: string
+    settingBusinessDescription: string
+    settingSalesOrderingModeEnable: string
+    settingMainPageMode: string
+}
+
 const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
     const [ adminSettings, setAdminSettings ] = useState<AdminSettingInterface>({
         settingBusinessName: '',
@@ -24,25 +31,25 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
     const [ isDisabled, setDisabled ] = useState(false)
 
     const { control, handleSubmit, register, setValue } = useForm(
-        // {
-        //     defaultValues: {
-        //         settingBusinessName: '',
-        //         settingBusinessDescription: '',
-        //         settingSalesOrderingModeEnable: '',
-        //         settingMainPageMode: ''
-        //     }
-        // }
+        {
+            defaultValues: {
+                settingBusinessName: '',
+                settingBusinessDescription: '',
+                settingSalesOrderingModeEnable: '',
+                settingMainPageMode: ''
+            }
+        }
     )
 
-    const updateSetting = (data:any) => axios.post('/api/products', data);
+    const updateSetting = (data:any) => axios.post('/api/settings', data);
     const toast = useToast()
-    const onSubmit: SubmitHandler<TokoBusinessSettingProps> = async (data) => {
-        setIsLoading(true)
-        toast({title:'Saving...'})
+    const onSubmit: SubmitHandler<AdminSettingInterface> = async (data) => {
+        // setIsLoading(true)
+        // toast({title:'Saving...'})
         await updateSetting(data)
-        setIsLoading(false)
-        setDisabled
-        toast({title:'Saved', status:'success'})
+        // setIsLoading(false)
+        // setDisabled
+        // toast({title:'Saved', status:'success'})
     }
 
     // const handleSettingChange = (event:BaseSyntheticEvent) => {
@@ -68,6 +75,7 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
             <Divider />
 
             <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
+                <form>
                 <Box>
                     <FormInput 
                         name='settingBusinessName'
@@ -105,10 +113,13 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
                         <option value='sales'>Sales Ordering</option>
                     </Select>
                 </Box>
+            </form>
             </Box>
 
             <Flex justifyContent='right' mt={4}>
-                <FormSubmitButton notLink buttonColor="orange.100">
+                <FormSubmitButton notLink buttonColor="orange.100"
+                    onClick={handleSubmit(onSubmit)}
+                >
                     <Box as={FiSave} mr={1} fontSize={20} />
                     Apply Settings
                 </FormSubmitButton>

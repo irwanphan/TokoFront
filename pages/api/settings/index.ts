@@ -14,41 +14,29 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         }
     }
     
-    // if (req.method === 'POST') {
+    if (req.method === 'POST') {
         
-    //     try {
-    //         const { id, email, name, image } = req.body
+        try {
+            const {
+                settingBusinessName, 
+                settingBusinessDescription, 
+                settingSalesOrderingModeEnable, 
+                settingMainPageMode
+            } = req.body
 
-    //         const existingUser = await prisma.user.findUnique({
-    //             where: { email: email }
-    //         })
-    //         console.log(existingUser)
+            console.log(settingBusinessName)
 
-    //         const code = id
+            return res.status(200)
 
-    //         if (!existingUser) {
-    //             const user = await prisma.user.create({
-    //                 data: {
-    //                     code,
-    //                     email,
-    //                     name,
-    //                     image
-    //                 }
-    //             })
-    //             // console.log(user)
-    //             return res.status(200).json(user)
-    //         }
-    //         return res.status(200).json(existingUser)
-
-    //     } catch (e:any) {
-    //         console.log(e)
-    //         return res.status(500).json({ message: `${e.status}` })
-    //     }
-    // }
-    // else {
-    //     res.setHeader('Allow', ['POST']);
-    //     return res
-    //         .status(405)
-    //         .json({ message: `HTTP method ${req.method} is not supported.` })
-    // }
+        } catch (e:any) {
+            console.log(e)
+            return res.status(500).json({ message: `${e.status}` })
+        }
+    }
+    else {
+        res.setHeader('Allow', ['POST']);
+        return res
+            .status(405)
+            .json({ message: `HTTP method ${req.method} is not supported.` })
+    }
 }
