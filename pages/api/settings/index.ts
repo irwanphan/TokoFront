@@ -41,15 +41,18 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // })
             // })
 
-            // console.log(settingBusinessName)
-            const updateSettingBusinessName = await prisma.setting.update({
+            const updateSettingBusinessName = prisma.setting.update({
                 where: { name : 'settingBusinessName' },
                 data: { value : settingBusinessName }
             })
-            const updateSettingBusinessDescription = await prisma.setting.update({
+            const updateSettingBusinessDescription = prisma.setting.update({
                 where: { name : 'settingBusinessDescription' },
                 data: { value : settingBusinessDescription }
             })
+            const updateSettings = await prisma.$transaction([
+                updateSettingBusinessName,
+                updateSettingBusinessDescription
+            ])
 
             return res.status(200).json(req.body)
 

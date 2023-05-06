@@ -12,13 +12,6 @@ interface TokoBusinessSettingProps {
     settings: AdminSettingInterface | undefined
 }
 
-interface IFormInput {
-    settingBusinessName: string
-    settingBusinessDescription: string
-    settingSalesOrderingModeEnable: string
-    settingMainPageMode: string
-}
-
 const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
     const [ adminSettings, setAdminSettings ] = useState<AdminSettingInterface>({
         settingBusinessName: '',
