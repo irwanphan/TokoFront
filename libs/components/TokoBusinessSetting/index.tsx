@@ -37,12 +37,14 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
     const updateSetting = (data:any) => axios.post('/api/settings', data);
     const toast = useToast()
     const onSubmit: SubmitHandler<AdminSettingInterface> = async (data) => {
-        // setIsLoading(true)
-        // toast({title:'Saving...'})
+        setIsLoading(true)
+        toast({title:'Saving...'})
+        // update data to Supabase DB
         await updateSetting(data)
-        // setIsLoading(false)
-        // setDisabled
-        // toast({title:'Saved', status:'success'})
+        // update local session tokosettings
+        sessionStorage.setItem("tokoSettings", JSON.stringify(data))
+        toast({title:'Saved', status:'success'})
+        setIsLoading(false)
     }
 
     // const handleSettingChange = (event:BaseSyntheticEvent) => {
