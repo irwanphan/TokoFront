@@ -88,8 +88,9 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
                         Sales Ordering Mode Enable
                     </FormLabel>
                     <Select 
+                        {...register('settingSalesOrderingModeEnable')}
                         // onChange={handleSettingChange} 
-                        // value={adminSettings.settingSalesOrderingModeEnable}
+                        defaultValue={adminSettings.settingSalesOrderingModeEnable}
                     >
                         <option value='yes'>Yes</option>
                         <option value='no'>No</option>
@@ -99,8 +100,9 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
                         Main Page Mode
                     </FormLabel>
                     <Select 
+                        {...register('settingMainPageMode')}
                         // onChange={handleSettingChange} 
-                        // value={adminSettings.settingMainPageMode} 
+                        defaultValue={adminSettings.settingMainPageMode} 
                     >
                         <option value='store'>Store</option>
                         <option value='sales'>Sales Ordering</option>

@@ -49,9 +49,19 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 where: { name : 'settingBusinessDescription' },
                 data: { value : settingBusinessDescription }
             })
+            const updateSettingSalesOrderingModeEnable = prisma.setting.update({
+                where: { name : 'settingSalesOrderingModeEnable' },
+                data: { value : settingSalesOrderingModeEnable }
+            })
+            const updateSettingMainPageMode = prisma.setting.update({
+                where: { name : 'settingMainPageMode' },
+                data: { value : settingMainPageMode }
+            })
             const updateSettings = await prisma.$transaction([
                 updateSettingBusinessName,
-                updateSettingBusinessDescription
+                updateSettingBusinessDescription,
+                updateSettingSalesOrderingModeEnable,
+                updateSettingMainPageMode
             ])
 
             return res.status(200).json(req.body)
