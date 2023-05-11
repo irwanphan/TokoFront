@@ -24,25 +24,27 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
     const [ isDisabled, setDisabled ] = useState(false)
 
     const { control, handleSubmit, register, setValue } = useForm(
-        // {
-        //     defaultValues: {
-        //         settingBusinessName: '',
-        //         settingBusinessDescription: '',
-        //         settingSalesOrderingModeEnable: '',
-        //         settingMainPageMode: ''
-        //     }
-        // }
+        {
+            defaultValues: {
+                settingBusinessName: '',
+                settingBusinessDescription: '',
+                settingSalesOrderingModeEnable: '',
+                settingMainPageMode: ''
+            }
+        }
     )
 
-    const updateSetting = (data:any) => axios.post('/api/products', data);
+    const updateSetting = (data:any) => axios.post('/api/settings', data);
     const toast = useToast()
-    const onSubmit: SubmitHandler<TokoBusinessSettingProps> = async (data) => {
+    const onSubmit: SubmitHandler<AdminSettingInterface> = async (data) => {
         setIsLoading(true)
         toast({title:'Saving...'})
+        // update data to Supabase DB
         await updateSetting(data)
-        setIsLoading(false)
-        setDisabled
+        // update local session tokosettings
+        sessionStorage.setItem("tokoSettings", JSON.stringify(data))
         toast({title:'Saved', status:'success'})
+        setIsLoading(false)
     }
 
     // const handleSettingChange = (event:BaseSyntheticEvent) => {
@@ -68,6 +70,7 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
             <Divider />
 
             <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
+                <form>
                 <Box>
                     <FormInput 
                         name='settingBusinessName'
@@ -87,8 +90,9 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
                         Sales Ordering Mode Enable
                     </FormLabel>
                     <Select 
+                        {...register('settingSalesOrderingModeEnable')}
                         // onChange={handleSettingChange} 
-                        // value={adminSettings.settingSalesOrderingModeEnable}
+                        defaultValue={adminSettings.settingSalesOrderingModeEnable}
                     >
                         <option value='yes'>Yes</option>
                         <option value='no'>No</option>
@@ -98,17 +102,21 @@ const TokoBusinessSetting = ({settings}:TokoBusinessSettingProps) => {
                         Main Page Mode
                     </FormLabel>
                     <Select 
+                        {...register('settingMainPageMode')}
                         // onChange={handleSettingChange} 
-                        // value={adminSettings.settingMainPageMode} 
+                        defaultValue={adminSettings.settingMainPageMode} 
                     >
                         <option value='store'>Store</option>
                         <option value='sales'>Sales Ordering</option>
                     </Select>
                 </Box>
+            </form>
             </Box>
 
             <Flex justifyContent='right' mt={4}>
-                <FormSubmitButton notLink buttonColor="orange.100">
+                <FormSubmitButton notLink buttonColor="orange.100"
+                    onClick={handleSubmit(onSubmit)}
+                >
                     <Box as={FiSave} mr={1} fontSize={20} />
                     Apply Settings
                 </FormSubmitButton>

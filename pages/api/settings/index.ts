@@ -14,41 +14,67 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         }
     }
     
-    // if (req.method === 'POST') {
+    if (req.method === 'POST') {
         
-    //     try {
-    //         const { id, email, name, image } = req.body
+        try {
+            const {
+                settingBusinessName, 
+                settingBusinessDescription, 
+                settingSalesOrderingModeEnable, 
+                settingMainPageMode
+            } = req.body
 
-    //         const existingUser = await prisma.user.findUnique({
-    //             where: { email: email }
-    //         })
-    //         console.log(existingUser)
+            console.log(`req.body: ${req.body}`)
 
-    //         const code = id
+            // const settings = await prisma.setting.findMany()
+            // console.log(settings)
+            // .then((res) => {
+            // settings.map(item => {
+            //     // console.log(item)
+            //     if (item.name === 'settingBusinessName' && item.value !== settingBusinessName) {
+            //         prisma.setting.update({
+            //             where:  { name  : 'settingBusinessName' },
+            //             data:   { value : settingBusinessName  }
+            //         })
+            //         console.log('asdf')
+            //     }
+            // })
+            // })
 
-    //         if (!existingUser) {
-    //             const user = await prisma.user.create({
-    //                 data: {
-    //                     code,
-    //                     email,
-    //                     name,
-    //                     image
-    //                 }
-    //             })
-    //             // console.log(user)
-    //             return res.status(200).json(user)
-    //         }
-    //         return res.status(200).json(existingUser)
+            const updateSettingBusinessName = prisma.setting.update({
+                where: { name : 'settingBusinessName' },
+                data: { value : settingBusinessName }
+            })
+            const updateSettingBusinessDescription = prisma.setting.update({
+                where: { name : 'settingBusinessDescription' },
+                data: { value : settingBusinessDescription }
+            })
+            const updateSettingSalesOrderingModeEnable = prisma.setting.update({
+                where: { name : 'settingSalesOrderingModeEnable' },
+                data: { value : settingSalesOrderingModeEnable }
+            })
+            const updateSettingMainPageMode = prisma.setting.update({
+                where: { name : 'settingMainPageMode' },
+                data: { value : settingMainPageMode }
+            })
+            const updateSettings = await prisma.$transaction([
+                updateSettingBusinessName,
+                updateSettingBusinessDescription,
+                updateSettingSalesOrderingModeEnable,
+                updateSettingMainPageMode
+            ])
 
-    //     } catch (e:any) {
-    //         console.log(e)
-    //         return res.status(500).json({ message: `${e.status}` })
-    //     }
-    // }
-    // else {
-    //     res.setHeader('Allow', ['POST']);
-    //     return res
-    //         .status(405)
-    //         .json({ message: `HTTP method ${req.method} is not supported.` })
-    // }
+            return res.status(200).json(req.body)
+
+        } catch (e:any) {
+            console.log(e)
+            return res.status(500).json({ message: `${e.status}` })
+        }
+    }
+    else {
+        res.setHeader('Allow', ['POST']);
+        return res
+            .status(405)
+            .json({ message: `HTTP method ${req.method} is not supported.` })
+    }
 }
