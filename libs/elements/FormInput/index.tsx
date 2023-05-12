@@ -1,4 +1,4 @@
-import { Box, FlexProps, FormLabel, Input, NumberInput, NumberInputField, Textarea } from "@chakra-ui/react"
+import { Box, FlexProps, FormLabel, Input, NumberInput, NumberInputField, Select, Textarea } from "@chakra-ui/react"
 import { IconType } from "react-icons/lib";
 
 interface optionProps {
@@ -14,6 +14,7 @@ interface FormInputProps extends FlexProps {
     register: any
     autoFocus?: boolean
     value? : string | number
+    defaultValue? : string | number
     placeholder?: string
     options? : optionProps[]
     icon? : IconType
@@ -21,7 +22,7 @@ interface FormInputProps extends FlexProps {
     isDisabled?: boolean
 }
 
-const FormInput = ({name, label, type, register, autoFocus, value, placeholder, options, icon, spaceAfter, isDisabled, children, ...rest}:FormInputProps) => {
+const FormInput = ({name, label, type, register, autoFocus, value, defaultValue, placeholder, options, icon, spaceAfter, isDisabled, children, ...rest}:FormInputProps) => {
     const FormInputManifest = () => {
         if (type === 'textarea') {
             return (
@@ -29,6 +30,7 @@ const FormInput = ({name, label, type, register, autoFocus, value, placeholder, 
                     {...register(name)}
                     name={name}
                     value={value}
+                    defaultValue={defaultValue}
                     placeholder={placeholder}
                     layerStyle='formInputBase'
                     // border and _hover not working on extend theme
@@ -47,6 +49,7 @@ const FormInput = ({name, label, type, register, autoFocus, value, placeholder, 
                         {...register(name)}
                         name={name}
                         value={value}
+                        defaultValue={defaultValue}
                         placeholder={placeholder}
                         layerStyle='formInputBase'
                         borderColor='gray.900'
@@ -57,11 +60,31 @@ const FormInput = ({name, label, type, register, autoFocus, value, placeholder, 
                 </NumberInput>
             )
         }
+        if (type === 'select') {
+            return (
+                <Select
+                    {...register(name)}
+                    name={name}
+                    value={value}
+                    defaultValue={defaultValue}
+                    placeholder={placeholder}
+                    layerStyle='formInputBase'
+                    borderColor='gray.900'
+                    _hover={{ layerStyle: 'formInputHover' }}
+                    mb={ spaceAfter ?? '2' }
+                    autoFocus={autoFocus}
+                    isDisabled={isDisabled}
+                >
+                    {children}
+                </Select>
+            )
+        }
         return (
             <Input type='text'
                 {...register(name)}
                 name={name}
                 value={value}
+                defaultValue={defaultValue}
                 placeholder={placeholder}
                 layerStyle='formInputBase'
                 borderColor='gray.900'
