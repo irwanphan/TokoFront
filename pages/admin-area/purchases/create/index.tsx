@@ -6,8 +6,8 @@ import MainLayout from "@libs/layouts/MainLayout"
 import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoadingOverlay from "@elements/LoadingOverlay"
-import { Box, Flex, useToast, Img, Text, Divider, useDisclosure, NumberInput, Input, NumberInputField } from "@chakra-ui/react"
-import { FiBox, FiPackage, FiShoppingCart } from "react-icons/fi"
+import { Box, Flex, useToast, Img, Text, Divider, useDisclosure, NumberInput, Input, NumberInputField, List, ListItem } from "@chakra-ui/react"
+import { FiBox, FiPackage, FiShoppingCart, FiTrash, FiX } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
 import { ItemInterface } from "@interfaces//storeItem"
 import { productsState } from "@contexts/products"
@@ -44,18 +44,19 @@ const CreateProductPage = () => {
     })
 
     // handling add product modal
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenAddItem, onOpen: onOpenAddItem, onClose: onCloseAddItem } = useDisclosure()
+    const { isOpen: ItemeleteProduct, onOpen: onOpenDeleteItem, onClose: onCloseDeleteItem } = useDisclosure()
     
-    const handleAddProduct = () => {
+    const handleAddItem = () => {
         console.log(store)
-        onOpen()
+        onOpenAddItem()
     }
-    const modalProps = {
+    const modalPropsForAddItem = {
         title: `Add Product`,
     }
-    const handlePickProduct = (item:ItemInterface) => {
+    const handlePickItem = (item:ItemInterface) => {
         setProductsPicked([...productsPicked, item])
-        onClose()
+        onCloseAddItem()
     }
 
     const toast = useToast()
@@ -86,37 +87,66 @@ const CreateProductPage = () => {
                 </Flex>
                 <Divider />
                 <FormSubmitButton notLink buttonColor="green.100"
-                    onClick={() => handleAddProduct()}
-                >
+                    onClick={() => handleAddItem()}>
                     Add
                 </FormSubmitButton>
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
-                    <Flex gap={2} flexDirection='column'>
+                    <List gap={2}>
                     {   productsPicked.length > 0 ?
                         productsPicked.map((item:ItemInterface) => {
                             return (
-                                <Box>
-                                    <Flex key={item.id} alignItems='center' gap={2}>
+                                <ListItem key={item.id}>
+                                    <Flex alignItems='center' gap={2}>
                                         <Box w={20} h={10} overflow='hidden'>
                                             <Img src={item.image} />
                                         </Box>
-                                        <Text>{item.name}</Text>
+                                        <Flex alignItems='center' mb={1}>
+                                            <Text>{item.name}</Text>
+                                            <Box 
+                                                ml={2} p={1} 
+                                                borderWidth='1px'
+                                                borderStyle='solid'
+                                                borderColor='gray.600'
+                                                cursor='pointer'
+                                                fontSize={12}
+                                                transition='0.3s ease all'
+                                                _hover={{ bgColor: 'orange.200' }}
+                                                onClick={() => {
+                                                    // setScope(cartItem)
+                                                    onOpenDeleteItem()
+                                                }}
+                                            ><FiTrash /></Box>
+                                        </Flex>
                                     </Flex>
-                                    <NumberInput defaultValue={1} min={1}>
-                                        <NumberInputField />
-                                    </NumberInput>
-                                    <Input placeholder='price' />
-                                </Box>
+                                    <Flex color='gray.600' fontSize={12} my={2} justifyContent='space-between'>
+                                        <Flex gap={2} alignItems='center'>
+                                            <Flex gap={1.5} alignItems='center'>
+                                                Qty: 
+                                                <NumberInput defaultValue={1} min={1}>
+                                                    <NumberInputField fontSize={12} h={6} w={20} p={2} />
+                                                </NumberInput>
+                                            </Flex>
+                                            <FiX />
+                                            <Flex gap={1.5} alignItems='center'>
+                                                <Input placeholder='price' 
+                                                    fontSize={12} h={6} w={20} p={2} 
+                                                    value={item.lastPurchasePrice ? item.lastPurchasePrice : 0}
+                                                />
+                                            </Flex>
+                                        </Flex>
+                                        <Box justifySelf='flex-end' >asdf</Box>
+                                    </Flex>
+                                    <Divider />
+                                </ListItem>
                             )
                         }) : <>Add to your purchase / procurement</>
                     }
-                    </Flex>
-                    <CartItems />
+                    </List>
                 </Box>
             </BlockContainer>
 
             { isLoading && <LoadingOverlay isLoading={isLoading} /> }
-            <ModalPopup modalProps={modalProps} isOpen={isOpen} onClose={onClose} canCancel>
+            <ModalPopup modalProps={modalPropsForAddItem} isOpen={isOpenAddItem} onClose={onCloseAddItem} canCancel>
                 <Flex gap={2} flexDirection='column'>
                     {
                         store.map((item:ItemInterface) => {
@@ -126,7 +156,9 @@ const CreateProductPage = () => {
                                     borderRadius={4}
                                     padding={2}
                                     cursor='pointer'
-                                    onClick={() => handlePickProduct(item)}
+                                    transition='0.3s ease all'
+                                    _hover={{ bgColor: 'gray.100' }}
+                                    onClick={() => handlePickItem(item)}
                                 >
                                     <Flex key={item.id} alignItems='center' gap={2}>
                                         <Box w={20} h={10} overflow='hidden'>
