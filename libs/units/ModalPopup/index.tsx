@@ -48,7 +48,7 @@ const ModalPopup = ({modalProps, children, isOpen, onClose, canCancel, ...rest}:
                         <FormSubmitButton notLink mr={2} 
                             bgColor='pink.100'
                             onClick={onClose}
-                        >{modalProps.cancel ?? 'Batal'}</FormSubmitButton>
+                        >{modalProps.cancel ?? 'Cancel'}</FormSubmitButton>
                     }
                     { modalProps.button &&
                         <FormSubmitButton notLink
