@@ -9,7 +9,7 @@ import { TbFileInvoice } from "react-icons/tb"
 
 import MainLayout from "@libs/layouts/MainLayout"
 import { CartItems } from "@libs/components/Cart"
-import { useFetchPurchasesByUserId } from "@hooks/useFetchPurchasesByUserId"
+import { useFetchPurchasesByUserId } from "@hooks/useFetchSalesByUserId"
 import { useRecoilValue } from "recoil"
 import { checkCartState } from "@contexts/cart"
 import { useRouter } from "next/router"

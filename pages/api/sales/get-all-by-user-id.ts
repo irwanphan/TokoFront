@@ -5,10 +5,10 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const query:any = req.query
     const userId:any = query.userId
     
-    // get all purchases
+    // get all sales
     if (req.method === 'GET') {
         try {
-            const purchases = await prisma.purchase.findMany({
+            const sales = await prisma.sale.findMany({
                 include: {
                     detail: true,
                     shipments: true
@@ -17,8 +17,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     id: 'desc'
                 }
             })
-            // console.log(purchases)
-            return res.status(200).json(purchases)
+            // console.log(sales)
+            return res.status(200).json(sales)
         }
         catch (e) {
             console.log(e)
@@ -47,7 +47,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // })
                 
             if (existingUser) {
-                const purchase = await prisma.purchase.create({
+                const sale = await prisma.sale.create({
                     include: {
                         detail: true
                     },
@@ -71,7 +71,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         detail: {
                             create: orders.map((order:any) => ({
                                     productId: order.id,
-                                    purchasePrice: order.price,
+                                    salePrice: order.price,
                                     qty: order.quantity,
                                     unit: 'piece'
                             })),
@@ -79,8 +79,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
                 })
-                console.log(purchase)
-                return res.status(200).json(purchase)
+                console.log(sale)
+                return res.status(200).json(sale)
             }
 
         } catch (e:any) {

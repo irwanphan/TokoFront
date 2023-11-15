@@ -11,7 +11,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (id) {
         if (req.method === 'GET') {
             try {
-                const purchase = await prisma.purchase.findUnique({
+                const sale = await prisma.sale.findUnique({
                     include: {
                         detail: true,
                         shipments: true,
@@ -20,8 +20,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         id: id
                     }
                 })
-                // console.log(purchase)
-                return res.status(200).json(purchase)
+                // console.log(sale)
+                return res.status(200).json(sale)
             }
             catch (e) {
                 console.log(e)

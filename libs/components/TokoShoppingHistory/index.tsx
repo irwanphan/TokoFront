@@ -1,8 +1,7 @@
-import purchases from "@api/purchases"
 import { Box, Flex, Divider, List, ListItem, Text } from "@chakra-ui/react"
 import BlockContainer from "@elements/BlockContainer"
 import { LoadingBlockList } from "@elements/LoadingBlock"
-import { useFetchPurchasesByUserId } from "@hooks/useFetchPurchasesByUserId"
+import { useFetchSalesByUserId } from "@hooks/useFetchSalesByUserId"
 import TriggerBox from "@units/TriggerBox"
 import router from "next/router"
 import { FiEdit } from "react-icons/fi"
@@ -13,7 +12,7 @@ interface TokoShoppingHistoryProps {
 }
 
 const TokoShoppingHistory = ({userId}: TokoShoppingHistoryProps) => {
-    const { purchases, isLoadingPurchases } = useFetchPurchasesByUserId(userId)
+    const { sales, isLoadingSales } = useFetchSalesByUserId(userId)
 
     return (
         <BlockContainer>
@@ -23,21 +22,21 @@ const TokoShoppingHistory = ({userId}: TokoShoppingHistoryProps) => {
             </Flex>
             <Divider />
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
-                    <List className="purchase-items">
-                        {   isLoadingPurchases ?
+                    <List className="sale-items">
+                        {   isLoadingSales ?
                             <LoadingBlockList />
                         :   
-                            purchases?.map((purchase) => {
-                                const date = new Date(`${purchase.createdAt}`).toLocaleDateString('en-EN', { 
+                            sales?.map((sale) => {
+                                const date = new Date(`${sale.createdAt}`).toLocaleDateString('en-EN', { 
                                     weekday: 'long', 
                                     year: 'numeric', 
                                     month: 'long', 
                                     day: 'numeric'
                                 })
-                                const time = new Date(`${purchase.createdAt}`).toLocaleTimeString()
+                                const time = new Date(`${sale.createdAt}`).toLocaleTimeString()
                                 
                                 return (
-                                    <ListItem key={purchase.id} 
+                                    <ListItem key={sale.id} 
                                         mb={3} // seen from Divider 
                                     >
                                         <Flex alignItems='center' 
@@ -55,11 +54,11 @@ const TokoShoppingHistory = ({userId}: TokoShoppingHistoryProps) => {
                                             <Flex direction='column' >
                                                 <Flex gap={2}>
                                                     <Text>Type of items</Text>                                            
-                                                    <Text fontWeight={600}>{purchase?.detail?.length}</Text>                                            
+                                                    <Text fontWeight={600}>{sale?.detail?.length}</Text>                                            
                                                 </Flex>
                                                 <Flex gap={2}>
-                                                    <Text>Total purchase</Text>                                            
-                                                    <Text fontWeight={600}>{purchase.total}</Text>                                            
+                                                    <Text>Total sale</Text>                                            
+                                                    <Text fontWeight={600}>{sale.total}</Text>                                            
                                                 </Flex>
                                             </Flex>
                                             <Flex gap={2} alignItems='flex-end'>
@@ -67,7 +66,7 @@ const TokoShoppingHistory = ({userId}: TokoShoppingHistoryProps) => {
                                                     icon={FiEdit}
                                                     hoverColor='green.100'
                                                     onClick={() => {
-                                                        router.replace(`/admin-area/purchases/${purchase.id}`)
+                                                        router.replace(`/admin-area/sales/${sale.id}`)
                                                     }}
                                                 >View Detail
                                                 </TriggerBox>

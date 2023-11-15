@@ -1,4 +1,4 @@
-export interface PurchaseInterface {
+export interface SaleInterface {
     id: number
     userId: String
     userEmail: String
@@ -6,24 +6,24 @@ export interface PurchaseInterface {
     note: String
     createdAt: String
     updatedAt: String
-    shipment: PurchaseShipmentInterface
-    detail: PurchaseDetailInterface[]
+    shipment: SaleShipmentInterface
+    detail: SaleDetailInterface[]
 } 
 
-export interface PurchaseShipmentInterface {
+export interface SaleShipmentInterface {
     id: number
     address: String
     city: String
     province: String
     postal: String
-    purchaseId: number
+    saleId: number
 }
 
-export interface PurchaseDetailInterface {
+export interface SaleDetailInterface {
     id: number
-    purchaseId: number
+    saleId: number
     productId: String
-    purchasePrice: number
+    salePrice: number
     qty: number
     unit: String
 }

@@ -8,14 +8,14 @@ import { useEffect, useState } from "react"
 import { FiFileText } from "react-icons/fi"
 import axios from "axios"
 import LoadingOverlay from "@elements/LoadingOverlay"
-import { PurchaseInterface } from "@interfaces//purchases"
-import { useFetchPurchaseById } from "@hooks/useFetchPurchaseById"
+import { SaleInterface } from "@interfaces//sales"
+import { useFetchSaleById } from "@hooks/useFetchSaleById"
 
-const PurchaseDetailViewPage = () => {
+const SaleDetailViewPage = () => {
     const [ userCategory, setUserCategory ] = useState('admin')
 
     // handling show item
-    const [ selected, setSelected ] = useState<PurchaseInterface>()
+    const [ selected, setSelected ] = useState<SaleInterface>()
     const [ qid, setQid ] = useState<number|any>()
 
     const router = useRouter()
@@ -31,11 +31,11 @@ const PurchaseDetailViewPage = () => {
                             : setQid(pid)
         setIsLoadingId(false)
     }, [pid] )
-    const { purchase, isLoadingPurchase } = useFetchPurchaseById(qid)
+    const { sale, isLoadingSale } = useFetchSaleById(qid)
 
     useEffect(() => {
-        if (purchase) setSelected(purchase)
-    }, [purchase])
+        if (sale) setSelected(sale)
+    }, [sale])
     // console.log(selected)
     
     const onSubmit = async (data:any) => {
@@ -48,7 +48,7 @@ const PurchaseDetailViewPage = () => {
         toast({title:'Saved', status:'success'})
     }
 
-    if (isLoadingPurchase) return (
+    if (isLoadingSale) return (
         <MainLayout>
             <Skeleton h={12} mb={4} />
             <LoadingBlock />
@@ -66,16 +66,16 @@ const PurchaseDetailViewPage = () => {
                 <Box>
                     <Flex alignItems='center'>
                         <Box as={FiFileText} mr={2} />
-                        <Text fontWeight={600} >Invoice #: {purchase?.id}</Text>
+                        <Text fontWeight={600} >Invoice #: {sale?.id}</Text>
                     </Flex>
                     <Divider/>
                 </Box>
                 <Box>
                         
                     <Text>
-                        Purchased on : {purchase?.createdAt}
+                        Saled on : {sale?.createdAt}
                     </Text>
-                    { purchase?.detail.map(item => {
+                    { sale?.detail.map(item => {
                         return (
                             <Box key={item.id}
                                 border="1px solid lightgray"
@@ -87,7 +87,7 @@ const PurchaseDetailViewPage = () => {
                                     product ID: {item.productId}
                                 </Text>
                                 <Text>
-                                    product price: {item.purchasePrice}
+                                    product price: {item.salePrice}
                                 </Text>
                                 <Text>
                                     qty bought: {item.qty} {item.unit}
@@ -96,13 +96,13 @@ const PurchaseDetailViewPage = () => {
                         )
                     }) }
                     <Text>
-                        Total : {purchase?.total}
+                        Total : {sale?.total}
                     </Text>
 
                     {
-                        purchase?.note &&
+                        sale?.note &&
                         <Text fontSize={12} mt={2}>
-                            Note : {purchase?.note}
+                            Note : {sale?.note}
                         </Text>
                     }
 
@@ -128,4 +128,4 @@ const PurchaseDetailViewPage = () => {
     )
 }
 
-export default PurchaseDetailViewPage
+export default SaleDetailViewPage
