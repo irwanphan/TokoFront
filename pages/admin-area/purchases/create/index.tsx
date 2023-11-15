@@ -6,7 +6,7 @@ import MainLayout from "@libs/layouts/MainLayout"
 import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoadingOverlay from "@elements/LoadingOverlay"
-import { Box, Flex, useToast, Img, Text, Divider, useDisclosure } from "@chakra-ui/react"
+import { Box, Flex, useToast, Img, Text, Divider, useDisclosure, NumberInput, Input, NumberInputField } from "@chakra-ui/react"
 import { FiBox, FiPackage, FiShoppingCart } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
 import { ItemInterface } from "@interfaces//storeItem"
@@ -31,6 +31,8 @@ const CreateProductPage = () => {
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
 
+    const [ productsPicked, setProductsPicked ] = useState<ItemInterface[]>([])
+
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
             name: '',
@@ -52,7 +54,7 @@ const CreateProductPage = () => {
         title: `Add Product`,
     }
     const handlePickProduct = (item:ItemInterface) => {
-        console.log(item)
+        setProductsPicked([...productsPicked, item])
         onClose()
     }
 
@@ -89,6 +91,26 @@ const CreateProductPage = () => {
                     Add
                 </FormSubmitButton>
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
+                    <Flex gap={2} flexDirection='column'>
+                    {   productsPicked.length > 0 ?
+                        productsPicked.map((item:ItemInterface) => {
+                            return (
+                                <Box>
+                                    <Flex key={item.id} alignItems='center' gap={2}>
+                                        <Box w={20} h={10} overflow='hidden'>
+                                            <Img src={item.image} />
+                                        </Box>
+                                        <Text>{item.name}</Text>
+                                    </Flex>
+                                    <NumberInput defaultValue={1} min={1}>
+                                        <NumberInputField />
+                                    </NumberInput>
+                                    <Input placeholder='price' />
+                                </Box>
+                            )
+                        }) : <>Add to your purchase / procurement</>
+                    }
+                    </Flex>
                     <CartItems />
                 </Box>
             </BlockContainer>
@@ -106,7 +128,7 @@ const CreateProductPage = () => {
                                     cursor='pointer'
                                     onClick={() => handlePickProduct(item)}
                                 >
-                                    <Flex key={item.id} gap={2}>
+                                    <Flex key={item.id} alignItems='center' gap={2}>
                                         <Box w={20} h={10} overflow='hidden'>
                                             <Img src={item.image} />
                                         </Box>

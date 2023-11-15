@@ -4,6 +4,7 @@ export interface ItemInterface {
     name: string
     description: string
     price: number
+    quantity?: number
     currentStock?: number
     image: string
     isTrending?: boolean
