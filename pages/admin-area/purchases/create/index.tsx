@@ -14,6 +14,7 @@ import { productsState } from "@contexts/products"
 import LoadingBlock from "@elements/LoadingBlock"
 import { CartItems } from "@components/Cart"
 import ModalPopup from "@units/ModalPopup"
+import { removeFromPurchaseCart } from "@contexts/purchaseCart"
 
 interface IFormInput {
     name: string
@@ -31,7 +32,7 @@ const CreateProductPage = () => {
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
 
-    const [ productsPicked, setProductsPicked ] = useState<ItemInterface[]>([])
+    const [ itemsPicked, setItemsPicked ] = useState<ItemInterface[]>([])
 
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
@@ -55,18 +56,24 @@ const CreateProductPage = () => {
         title: `Add Product`,
     }
     const handlePickItem = (item:ItemInterface) => {
-        setProductsPicked([...productsPicked, item])
+        setItemsPicked([...itemsPicked, item])
         onCloseAddItem()
     }
 
+    const handleRemoveFromAddedItem = (scope:ItemInterface|any) => {
+        const foundIndex = itemsPicked.findIndex((x:any) => x.id === scope.id)
+        const newItemsPicked = [...itemsPicked]
+        newItemsPicked.splice(foundIndex, 1)
+        setItemsPicked(newItemsPicked)
+        // notify(`${toBeDelete?.name} removed from your cart`)
+    }
     const [ scope, setScope ] = useState<ItemInterface>()
     const modalPropsForDeleteItem = {
         title: `Remove ${scope?.name} From Procurement`,
         texts: 'Are you really OK with this decision?',
         button: 'OK',
         action: () => {
-            console.log('scope: ', scope)
-            // handleRemoveFromAddedItem(scope)
+            handleRemoveFromAddedItem(scope)
             onCloseDeleteItem()
         }
     }
@@ -104,8 +111,8 @@ const CreateProductPage = () => {
                 </FormSubmitButton>
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                     <List gap={2}>
-                    {   productsPicked.length > 0 ?
-                        productsPicked.map((item:ItemInterface) => {
+                    {   itemsPicked.length > 0 ?
+                        itemsPicked.map((item:ItemInterface) => {
                             return (
                                 <ListItem key={item.id}>
                                     <Flex alignItems='center' gap={2}>
