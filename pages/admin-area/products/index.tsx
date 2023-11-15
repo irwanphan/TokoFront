@@ -68,7 +68,7 @@ const ManageProductsPage = () => {
                 <Divider />
                     <Flex gap={3}>
                         <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
-                        <FormSubmitButton href="/admin-area/purchases" buttonColor="green.100" ><Box as={FiBox} mr={0.5}/>Purchase</FormSubmitButton>
+                        <FormSubmitButton href="/admin-area/purchases/create" buttonColor="green.100" ><Box as={FiBox} mr={0.5}/>Purchase</FormSubmitButton>
                     </Flex>
                     <Box mt={4}>
                         <form onSubmit={(e) => {
