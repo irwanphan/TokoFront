@@ -165,6 +165,7 @@ const CreateProductPage = () => {
                         store.map((item:ItemInterface) => {
                             return (
                                 <Box
+                                    key={item.id}
                                     border='1px solid lightgray'
                                     borderRadius={4}
                                     padding={2}
