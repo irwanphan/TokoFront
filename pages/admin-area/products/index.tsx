@@ -9,7 +9,7 @@ import ModalPopup from "@units/ModalPopup"
 import TriggerBox from "@units/TriggerBox"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { FiEdit, FiPackage, FiSearch, FiSlash } from "react-icons/fi"
+import { FiBox, FiEdit, FiPackage, FiSearch, FiSlash } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
 
 const ManageProductsPage = () => {
@@ -68,6 +68,9 @@ const ManageProductsPage = () => {
                 <Divider />
                     <Flex gap={3}>
                         <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
+                        <FormSubmitButton href="/admin-area/purchases" buttonColor="green.100" ><Box as={FiBox} mr={0.5}/>Purchase</FormSubmitButton>
+                    </Flex>
+                    <Box mt={4}>
                         <form onSubmit={(e) => {
                             e.preventDefault()
                             onSubmit(search)
@@ -81,7 +84,7 @@ const ManageProductsPage = () => {
                                 />
                             </InputGroup>
                         </form>
-                    </Flex>
+                    </Box>
                 {
                     isLoadingProducts ?
                     <LoadingBlockList />
