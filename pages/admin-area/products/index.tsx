@@ -48,8 +48,8 @@ const ManageProductsPage = () => {
     useEffect(() => {
         setIsLoadingProducts(false)
     }, [store])
+    // console.log("store: ", showProducts)
 
-    console.log("store: ", showProducts)
 
     return (
         <MainLayout>
