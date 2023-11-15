@@ -14,7 +14,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 const purchase = await prisma.purchase.findUnique({
                     include: {
                         detail: true,
-                        shipments: true,
+                        shipment: true,
                     },
                     where: {
                         id: id

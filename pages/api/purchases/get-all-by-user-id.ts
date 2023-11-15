@@ -11,7 +11,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const purchases = await prisma.purchase.findMany({
                 include: {
                     detail: true,
-                    shipments: true
+                    // shipment: true
                 },
                 orderBy: {
                     id: 'desc'
@@ -29,7 +29,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'POST') {
         console.log('post data')
         try {
-            const { address, city, province, postal, total, note, user, orders } = req.body
+            const { total, note, user, orders } = req.body
             console.log('request body', req.body)
             // console.log(note)
             // console.log(user)s
@@ -45,6 +45,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // orders.map((order:any) => {
             //     console.log(order.id)
             // })
+
+            // TODO: add warehouse
                 
             if (existingUser) {
                 const purchase = await prisma.purchase.create({
@@ -60,14 +62,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         userEmail,
                         total,
                         note,
-                        shipments: {
-                            create: {
-                                address,
-                                city,
-                                province,
-                                postal
-                            }
-                        },
+                        // shipment: {
+                        //     connect: {
+                        //         warehouseId: 1
+                        //     }
+                        // },
                         detail: {
                             create: orders.map((order:any) => ({
                                     productId: order.id,
