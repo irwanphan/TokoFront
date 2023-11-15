@@ -40,7 +40,7 @@ model Sale {
   shipments         Shipment?
   detail            SaleDetail[]
   user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  @@map("purchases")
+  @@map("sales")
 }
 
 model SaleDetail {
@@ -51,7 +51,7 @@ model SaleDetail {
   qty               Float
   unit              String
   purchase          Sale           @relation(fields: [purchaseId], references: [id])
-  @@map("purchase_details")
+  @@map("sale_details")
 }
 
 model Shipment {
