@@ -45,7 +45,7 @@ const CreateProductPage = () => {
 
     // handling add product modal
     const { isOpen: isOpenAddItem, onOpen: onOpenAddItem, onClose: onCloseAddItem } = useDisclosure()
-    const { isOpen: ItemeleteProduct, onOpen: onOpenDeleteItem, onClose: onCloseDeleteItem } = useDisclosure()
+    const { isOpen: isOpenDeleteItem, onOpen: onOpenDeleteItem, onClose: onCloseDeleteItem } = useDisclosure()
     
     const handleAddItem = () => {
         console.log(store)
@@ -57,6 +57,18 @@ const CreateProductPage = () => {
     const handlePickItem = (item:ItemInterface) => {
         setProductsPicked([...productsPicked, item])
         onCloseAddItem()
+    }
+
+    const [ scope, setScope ] = useState<ItemInterface>()
+    const modalPropsForDeleteItem = {
+        title: `Remove ${scope?.name} From Procurement`,
+        texts: 'Are you really OK with this decision?',
+        button: 'OK',
+        action: () => {
+            console.log('scope: ', scope)
+            // handleRemoveFromAddedItem(scope)
+            onCloseDeleteItem()
+        }
     }
 
     const toast = useToast()
@@ -112,7 +124,7 @@ const CreateProductPage = () => {
                                                 transition='0.3s ease all'
                                                 _hover={{ bgColor: 'orange.200' }}
                                                 onClick={() => {
-                                                    // setScope(cartItem)
+                                                    setScope(item)
                                                     onOpenDeleteItem()
                                                 }}
                                             ><FiTrash /></Box>
@@ -172,6 +184,7 @@ const CreateProductPage = () => {
                     }
                 </Flex>
             </ModalPopup>
+            <ModalPopup modalProps={modalPropsForDeleteItem} isOpen={isOpenDeleteItem} onClose={onCloseDeleteItem} />
             
         </MainLayout>
     )
