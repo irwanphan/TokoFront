@@ -31,8 +31,8 @@ const CreateProductPage = () => {
     const store = useRecoilValue<ItemInterface[]>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
-
     const [ itemsPicked, setItemsPicked ] = useState<ItemInterface[]>([])
+    const toast = useToast()
 
     const { control, handleSubmit, register } = useForm({
         defaultValues: {
@@ -44,28 +44,23 @@ const CreateProductPage = () => {
         }
     })
 
-    // handling add product modal
+    // handling add item modal
     const { isOpen: isOpenAddItem, onOpen: onOpenAddItem, onClose: onCloseAddItem } = useDisclosure()
-    const { isOpen: isOpenDeleteItem, onOpen: onOpenDeleteItem, onClose: onCloseDeleteItem } = useDisclosure()
-    
-    const handleAddItem = () => {
-        console.log(store)
-        onOpenAddItem()
-    }
-    const modalPropsForAddItem = {
-        title: `Add Product`,
-    }
+    const handleAddItem = () => { onOpenAddItem() }
+    const modalPropsForAddItem = { title: `Add Product` }
     const handlePickItem = (item:ItemInterface) => {
         setItemsPicked([...itemsPicked, item])
         onCloseAddItem()
     }
 
+    // handling delete item modal
+    const { isOpen: isOpenDeleteItem, onOpen: onOpenDeleteItem, onClose: onCloseDeleteItem } = useDisclosure()
     const handleRemoveFromAddedItem = (scope:ItemInterface|any) => {
         const foundIndex = itemsPicked.findIndex((x:any) => x.id === scope.id)
         const newItemsPicked = [...itemsPicked]
         newItemsPicked.splice(foundIndex, 1)
         setItemsPicked(newItemsPicked)
-        // notify(`${toBeDelete?.name} removed from your cart`)
+        toast({title:`${scope.name} removed from your cart`, status:'info'})
     }
     const [ scope, setScope ] = useState<ItemInterface>()
     const modalPropsForDeleteItem = {
@@ -78,7 +73,6 @@ const CreateProductPage = () => {
         }
     }
 
-    const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         data.price = parseInt(data.price) // price was string
         setIsLoading(true)
@@ -149,7 +143,7 @@ const CreateProductPage = () => {
                                             <Flex gap={1.5} alignItems='center'>
                                                 <Input placeholder='price' 
                                                     fontSize={12} h={6} w={20} p={2} 
-                                                    value={item.lastPurchasePrice ? item.lastPurchasePrice : 0}
+                                                    defaultValue={item.lastPurchasePrice ? item.lastPurchasePrice : 0}
                                                 />
                                             </Flex>
                                         </Flex>
