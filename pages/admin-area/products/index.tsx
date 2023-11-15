@@ -1,4 +1,4 @@
-import { Box, Flex, Divider, Text, List, ListItem, useDisclosure, Skeleton } from "@chakra-ui/react"
+import { Box, Flex, Divider, Text, List, ListItem, useDisclosure, Skeleton, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
 import { productsState } from "@contexts/products"
 import BlockContainer from "@elements/BlockContainer"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -9,7 +9,7 @@ import ModalPopup from "@units/ModalPopup"
 import TriggerBox from "@units/TriggerBox"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { FiEdit, FiPackage, FiSlash } from "react-icons/fi"
+import { FiEdit, FiPackage, FiSearch, FiSlash } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
 
 const ManageProductsPage = () => {
@@ -31,9 +31,25 @@ const ManageProductsPage = () => {
         }
     }
 
+    // handling search
+    const [ search, setSearch ] = useState('')
+    const [ showProducts, setShowProducts ] = useState<ItemInterface[]>()
+    const onSubmit = async (keyword:string) => {
+        const products:ItemInterface[]|any = await store.filter((item:ItemInterface) => {
+            return item.name.toLowerCase().includes(keyword.toLowerCase())
+        })
+        setShowProducts(products)
+        // console.log(products)
+    }
+
+    useEffect(() => {
+        setShowProducts(store)
+    }, [])
     useEffect(() => {
         setIsLoadingProducts(false)
     }, [store])
+
+    console.log("store: ", showProducts)
 
     return (
         <MainLayout>
@@ -50,15 +66,31 @@ const ManageProductsPage = () => {
                     </Flex>
                 </Box>
                 <Divider />
+                    <Flex gap={3}>
+                        <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
+                        <form onSubmit={(e) => {
+                            e.preventDefault()
+                            onSubmit(search)
+                        }}>
+                            <InputGroup>
+                                <InputRightElement>
+                                    <FiSearch />
+                                </InputRightElement>
+                                <Input onChange={(e) => setSearch(e.target.value)} 
+                                    placeholder="Search product"
+                                />
+                            </InputGroup>
+                        </form>
+                    </Flex>
                 {
                     isLoadingProducts ?
                     <LoadingBlockList />
                 :   <>
-                        <FormSubmitButton href="/admin-area/products/create" buttonColor="green.100" >+ New</FormSubmitButton>
                         <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                             <Box>
                                 <List className="cart-items">
-                                    {store.map((item:ItemInterface) => {
+                                    {   showProducts &&
+                                        showProducts.map((item:ItemInterface) => {
                                         return (
                                             <ListItem key={item.id} mb={2} >
                                                 <Flex alignItems='center' mb={1}>
