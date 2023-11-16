@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 import BlockContainer from "@elements/BlockContainer"
 import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -34,6 +34,7 @@ const CreateProductPage = () => {
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
     const [ itemsPicked, setItemsPicked ] = useState<PurchaseItemInterface[]>([])
     // console.log('itemsPicked: ', itemsPicked)
+    const [ total, setTotal ] = useState<number>(0)
     const toast = useToast()
 
     const { control, handleSubmit, register } = useForm({
@@ -115,8 +116,21 @@ const CreateProductPage = () => {
     }
     // handling update subtotal
     const updateSubtotal = (quantity:string, price:string) => {
+        if (price === '') return '0'
+        if (price === '0') return '0'
         return (parseInt(quantity) * parseInt(price)).toString()
     }
+
+    useEffect(() => {
+        if (itemsPicked.length > 0) {
+            const total = itemsPicked.reduce((counting:any, itemPicked:any) => {
+                return counting + parseInt(itemPicked.subtotal)
+            }, 0)
+            setTotal(total)
+        } else {
+            setTotal(0)
+        }
+    }, [itemsPicked])
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         setIsLoading(true)
@@ -206,6 +220,7 @@ const CreateProductPage = () => {
                                                 IDR
                                                 <Input type='number'
                                                     fontSize={12} h={6} w={20} p={2} 
+                                                    defaultValue={item.lastPurchasePrice ?? 0}
                                                     value={item.lastPurchasePrice}
                                                     onChange={(e) => {
                                                         handleUpdatePrice(item.id, e.target.value)
@@ -218,11 +233,18 @@ const CreateProductPage = () => {
                                         </Box>
                                     </Flex>
                                     <Divider />
+
+                                    
                                 </ListItem>
                             )
                         }) : <>Add to your purchase / procurement</>
                     }
                     </List>
+                    <Flex flexDirection='column' textAlign='right' mt={4}>
+                        {/* TODO: add currency */}
+                        <Box fontSize={12}>Total (IDR)</Box>
+                        <Box fontWeight={600}>{total}</Box>
+                    </Flex>
                 </Box>
             </BlockContainer>
 
