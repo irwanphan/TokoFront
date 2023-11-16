@@ -9,12 +9,12 @@ import LoadingOverlay from "@elements/LoadingOverlay"
 import { Box, Flex, useToast, Img, Text, Divider, useDisclosure, NumberInput, Input, NumberInputField, List, ListItem } from "@chakra-ui/react"
 import { FiBox, FiPackage, FiShoppingCart, FiTrash, FiX } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
-import { ItemInterface } from "@interfaces//storeItem"
+import { ItemInterface, PurchaseItemInterface } from "@interfaces//storeItem"
 import { productsState } from "@contexts/products"
 import LoadingBlock from "@elements/LoadingBlock"
 import { CartItems } from "@components/Cart"
 import ModalPopup from "@units/ModalPopup"
-import { removeFromPurchaseCart } from "@contexts/purchaseCart"
+import { addToPurchaseCart, removeFromPurchaseCart } from "@contexts/purchaseCart"
 
 interface IFormInput {
     name: string
@@ -52,6 +52,7 @@ const CreateProductPage = () => {
     const handleAddItem = () => { onOpenAddItem() }
     const modalPropsForAddItem = { title: `Add Product` }
     const handlePickItem = (item:ItemInterface) => {
+        addToPurchaseCart(item)
         setItemsPicked([...itemsPicked, item])
         onCloseAddItem()
     }
@@ -123,7 +124,7 @@ const CreateProductPage = () => {
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>
                     <List gap={2}>
                     {   itemsPicked.length > 0 ?
-                        itemsPicked.map((item:ItemInterface) => {
+                        itemsPicked.map((item:PurchaseItemInterface) => {
                             return (
                                 <ListItem key={item.id}>
                                     <Flex alignItems='center' gap={2}>
@@ -164,7 +165,9 @@ const CreateProductPage = () => {
                                                 />
                                             </Flex>
                                         </Flex>
-                                        <Box justifySelf='flex-end' >asdf</Box>
+                                        <Box justifySelf='flex-end' >
+                                            IDR {item.subtotal ? item.subtotal : 0}
+                                        </Box>
                                     </Flex>
                                     <Divider />
                                 </ListItem>
@@ -179,7 +182,7 @@ const CreateProductPage = () => {
             <ModalPopup modalProps={modalPropsForAddItem} isOpen={isOpenAddItem} onClose={onCloseAddItem} canCancel>
                 <Flex gap={2} flexDirection='column'>
                     {
-                        store.map((item:ItemInterface) => {
+                        store.map((item:PurchaseItemInterface) => {
                             return (
                                 <Box
                                     key={item.id}

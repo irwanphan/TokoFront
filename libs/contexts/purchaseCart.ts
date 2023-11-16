@@ -1,11 +1,11 @@
 import { atom, selector } from "recoil"
-import { CartItemInterface } from "@libs/interfaces/cartItem"
+import { CartItemCheckoutInterface, CartItemInterface } from "@libs/interfaces/cartItem"
 import { ItemInterface } from "@interfaces//storeItem";
 import { productsState } from "./products";
 
 export const purchaseCartState = atom({
   key: 'purchaseCart',
-  default: [] as CartItemInterface[]
+  default: [] as CartItemCheckoutInterface[]
 })
 
 export const checkPurchaseCartState = selector({
@@ -38,28 +38,31 @@ export const removeFromPurchaseCart = (purchaseCart:any, product:any) => {
   // }
 }
 
-export const addToPurchaseCart = (purchaseCart:any, product:any, qtyAdded:number) => {
-  const newCart = [...purchaseCart]
-  const foundIndex = purchaseCart.findIndex((x:any) => x.id === product.refId)
+export const addToPurchaseCart = (product:any) => {
+  // const newCart = [...purchaseCart]
+  // const foundIndex = purchaseCart.findIndex((x:any) => x.id === product.refId)
 
-  // Increase quantity if existing
-  if (foundIndex >= 0) {
-    newCart[foundIndex] = {
-      ...purchaseCart[foundIndex],
-      quantity: purchaseCart[foundIndex].quantity + qtyAdded,
-    };
-    return newCart
-  }
+  // console.log('foundIndex: ',foundIndex)
+  console.log('product: ',product)
 
-  // Add new item
-  // purchaseCart is using refId as Id
-  newCart.push({
-    // product,
-    id: product?.refId,
-    name: product?.name,
-    quantity: qtyAdded,
-  });
-  return newCart
+  // // Increase quantity if existing
+  // if (foundIndex >= 0) {
+  //   newCart[foundIndex] = {
+  //     ...purchaseCart[foundIndex],
+  //     quantity: purchaseCart[foundIndex].quantity + qtyAdded,
+  //   };
+  //   return newCart
+  // }
+
+  // // Add new item
+  // // purchaseCart is using refId as Id
+  // newCart.push({
+  //   // product,
+  //   id: product?.refId,
+  //   name: product?.name,
+  //   quantity: qtyAdded,
+  // });
+  // return newCart
 }
 
 export const crossCheck = (purchaseCart:CartItemInterface[], store:ItemInterface[]) => {
