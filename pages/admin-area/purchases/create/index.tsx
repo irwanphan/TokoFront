@@ -17,11 +17,9 @@ import ModalPopup from "@units/ModalPopup"
 import { addToPurchaseCart, removeFromPurchaseCart } from "@contexts/purchaseCart"
 
 interface IFormInput {
-    name: string
-    refId: string
-    description: string
-    price: number | any
-    currentStock?: number
+    // warehouse: string
+    // receivedBy: string
+    // received: boolean
 }
 
 const CreateProductPage = () => {
@@ -81,6 +79,8 @@ const CreateProductPage = () => {
 
     // handling update qty
     const handleUpdateQty = (id:string, quantity:string) => {
+        if (quantity === '') { quantity = '1' }
+        if (quantity.charAt(0) === '0') { quantity = quantity.slice(1) }
         const foundIndex = itemsPicked.findIndex((x:any) => x.id === id)
         const newItemsPicked = [...itemsPicked]
         // console.log('newItemsPicked: ', newItemsPicked)
@@ -97,6 +97,8 @@ const CreateProductPage = () => {
     }
     // handling update price
     const handleUpdatePrice = (id:string, price:string) => {
+        if (price === '') { price = '0' }
+        if (price.charAt(0) === '0') { price = price.slice(1) }
         const foundIndex = itemsPicked.findIndex((x:any) => x.id === id)
         const newItemsPicked = [...itemsPicked]
         // console.log('newItemsPicked: ', newItemsPicked)
@@ -117,7 +119,6 @@ const CreateProductPage = () => {
     }
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        data.price = parseInt(data.price) // price was string
         setIsLoading(true)
         toast({title:'Saving...'})
         // 
@@ -192,20 +193,20 @@ const CreateProductPage = () => {
                                         <Flex gap={2} alignItems='center'>
                                             <Flex gap={1.5} alignItems='center'>
                                                 Qty: 
-                                                <NumberInput defaultValue={1} min={1}>
-                                                    <NumberInputField 
-                                                        fontSize={12} h={6} w={20} p={2}
-                                                        onChange={(e) => {
-                                                            handleUpdateQty(item.id, e.target.value)
-                                                        }}
-                                                    />
-                                                </NumberInput>
+                                                <Input type='number'
+                                                    fontSize={12} h={6} w={20} p={2} 
+                                                    value={item.quantity}
+                                                    onChange={(e) => {
+                                                        handleUpdateQty(item.id, e.target.value)
+                                                    }}
+                                                />
                                             </Flex>
                                             <FiX />
                                             <Flex gap={1.5} alignItems='center'>
-                                                <Input placeholder='price' 
+                                                IDR
+                                                <Input type='number'
                                                     fontSize={12} h={6} w={20} p={2} 
-                                                    value={item.lastPurchasePrice ? item.lastPurchasePrice : 0}
+                                                    value={item.lastPurchasePrice}
                                                     onChange={(e) => {
                                                         handleUpdatePrice(item.id, e.target.value)
                                                     }}
