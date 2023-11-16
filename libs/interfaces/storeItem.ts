@@ -14,11 +14,11 @@ export interface PurchaseItemInterface {
     refId?: string
     name: string
     description: string
-    price: number
-    lastPurchasePrice?: number
+    price: string // string because it's from input
+    lastPurchasePrice?: string // string because it's from input
     currentStock?: number
     image: string
     isTrending?: boolean
-    quantity?: string // string because it's from input
-    subtotal?: number
+    quantity: string // string because it's from input
+    subtotal: string
 }

@@ -31,11 +31,11 @@ const CreateProductPage = () => {
     // TODO: apply middleware to all admin-area
     const [ userCategory, setUserCategory ] = useState('admin')
 
-    const store = useRecoilValue<ItemInterface[]>(productsState)
+    const store = useRecoilValue<ItemInterface[]|any>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
     const [ itemsPicked, setItemsPicked ] = useState<PurchaseItemInterface[]>([])
-    console.log('picked: ', itemsPicked)
+    // console.log('itemsPicked: ', itemsPicked)
     const toast = useToast()
 
     const { control, handleSubmit, register } = useForm({
@@ -53,7 +53,7 @@ const CreateProductPage = () => {
     const handleAddItem = () => { onOpenAddItem() }
     const modalPropsForAddItem = { title: `Add Product` }
     const handlePickItem = (item:PurchaseItemInterface) => {
-        const recentPickedItem = {...item, quantity:'1'}
+        const recentPickedItem = {...item, quantity:'1', subtotal:'0'}
         setItemsPicked([...itemsPicked, recentPickedItem])
         // addToPurchaseCart(item)
         onCloseAddItem()
@@ -68,7 +68,7 @@ const CreateProductPage = () => {
         setItemsPicked(newItemsPicked)
         toast({title:`${scope.name} removed from your cart`, status:'info'})
     }
-    const [ scope, setScope ] = useState<ItemInterface>()
+    const [ scope, setScope ] = useState<PurchaseItemInterface>()
     const modalPropsForDeleteItem = {
         title: `Remove ${scope?.name} From Procurement`,
         texts: 'Are you really OK with this decision?',
@@ -85,7 +85,35 @@ const CreateProductPage = () => {
         const newItemsPicked = [...itemsPicked]
         // console.log('newItemsPicked: ', newItemsPicked)
         newItemsPicked[foundIndex].quantity = quantity
+        if (!newItemsPicked[foundIndex].lastPurchasePrice) {
+            newItemsPicked[foundIndex].lastPurchasePrice = '0'
+            const lastPurchasePrice = newItemsPicked[foundIndex].lastPurchasePrice!
+            newItemsPicked[foundIndex].subtotal = updateSubtotal(quantity, lastPurchasePrice)
+        } else {
+            const lastPurchasePrice = newItemsPicked[foundIndex].lastPurchasePrice!
+            newItemsPicked[foundIndex].subtotal = updateSubtotal(quantity, lastPurchasePrice)
+        }
         setItemsPicked(newItemsPicked)
+    }
+    // handling update price
+    const handleUpdatePrice = (id:string, price:string) => {
+        const foundIndex = itemsPicked.findIndex((x:any) => x.id === id)
+        const newItemsPicked = [...itemsPicked]
+        // console.log('newItemsPicked: ', newItemsPicked)
+        newItemsPicked[foundIndex].lastPurchasePrice = price
+        if (!newItemsPicked[foundIndex].lastPurchasePrice) {
+            newItemsPicked[foundIndex].lastPurchasePrice = '0'
+            const quantity = newItemsPicked[foundIndex].quantity!
+            newItemsPicked[foundIndex].subtotal = updateSubtotal(quantity, price)
+        } else {
+            const quantity = newItemsPicked[foundIndex].quantity!
+            newItemsPicked[foundIndex].subtotal = updateSubtotal(quantity, price)
+        }
+        setItemsPicked(newItemsPicked)
+    }
+    // handling update subtotal
+    const updateSubtotal = (quantity:string, price:string) => {
+        return (parseInt(quantity) * parseInt(price)).toString()
     }
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -177,7 +205,10 @@ const CreateProductPage = () => {
                                             <Flex gap={1.5} alignItems='center'>
                                                 <Input placeholder='price' 
                                                     fontSize={12} h={6} w={20} p={2} 
-                                                    defaultValue={item.lastPurchasePrice ? item.lastPurchasePrice : 0}
+                                                    value={item.lastPurchasePrice ? item.lastPurchasePrice : 0}
+                                                    onChange={(e) => {
+                                                        handleUpdatePrice(item.id, e.target.value)
+                                                    }}
                                                 />
                                             </Flex>
                                         </Flex>
