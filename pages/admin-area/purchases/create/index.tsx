@@ -191,11 +191,14 @@ const CreateProductPage = () => {
                                     _hover={{ bgColor: 'gray.100' }}
                                     onClick={() => handlePickItem(item)}
                                 >
-                                    <Flex key={item.id} alignItems='center' gap={2}>
-                                        <Box w={20} h={10} overflow='hidden'>
-                                            <Img src={item.image} />
-                                        </Box>
-                                        <Text>{item.name}</Text>
+                                    <Flex key={item.id} justifyContent='space-between' alignItems='center'>
+                                        <Flex gap={2} alignItems='center'>
+                                            <Box w={20} h={10} overflow='hidden'>
+                                                <Img src={item.image} />
+                                            </Box>
+                                            <Text>{item.name}</Text>
+                                        </Flex>
+                                        <Text color='gray.600' fontSize={12}>IDR: {item.lastPurchasePrice ? item.lastPurchasePrice : 0}</Text>
                                     </Flex>
                                 </Box>
                             )

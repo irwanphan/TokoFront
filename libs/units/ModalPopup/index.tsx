@@ -34,6 +34,7 @@ const ModalPopup = ({modalProps, children, isOpen, onClose, canCancel, ...rest}:
                 borderBottomWidth="4px"
                 borderColor="black"
                 borderStyle="solid"
+                alignSelf='baseline'
             >
                 <ModalHeader
                     textAlign={'center'} fontWeight={800}
