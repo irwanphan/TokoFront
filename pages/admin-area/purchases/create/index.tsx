@@ -246,6 +246,19 @@ const CreateProductPage = () => {
                         <Box fontWeight={600}>{total}</Box>
                     </Flex>
                 </Box>
+
+                <Box mt={4} />
+                <form>
+                    <Flex gap={2} justifyContent='flex-end'>
+                        <FormSubmitButton href="/admin-area/purchases" >Back</FormSubmitButton>
+                        <FormSubmitButton notLink 
+                            buttonColor="green.100"
+                            isDisabled={isDisabled}
+                            onClick={handleSubmit(onSubmit)} >
+                            Proceed
+                        </FormSubmitButton>
+                    </Flex>
+                </form>
             </BlockContainer>
 
             { isLoading && <LoadingOverlay isLoading={isLoading} /> }
