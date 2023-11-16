@@ -70,7 +70,7 @@ const AdminAreaPage = () => {
             <BlockContainer>
                 <Flex alignItems='center'>
                     <Box as={FiShoppingCart} mr={2} />
-                    <Text fontWeight={600} >In your cart</Text>
+                    <Text fontWeight={600} >In your shopping cart</Text>
                 </Flex>
                 <Divider />
                 <Box rounded='md' border='1px solid lightgray' mt={4} p={4} shadow='sm'>

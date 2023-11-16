@@ -5,20 +5,20 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const query:any = req.query
     const userId:any = query.userId
     
-    // get all sales
+    // get all purchases
     if (req.method === 'GET') {
         try {
-            const sales = await prisma.sale.findMany({
+            const purchases = await prisma.purchase.findMany({
                 include: {
                     detail: true,
-                    shipment: true
+                    // shipment: true
                 },
                 orderBy: {
                     id: 'desc'
                 }
             })
-            // console.log(sales)
-            return res.status(200).json(sales)
+            // console.log(purchases)
+            return res.status(200).json(purchases)
         }
         catch (e) {
             console.log(e)
@@ -29,7 +29,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'POST') {
         console.log('post data')
         try {
-            const { address, city, province, postal, total, note, user, orders } = req.body
+            const { total, note, user, orders } = req.body
             console.log('request body', req.body)
             // console.log(note)
             // console.log(user)s
@@ -45,9 +45,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // orders.map((order:any) => {
             //     console.log(order.id)
             // })
+
+            // TODO: add warehouse
                 
             if (existingUser) {
-                const sale = await prisma.sale.create({
+                const purchase = await prisma.purchase.create({
                     include: {
                         detail: true
                     },
@@ -60,18 +62,15 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         userEmail,
                         total,
                         note,
-                        shipment: {
-                            create: {
-                                address,
-                                city,
-                                province,
-                                postal
-                            }
-                        },
+                        // shipment: {
+                        //     connect: {
+                        //         warehouseId: 1
+                        //     }
+                        // },
                         detail: {
                             create: orders.map((order:any) => ({
                                     productId: order.id,
-                                    salePrice: order.price,
+                                    purchasePrice: order.price,
                                     qty: order.quantity,
                                     unit: 'piece'
                             })),
@@ -79,8 +78,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
                 })
-                console.log(sale)
-                return res.status(200).json(sale)
+                console.log(purchase)
+                return res.status(200).json(purchase)
             }
 
         } catch (e:any) {

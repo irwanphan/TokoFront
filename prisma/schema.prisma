@@ -37,7 +37,7 @@ model Sale {
   note              String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  shipments         Shipment?
+  shipment          SaleShipment?
   detail            SaleDetail[]
   user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@map("sales")
@@ -45,24 +45,71 @@ model Sale {
 
 model SaleDetail {
   id                Int                @id @default(autoincrement())
-  purchaseId        Int
+  saleId            Int
   productId         String
-  purchasePrice     Float
+  salePrice         Float
   qty               Float
   unit              String
-  purchase          Sale           @relation(fields: [purchaseId], references: [id])
+  sale              Sale               @relation(fields: [saleId], references: [id])
   @@map("sale_details")
 }
 
-model Shipment {
+model SaleShipment {
   id                String             @id @default(uuid())
   address           String
   city              String
   province          String
   postal            String
+  saleId            Int                @unique
+  sale              Sale               @relation(fields: [saleId], references: [id])
+  @@map("sale_shipments")
+}
+
+model Purchase {
+  id                Int                @id @default(autoincrement())
+  userId            String             @db.Uuid
+  userEmail         String
+  total             Float
+  note              String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  shipment          PurchaseShipment?
+  detail            PurchaseDetail[]
+  user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@map("purchases")
+}
+
+model PurchaseDetail {
+  id                Int                @id @default(autoincrement())
+  purchaseId        Int
+  productId         String
+  purchasePrice     Float
+  qty               Float
+  unit              String
+  purchase          Purchase           @relation(fields: [purchaseId], references: [id])
+  @@map("purchase_details")
+}
+
+model PurchaseShipment {
+  id                String             @id @default(uuid())
+  address           String
+  warehouseId       String
+  warehouse         Warehouse          @relation(fields: [warehouseId], references: [id])
   purchaseId        Int                @unique
-  purchase          Sale           @relation(fields: [purchaseId], references: [id])
-  @@map("shipments")
+  purchase          Purchase           @relation(fields: [purchaseId], references: [id])
+  @@map("purchase_shipments")
+}
+
+model Warehouse {
+  id                String             @id @default(uuid())
+  name              String
+  address           String
+  city              String
+  province          String
+  postal            String
+  note              String?
+  purchaseShipment  PurchaseShipment[]
+  @@map("warehouses")
 }
 
 model UserAddress {
@@ -94,7 +141,8 @@ model User {
   emailVerified     DateTime?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  purchases         Sale[]
+  sales             Sale[]
+  purchase          Purchase[]
   addresses         UserAddress[]
   @@map("users")
 }
