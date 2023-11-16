@@ -28,6 +28,9 @@ const CreateProductPage = () => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isDisabled, setDisabled ] = useState(false)
 
+    // TODO: apply middleware to all admin-area
+    const [ userCategory, setUserCategory ] = useState('admin')
+
     const store = useRecoilValue<ItemInterface[]>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
@@ -93,6 +96,20 @@ const CreateProductPage = () => {
 
     return (
         <MainLayout>
+            {
+                userCategory == 'admin' ?
+                <Flex 
+                    gap={2} maxW='full'
+                    direction={{ base: 'column', md: 'row' }}
+                >
+                    <FormSubmitButton href="/admin-area">Dashboard</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/users">Manage Users</FormSubmitButton>
+                </Flex>
+                : <></>
+            }
+            <Box mt={4} />
+
             <BlockContainer>
                 <Flex alignItems='center'>
                     <Box as={FiBox} mr={2} />
