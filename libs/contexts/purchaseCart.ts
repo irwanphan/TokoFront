@@ -65,6 +65,11 @@ export const addToPurchaseCart = (product:any) => {
   // return newCart
 }
 
+export const updatePurchaseCart = (productId:any, type:string, value:number) => {
+  // const newCart = [...purchaseCart]
+
+}
+
 export const crossCheck = (purchaseCart:CartItemInterface[], store:ItemInterface[]) => {
   const newCart = [...purchaseCart]
   newCart.map((cartItem:CartItemInterface, index:number) => {

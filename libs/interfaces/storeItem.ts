@@ -19,6 +19,6 @@ export interface PurchaseItemInterface {
     currentStock?: number
     image: string
     isTrending?: boolean
-    quantity?: number
+    quantity?: string // string because it's from input
     subtotal?: number
 }

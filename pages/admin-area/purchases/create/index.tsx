@@ -34,7 +34,8 @@ const CreateProductPage = () => {
     const store = useRecoilValue<ItemInterface[]>(productsState)
     // console.log(store)
     const [ isLoadingProducts, setIsLoadingProducts ] = useState<boolean>(true)
-    const [ itemsPicked, setItemsPicked ] = useState<ItemInterface[]>([])
+    const [ itemsPicked, setItemsPicked ] = useState<PurchaseItemInterface[]>([])
+    console.log('picked: ', itemsPicked)
     const toast = useToast()
 
     const { control, handleSubmit, register } = useForm({
@@ -51,15 +52,16 @@ const CreateProductPage = () => {
     const { isOpen: isOpenAddItem, onOpen: onOpenAddItem, onClose: onCloseAddItem } = useDisclosure()
     const handleAddItem = () => { onOpenAddItem() }
     const modalPropsForAddItem = { title: `Add Product` }
-    const handlePickItem = (item:ItemInterface) => {
-        addToPurchaseCart(item)
-        setItemsPicked([...itemsPicked, item])
+    const handlePickItem = (item:PurchaseItemInterface) => {
+        const recentPickedItem = {...item, quantity:'1'}
+        setItemsPicked([...itemsPicked, recentPickedItem])
+        // addToPurchaseCart(item)
         onCloseAddItem()
     }
 
     // handling delete item modal
     const { isOpen: isOpenDeleteItem, onOpen: onOpenDeleteItem, onClose: onCloseDeleteItem } = useDisclosure()
-    const handleRemoveFromAddedItem = (scope:ItemInterface|any) => {
+    const handleRemoveFromAddedItem = (scope:PurchaseItemInterface|any) => {
         const foundIndex = itemsPicked.findIndex((x:any) => x.id === scope.id)
         const newItemsPicked = [...itemsPicked]
         newItemsPicked.splice(foundIndex, 1)
@@ -75,6 +77,15 @@ const CreateProductPage = () => {
             handleRemoveFromAddedItem(scope)
             onCloseDeleteItem()
         }
+    }
+
+    // handling update qty
+    const handleUpdateQty = (id:string, quantity:string) => {
+        const foundIndex = itemsPicked.findIndex((x:any) => x.id === id)
+        const newItemsPicked = [...itemsPicked]
+        // console.log('newItemsPicked: ', newItemsPicked)
+        newItemsPicked[foundIndex].quantity = quantity
+        setItemsPicked(newItemsPicked)
     }
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -154,7 +165,12 @@ const CreateProductPage = () => {
                                             <Flex gap={1.5} alignItems='center'>
                                                 Qty: 
                                                 <NumberInput defaultValue={1} min={1}>
-                                                    <NumberInputField fontSize={12} h={6} w={20} p={2} />
+                                                    <NumberInputField 
+                                                        fontSize={12} h={6} w={20} p={2}
+                                                        onChange={(e) => {
+                                                            handleUpdateQty(item.id, e.target.value)
+                                                        }}
+                                                    />
                                                 </NumberInput>
                                             </Flex>
                                             <FiX />
