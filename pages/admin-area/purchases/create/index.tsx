@@ -17,9 +17,9 @@ import ModalPopup from "@units/ModalPopup"
 import { addToPurchaseCart, removeFromPurchaseCart } from "@contexts/purchaseCart"
 
 interface IFormInput {
-    // warehouse: string
-    // receivedBy: string
-    // received: boolean
+    warehouseId: string
+    receivedBy: string
+    received: boolean
 }
 
 const CreateProductPage = () => {
@@ -36,16 +36,6 @@ const CreateProductPage = () => {
     // console.log('itemsPicked: ', itemsPicked)
     const [ total, setTotal ] = useState<number>(0)
     const toast = useToast()
-
-    const { control, handleSubmit, register } = useForm({
-        defaultValues: {
-            name: '',
-            refId: '',
-            description: '',
-            price: 0,
-            currentStock: 0
-        }
-    })
 
     // handling add item modal
     const { isOpen: isOpenAddItem, onOpen: onOpenAddItem, onClose: onCloseAddItem } = useDisclosure()
@@ -132,10 +122,19 @@ const CreateProductPage = () => {
         }
     }, [itemsPicked])
 
+    const { control, handleSubmit, register } = useForm({
+        defaultValues: {
+            warehouseId: 'main',
+            receivedBy: 'not defined',
+            received: false
+        }
+    })
+    const createPurchase = (data:any) => axios.post('/api/purchase', data);
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+        console.log('data: ', data)
         setIsLoading(true)
         toast({title:'Saving...'})
-        // 
+        // // 
         setIsLoading(false)
         setDisabled
         toast({title:'Saved', status:'success'})
@@ -249,6 +248,18 @@ const CreateProductPage = () => {
 
                 <Box mt={4} />
                 <form>
+                    <Box>
+                        <FormInput 
+                            name='warehouseId'
+                            label='Warehouse' 
+                            // TODO: selectable warehouse later
+                            // value={}
+                            isReadOnly
+                            placeholder="received in which warehouse"
+                            register={register} />
+                    </Box>
+                    <Divider mt={4} mb={4} />
+
                     <Flex gap={2} justifyContent='flex-end'>
                         <FormSubmitButton href="/admin-area/purchases" >Back</FormSubmitButton>
                         <FormSubmitButton notLink 
