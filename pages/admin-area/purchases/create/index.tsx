@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import BlockContainer from "@elements/BlockContainer"
 import FormInput from "@elements/FormInput"
 import FormSubmitButton from "@elements/FormSubmit"
@@ -7,25 +7,31 @@ import axios from "axios"
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoadingOverlay from "@elements/LoadingOverlay"
 import { Box, Flex, useToast, Img, Text, Divider, useDisclosure, NumberInput, Input, NumberInputField, List, ListItem } from "@chakra-ui/react"
-import { FiBox, FiPackage, FiShoppingCart, FiTrash, FiX } from "react-icons/fi"
+import { FiBox, FiTrash, FiX } from "react-icons/fi"
 import { useRecoilValue } from "recoil"
 import { ItemInterface, PurchaseItemInterface } from "@interfaces//storeItem"
 import { productsState } from "@contexts/products"
 import LoadingBlock from "@elements/LoadingBlock"
-import { CartItems } from "@components/Cart"
 import ModalPopup from "@units/ModalPopup"
-import { addToPurchaseCart, removeFromPurchaseCart } from "@contexts/purchaseCart"
+import { UserInterface } from "@interfaces//user"
+import { useRouter } from "next/router"
+import { useAuth } from "@contexts/authContext"
 
 interface IFormInput {
     warehouseId: string
     receivedBy: string
     received: boolean
+    total: number
+    note: string
+    orders: PurchaseItemInterface[]
+    user: UserInterface
 }
 
 const CreateProductPage = () => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isDisabled, setDisabled ] = useState(false)
 
+    const { session, isLoadingSession } = useAuth()
     // TODO: apply middleware to all admin-area
     const [ userCategory, setUserCategory ] = useState('admin')
 
@@ -36,6 +42,7 @@ const CreateProductPage = () => {
     // console.log('itemsPicked: ', itemsPicked)
     const [ total, setTotal ] = useState<number>(0)
     const toast = useToast()
+    const router = useRouter()
 
     // handling add item modal
     const { isOpen: isOpenAddItem, onOpen: onOpenAddItem, onClose: onCloseAddItem } = useDisclosure()
@@ -126,18 +133,45 @@ const CreateProductPage = () => {
         defaultValues: {
             warehouseId: 'main',
             receivedBy: 'not defined',
-            received: false
+            received: false,
+            total: 0,
+            note: '',
+            orders: [],
+            // TODO: user here only need id, email, and name
+            user: { id: '', email: '', name: '', emailVerified: false, image: '' }
         }
     })
-    const createPurchase = (data:any) => axios.post('/api/purchase', data);
+    const createPurchaseOrder = (data:IFormInput) => axios.post('/api/purchases', data);
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        console.log('data: ', data)
         setIsLoading(true)
-        toast({title:'Saving...'})
+        toast({title:'Submitting...'})
+        data.orders = itemsPicked
+        data.total = total ?? 0
+        console.log(session!.user)
+        data.user = {
+            ...data.user,
+            email: session?.user.email ?? '',
+            name: session?.user.user_metadata.name ?? '',
+            id: session?.user.id ?? '',
+            emailVerified: session?.user?.identities?.[0].identity_data?.email_verified ?? false,
+            image: session?.user.user_metadata.picture ?? ''
+        }
+        data.received = true
+        console.log('data: ', data)
+
+        // const userData = {
+        //     id: session!.user.id,
+        //     email: session!.user.email,
+        //     name: session!.user.user_metadata.name,
+        //     image: session!.user.user_metadata.picture
+        // }
+        // const purchase = await createPurchaseOrder(data)
+
         // // 
         setIsLoading(false)
         setDisabled
         toast({title:'Saved', status:'success'})
+        // router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     if (isLoading) {
