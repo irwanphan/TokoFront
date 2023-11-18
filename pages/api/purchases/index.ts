@@ -26,7 +26,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'POST') {
         console.log('post data')
         try {
-            const { total, note, user, orders } = req.body
+            const { warehouseId, received, receivedBy, total, note, user, orders } = req.body
             console.log('request body', req.body)
             // console.log(note)
             // console.log(user)s
@@ -57,12 +57,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         userEmail,
                         total,
                         note,
-                        // shipments: {
-                        //     create: {
-                        //         address,
-                        //         city,
-                        //         province,
-                        //         postal
+                        // shipment: {
+                        //     connect: {
+                        //         id: warehouseId
                         //     }
                         // },
                         detail: {
@@ -76,6 +73,18 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
                 })
+
+                // const productUpdates = orders.map((order: any) => ({
+                //     where: { id: order.id },
+                //     data: {
+                //         currentStock: { increment: order.quantity },
+                //         lastPurchasePrice: order.price,  // Update last purchase price here
+                //     },
+                // }));
+
+                // const product = await prisma.product.updateMany({
+                //     data: productUpdates
+                // })
                 console.log(purchase)
                 return res.status(200).json(purchase)
             }

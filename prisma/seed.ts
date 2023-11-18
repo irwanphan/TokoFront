@@ -2,7 +2,8 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const seedSettings = async () => {
+async function main() {
+  // seed business settings
   const settingBusinessName = await prisma.setting.create({
     data: {
       name: "settingBusinessName",
@@ -35,9 +36,9 @@ const seedSettings = async () => {
       updatedBy: "Setup Event"
     }
   })
-}
 
-const seedWarehouse = async () => {
+  // seed warehouse
+  // 
   const warehouse = await prisma.warehouse.create({
     data: {
       id: 'main',
@@ -49,10 +50,9 @@ const seedWarehouse = async () => {
       note: "Main Warehouse"
     }
   })
-  console.log({ warehouse })
-}
 
-const seedSampleProducts = async () => {
+  // seed sample products
+  // 
   const item1 = await prisma.product.create({
     data: {
       name: "Something", 
@@ -109,17 +109,6 @@ const seedSampleProducts = async () => {
     }
   })
   console.log({ item1, item2, item3, item4, item5 })
-}
-
-async function main() {
-  // seed business settings
-  seedSettings()
-
-  // seed main warehouse
-  seedWarehouse()
-
-  // seed sample products
-  seedSampleProducts() 
 }
 
 main()

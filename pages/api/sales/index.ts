@@ -68,7 +68,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         detail: {
                             create: orders.map((order:any) => ({
                                     productId: order.id,
-                                    purchasePrice: order.price,
+                                    salePrice: order.price,
                                     qty: order.quantity,
                                     unit: 'piece'
                             })),

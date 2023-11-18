@@ -49,7 +49,7 @@ const CreateProductPage = () => {
     const handleAddItem = () => { onOpenAddItem() }
     const modalPropsForAddItem = { title: `Add Product` }
     const handlePickItem = (item:PurchaseItemInterface) => {
-        const recentPickedItem = {...item, quantity:'1', subtotal:'0'}
+        const recentPickedItem = {...item, quantity:1, subtotal:0}
         setItemsPicked([...itemsPicked, recentPickedItem])
         // addToPurchaseCart(item)
         onCloseAddItem()
@@ -76,15 +76,15 @@ const CreateProductPage = () => {
     }
 
     // handling update qty
-    const handleUpdateQty = (id:string, quantity:string) => {
-        if (quantity === '') { quantity = '1' }
-        if (quantity.charAt(0) === '0') { quantity = quantity.slice(1) }
+    const handleUpdateQty = (id:string, quantity:number) => {
+        if (quantity === null) { quantity = 1 }
+        // if (quantity.charAt(0) === '0') { quantity = quantity.slice(1) }
         const foundIndex = itemsPicked.findIndex((x:any) => x.id === id)
         const newItemsPicked = [...itemsPicked]
         // console.log('newItemsPicked: ', newItemsPicked)
         newItemsPicked[foundIndex].quantity = quantity
         if (!newItemsPicked[foundIndex].lastPurchasePrice) {
-            newItemsPicked[foundIndex].lastPurchasePrice = '0'
+            newItemsPicked[foundIndex].lastPurchasePrice = 0
             const lastPurchasePrice = newItemsPicked[foundIndex].lastPurchasePrice!
             newItemsPicked[foundIndex].subtotal = updateSubtotal(quantity, lastPurchasePrice)
         } else {
@@ -94,15 +94,15 @@ const CreateProductPage = () => {
         setItemsPicked(newItemsPicked)
     }
     // handling update price
-    const handleUpdatePrice = (id:string, price:string) => {
-        if (price === '') { price = '0' }
-        if (price.charAt(0) === '0') { price = price.slice(1) }
+    const handleUpdatePrice = (id:string, price:number) => {
+        if (price === null) { price = 0 }
+        // if (price.charAt(0) === '0') { price = price.slice(1) }
         const foundIndex = itemsPicked.findIndex((x:any) => x.id === id)
         const newItemsPicked = [...itemsPicked]
         // console.log('newItemsPicked: ', newItemsPicked)
         newItemsPicked[foundIndex].lastPurchasePrice = price
         if (!newItemsPicked[foundIndex].lastPurchasePrice) {
-            newItemsPicked[foundIndex].lastPurchasePrice = '0'
+            newItemsPicked[foundIndex].lastPurchasePrice = 0
             const quantity = newItemsPicked[foundIndex].quantity!
             newItemsPicked[foundIndex].subtotal = updateSubtotal(quantity, price)
         } else {
@@ -112,10 +112,10 @@ const CreateProductPage = () => {
         setItemsPicked(newItemsPicked)
     }
     // handling update subtotal
-    const updateSubtotal = (quantity:string, price:string) => {
-        if (price === '') return '0'
-        if (price === '0') return '0'
-        return (parseInt(quantity) * parseInt(price)).toString()
+    const updateSubtotal = (quantity:number, price:number) => {
+        if (price === null) return 0
+        if (price === 0) return 0
+        return quantity * price
     }
 
     useEffect(() => {
@@ -141,13 +141,15 @@ const CreateProductPage = () => {
             user: { id: '', email: '', name: '', emailVerified: false, image: '' }
         }
     })
+    const createUserIfNotExist = (data:any) => axios.post('/api/users', data)
     const createPurchaseOrder = (data:IFormInput) => axios.post('/api/purchases', data);
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        setIsLoading(true)
+        // setIsLoading(true)
+        // setDisabled
         toast({title:'Submitting...'})
         data.orders = itemsPicked
         data.total = total ?? 0
-        console.log(session!.user)
+        // console.log(session!.user)
         data.user = {
             ...data.user,
             email: session?.user.email ?? '',
@@ -157,19 +159,19 @@ const CreateProductPage = () => {
             image: session?.user.user_metadata.picture ?? ''
         }
         data.received = true
-        console.log('data: ', data)
+        // console.log('data: ', data)
 
-        // const userData = {
-        //     id: session!.user.id,
-        //     email: session!.user.email,
-        //     name: session!.user.user_metadata.name,
-        //     image: session!.user.user_metadata.picture
-        // }
-        // const purchase = await createPurchaseOrder(data)
+        const userData = {
+            id: session!.user.id,
+            email: session!.user.email,
+            name: session!.user.user_metadata.name,
+            image: session!.user.user_metadata.picture
+        }
+        const user = await createUserIfNotExist(userData)
+        const purchase = await createPurchaseOrder(data)
 
         // // 
-        setIsLoading(false)
-        setDisabled
+        // setIsLoading(false)
         toast({title:'Saved', status:'success'})
         // router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
@@ -244,7 +246,7 @@ const CreateProductPage = () => {
                                                     fontSize={12} h={6} w={20} p={2} 
                                                     value={item.quantity}
                                                     onChange={(e) => {
-                                                        handleUpdateQty(item.id, e.target.value)
+                                                        handleUpdateQty(item.id, parseInt(e.target.value))
                                                     }}
                                                 />
                                             </Flex>
@@ -256,7 +258,7 @@ const CreateProductPage = () => {
                                                     defaultValue={item.lastPurchasePrice ?? 0}
                                                     value={item.lastPurchasePrice}
                                                     onChange={(e) => {
-                                                        handleUpdatePrice(item.id, e.target.value)
+                                                        handleUpdatePrice(item.id, parseInt(e.target.value))
                                                     }}
                                                 />
                                             </Flex>
