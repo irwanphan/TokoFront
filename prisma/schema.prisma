@@ -95,7 +95,7 @@ model PurchaseDetail {
 
 model PurchaseShipment {
   id                String             @id @default(uuid())
-  warehouseId       String
+  warehouseId       String             @db.Uuid
   note              String?
   received          Boolean            @default(false)
   receivedBy        String?
@@ -106,7 +106,7 @@ model PurchaseShipment {
 }
 
 model Warehouse {
-  id                String             @id @default(uuid())
+  id                String             @id @default(uuid()) @db.Uuid
   name              String
   address           String
   city              String
