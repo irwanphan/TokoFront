@@ -40,7 +40,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // orders.map((order:any) => {
             //     console.log(order.id)
             // })
-            const receivedValue:boolean = received === 'true' ? true : false
                 
             if (existingUser) {
                 const purchase = await prisma.purchase.create({
