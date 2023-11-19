@@ -8,7 +8,6 @@ export interface PurchaseInterface {
     updatedAt: String
     supplierId?: String
     shipment: PurchaseShipmentInterface
-    warehouseId: String
     detail: PurchaseDetailInterface[]
 } 
 
@@ -19,6 +18,10 @@ export interface PurchaseShipmentInterface {
     province: String
     postal: String
     purchaseId: number
+    warehouseId: String
+    received: boolean
+    receivedBy?: String
+    note?: String
 }
 
 export interface PurchaseDetailInterface {
