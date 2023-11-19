@@ -15,6 +15,7 @@ model Product {
   name              String
   description       String
   price             Float              @default(0)
+  lastPurchasePrice Float?             @default(0)
   currentStock      Float              @default(0)
   isActive          Boolean            @default(true)
   isTrending        Boolean            @default(false)
@@ -70,10 +71,12 @@ model Purchase {
   userId            String             @db.Uuid
   userEmail         String
   total             Float
-  note              String?
+  note              String
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   shipment          PurchaseShipment?
+  supplierId        String?            @db.Uuid
+  supplier          Supplier?          @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   detail            PurchaseDetail[]
   user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@map("purchases")
@@ -92,8 +95,10 @@ model PurchaseDetail {
 
 model PurchaseShipment {
   id                String             @id @default(uuid())
-  address           String
   warehouseId       String
+  note              String
+  receivedStatus    Boolean            @default(false)
+  receivedBy        String
   warehouse         Warehouse          @relation(fields: [warehouseId], references: [id])
   purchaseId        Int                @unique
   purchase          Purchase           @relation(fields: [purchaseId], references: [id])
@@ -101,15 +106,29 @@ model PurchaseShipment {
 }
 
 model Warehouse {
-  id                String             @id @default(uuid())
+  id                String             @id
   name              String
   address           String
   city              String
   province          String
   postal            String
-  note              String?
+  note              String
   purchaseShipment  PurchaseShipment[]
   @@map("warehouses")
+}
+
+model Supplier {
+  id                String             @id @default(uuid()) @db.Uuid
+  code              String             @unique
+  name              String
+  email             String?            @unique
+  isActive          Boolean            @default(true)
+  phone             String?            @db.VarChar(15)
+  image             String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  purchase          Purchase[]
+  @@map("suppliers")
 }
 
 model UserAddress {

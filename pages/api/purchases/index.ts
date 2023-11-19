@@ -1,3 +1,4 @@
+import { PurchaseInterface } from '@interfaces//purchases'
 import prisma from '@libs/connections/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -8,7 +9,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const purchases = await prisma.purchase.findMany({
                 include: {
                     detail: true,
-                    // shipment: true
+                    shipment: true
                 },
                 orderBy: {
                     id: 'desc'
@@ -26,27 +27,20 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'POST') {
         console.log('post data')
         try {
-            const { total, note, user, orders } = req.body
-            console.log('request body', req.body)
-            // console.log(note)
-            // console.log(user)s
+            const { warehouseId, receivedStatus, receivedBy, total, note, user, orders } = req.body
+            // console.log('request body', req.body)
             const existingUser = await prisma.user.findUnique({
                 where: { email: user.email }
             })
             // console.log(existingUser)
             const userId = existingUser?.id
             const userEmail:any = user.email
-            console.log(userId)
-            console.log(userEmail)
-            // NOTE: check orders
-            // orders.map((order:any) => {
-            //     console.log(order.id)
-            // })
                 
             if (existingUser) {
-                const purchase = await prisma.purchase.create({
+                const purchase: PurchaseInterface | any = await prisma.purchase.create({
                     include: {
-                        detail: true
+                        detail: true,
+                        shipment: true
                     },
                     data: {
                         user: {
@@ -56,26 +50,43 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         },
                         userEmail,
                         total,
-                        note,
-                        // shipments: {
-                        //     create: {
-                        //         address,
-                        //         city,
-                        //         province,
-                        //         postal
-                        //     }
-                        // },
+                        note: note || '',
+                        shipment: {
+                            create: {
+                                warehouse: {
+                                    connect: {
+                                        id: warehouseId,
+                                    },
+                                },
+                                receivedStatus: receivedStatus || false,
+                                receivedBy: receivedBy || '',
+                                note: note || ''
+                            }
+                        } as any,
                         detail: {
-                            create: orders.map((order:any) => ({
+                            create: orders.map((order: any) => ({
                                     productId: order.id,
                                     purchasePrice: order.price,
                                     qty: order.quantity,
                                     unit: 'piece'
                             })),
                         }
-                        // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
                 })
+
+                const productUpdates = await Promise.all(orders.map(async (order: any) => {
+                    const productUpdate = await prisma.product.update({
+                        where: { id: order.id },
+                        data: {
+                            currentStock: { increment: order.quantity },
+                            lastPurchasePrice: order.lastPurchasePrice || 0,
+                            updatedAt: ((new Date()).toISOString())
+                        } as any,
+                    });
+                  
+                    return productUpdate;
+                }));
+                
                 console.log(purchase)
                 return res.status(200).json(purchase)
             }

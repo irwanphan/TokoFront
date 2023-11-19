@@ -20,9 +20,10 @@ interface FormInputProps extends FlexProps {
     icon? : IconType
     spaceAfter?: string
     isDisabled?: boolean
+    isReadOnly?: boolean
 }
 
-const FormInput = ({name, label, type, register, autoFocus, value, defaultValue, placeholder, options, icon, spaceAfter, isDisabled, children, ...rest}:FormInputProps) => {
+const FormInput = ({name, label, type, register, autoFocus, value, defaultValue, placeholder, options, icon, spaceAfter, isDisabled, isReadOnly, children, ...rest}:FormInputProps) => {
     const FormInputManifest = () => {
         if (type === 'textarea') {
             return (
@@ -38,13 +39,14 @@ const FormInput = ({name, label, type, register, autoFocus, value, defaultValue,
                     _hover={{ layerStyle: 'formInputHover' }}
                     mb={ spaceAfter ?? '2' }
                     isDisabled={isDisabled}
+                    isReadOnly={isReadOnly}
                     autoFocus={autoFocus}
                 />
             )
         }
         if (type === 'number') {
             return (
-                <NumberInput isDisabled={isDisabled}>
+                <NumberInput isDisabled={isDisabled} isReadOnly={isReadOnly}>
                     <NumberInputField 
                         {...register(name)}
                         name={name}
@@ -74,6 +76,7 @@ const FormInput = ({name, label, type, register, autoFocus, value, defaultValue,
                     mb={ spaceAfter ?? '2' }
                     autoFocus={autoFocus}
                     isDisabled={isDisabled}
+                    isReadOnly={isReadOnly}
                 >
                     {children}
                 </Select>
@@ -92,6 +95,7 @@ const FormInput = ({name, label, type, register, autoFocus, value, defaultValue,
                 mb={ spaceAfter ?? '2' }
                 autoFocus={autoFocus}
                 isDisabled={isDisabled}
+                isReadOnly={isReadOnly}
             />
         )
     }

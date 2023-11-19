@@ -62,6 +62,7 @@ const AdminAreaPage = () => {
                 >
                     <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
                     <FormSubmitButton href="/admin-area/users">Manage Users</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/purchases">Purchase</FormSubmitButton>
                 </Flex>
                 : <></>
             }

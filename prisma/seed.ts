@@ -37,6 +37,20 @@ async function main() {
     }
   })
 
+  // seed warehouse
+  // 
+  const warehouse = await prisma.warehouse.create({
+    data: {
+      id: 'main',
+      name: "Main Warehouse",
+      address: "At Headquarter",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      postal: "12345",
+      note: "Main Warehouse"
+    }
+  })
+
   // seed sample products
   // 
   const item1 = await prisma.product.create({

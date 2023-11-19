@@ -92,7 +92,7 @@ const CheckoutPage = () => {
 
     const router = useRouter()
     const createUserIfNotExist = (data:any) => axios.post('/api/users', data)
-    const createPurchaseOrder = (data:any) => axios.post('/api/purchases', data)
+    const createSaleOrder = (data:any) => axios.post('/api/sales', data)
     const toast = useToast()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         // console.log('running', data)
@@ -119,16 +119,16 @@ const CheckoutPage = () => {
         const user = await createUserIfNotExist(userData)
         // console.log('user: ', user)
 
-        const purchase = await createPurchaseOrder(data)
-        // console.log('purchase: ', purchase)
+        const sale = await createSaleOrder(data)
+        // console.log('sale: ', sale)
         
         // TEST: comment localstorage.remove, setCart([]), and router.push
         localStorage.removeItem("cart")
         setCart([])
-        toast({title:'Purchase order submitted', status:'success'})
+        toast({title:'Sale order submitted', status:'success'})
         toast({title:'Redirecting ...'})
         setIsLoading(false)
-        router.push(`/admin-area/purchases/${purchase.data.id}`)
+        router.push(`/admin-area/sales/${sale.data.id}`)
     }
 
     if (isLoading) {
