@@ -75,6 +75,8 @@ model Purchase {
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   shipment          PurchaseShipment?
+  supplierId        String?
+  supplier          Supplier?         @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   detail            PurchaseDetail[]
   user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@map("purchases")
@@ -113,6 +115,20 @@ model Warehouse {
   note              String?
   purchaseShipment  PurchaseShipment[]
   @@map("warehouses")
+}
+
+model Supplier {
+  id                String             @id @default(uuid()) @db.Uuid
+  code              String             @unique
+  name              String
+  email             String?            @unique
+  isActive          Boolean            @default(true)
+  phone             String?            @db.VarChar(15)
+  image             String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  purchase          Purchase[]
+  @@map("suppliers")
 }
 
 model UserAddress {

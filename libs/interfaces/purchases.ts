@@ -6,6 +6,7 @@ export interface PurchaseInterface {
     note: String
     createdAt: String
     updatedAt: String
+    supplierId?: String
     shipment: PurchaseShipmentInterface
     warehouseId: String
     detail: PurchaseDetailInterface[]
