@@ -57,12 +57,12 @@ const AdminAreaPage = () => {
             {
                 userCategory == 'admin' ?
                 <Flex 
-                    gap={2} maxW='full'
-                    direction={{ base: 'column', md: 'row' }}
+                    gap={2} maxW='full' flexWrap='wrap'
                 >
-                    <FormSubmitButton href="/admin-area/products">Manage Products</FormSubmitButton>
-                    <FormSubmitButton href="/admin-area/users">Manage Users</FormSubmitButton>
-                    <FormSubmitButton href="/admin-area/purchases">Purchase</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/products">Products</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/users">Users</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/purchases">Purchases</FormSubmitButton>
+                    <FormSubmitButton href="/admin-area/warehouses">Warehouses</FormSubmitButton>
                 </Flex>
                 : <></>
             }
