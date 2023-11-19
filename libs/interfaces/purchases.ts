@@ -1,34 +1,34 @@
 export interface PurchaseInterface {
     id: number
-    userId: String
-    userEmail: String
+    userId: string
+    userEmail: string
     total: number
-    note: String
-    createdAt: String
-    updatedAt: String
-    supplierId?: String
+    note: string
+    createdAt: string
+    updatedAt: string
+    supplierId?: string
     shipment: PurchaseShipmentInterface
     detail: PurchaseDetailInterface[]
 } 
 
 export interface PurchaseShipmentInterface {
     id: number
-    address: String
-    city: String
-    province: String
-    postal: String
+    address: string
+    city: string
+    province: string
+    postal: string
     purchaseId: number
-    warehouseId: String
+    warehouseId: string
     received: boolean
-    receivedBy?: String
-    note?: String
+    receivedBy?: string
+    note?: string
 }
 
 export interface PurchaseDetailInterface {
     id: number
     purchaseId: number
-    productId: String
+    productId: string
     purchasePrice: number
     qty: number
-    unit: String
+    unit: string
 }
