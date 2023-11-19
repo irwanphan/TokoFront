@@ -63,64 +63,58 @@ const PurchaseDetailViewPage = () => {
             <Box mt={4} />
 
             <BlockContainer>
-                <Box>
-                    <Flex alignItems='center'>
-                        <Box as={FiFileText} mr={2} />
-                        <Text fontWeight={600} >Invoice #: {purchase?.id}</Text>
-                    </Flex>
-                    <Divider/>
-                </Box>
-                <Box>
-                        
-                    <Text>
-                        Purchased on : {purchase?.createdAt}
-                    </Text>
-                    { purchase?.detail.map(item => {
-                        return (
-                            <Box key={item.id}
-                                border="1px solid lightgray"
-                                borderRadius={8}
-                                p={2}
-                                my={2}
-                            >
-                                <Text>
-                                    product ID: {item.productId}
-                                </Text>
-                                <Text>
-                                    product price: {item.purchasePrice}
-                                </Text>
-                                <Text>
-                                    qty bought: {item.qty} {item.unit}
-                                </Text>
-                            </Box>
-                        )
-                    }) }
-                    <Text>
-                        Total : {purchase?.total}
-                    </Text>
+                {
+                    purchase &&
+                    <Box>
+                        <Box>
+                            <Flex alignItems='center'>
+                                <Box as={FiFileText} mr={2} />
+                                <Text fontWeight={600} >Invoice #: {purchase.id}</Text>
+                            </Flex>
+                            <Divider/>
+                        </Box>
 
-                    {
-                        purchase?.note &&
-                        <Text fontSize={12} mt={2}>
-                            Note : {purchase?.note}
-                        </Text>
-                    }
+                        <Text>Purchased on : {purchase.createdAt}</Text>
+                        { purchase.detail.map(item => {
+                            return (
+                                <Box key={item.id}
+                                    border="1px solid lightgray"
+                                    borderRadius={8}
+                                    p={2} my={2}
+                                >
+                                    <Text>product ID: {item.productId}</Text>
+                                    <Text>product price: {item.purchasePrice}</Text>
+                                    <Text>qty bought: {item.qty} {item.unit}</Text>
+                                </Box>
+                            )
+                        }) }
 
-                    <Divider mt={8} mb={4} />
+                        <Text>Total : {purchase.total}</Text>
 
-                    TODO: mark delivered here is by admin only
+                        {
+                            purchase.note &&
+                            <Text fontSize={12} mt={2}>
+                                Note : {purchase.note}
+                            </Text>
+                        }
+                    </Box>
+                }
+                    
+                <Divider mt={8} mb={4} />
 
-                    <Flex gap={2} justifyContent='flex-end'>
-                        <FormSubmitButton href="/admin-area/purchases" >Back</FormSubmitButton>
-                        <FormSubmitButton notLink 
-                            buttonColor="green.100"
-                            isDisabled={isDisabled}
-                            // onClick={handleSubmit(onSubmit)} 
-                            >
-                            Delivered!
-                        </FormSubmitButton>
-                    </Flex>
-                </Box>
+                {/* TODO: mark delivered here is by admin only */}
+
+                <Flex gap={2} justifyContent='flex-end'>
+                    <FormSubmitButton href="/admin-area/purchases" >Back</FormSubmitButton>
+                    <FormSubmitButton notLink 
+                        buttonColor="green.100"
+                        isDisabled={isDisabled}
+                        // onClick={handleSubmit(onSubmit)} 
+                        >
+                        Delivered!
+                    </FormSubmitButton>
+                </Flex>
+
             </BlockContainer>
 
             { isLoading && <LoadingOverlay isLoading={isLoading} /> }
