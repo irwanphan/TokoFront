@@ -43,18 +43,15 @@ const PurchasesPage = () => {
                             <Box key={purchase.id}
                                 border="1px solid lightgray"
                                 borderRadius={8}
-                                p={4}
-                                my={4}
+                                p={4} my={4}
                             >
                                 <Flex alignItems='center'>
                                     <Box as={FiFileText} mr={2} />
-                                    <Text fontWeight={600} >Invoice #: {purchase?.id}</Text>
+                                    <Text fontWeight={600} >Invoice #: {purchase.id}</Text>
                                 </Flex>
                                 <Divider/>
                                     
-                                <Text>
-                                    Purchased on : {purchase?.createdAt}
-                                </Text>
+                                <Text>Purchased on : {purchase.createdAt.toString()}</Text>
                                 {/* { purchase?.detail.map(item => {
                                     return (
                                         <Box key={item.id}
@@ -75,14 +72,12 @@ const PurchasesPage = () => {
                                         </Box>
                                     )
                                 }) } */}
-                                <Text>
-                                    Total : {purchase?.total}
-                                </Text>
+                                <Text>Total : {purchase.total}</Text>
 
                                 {
-                                    purchase?.note &&
+                                    purchase.note &&
                                     <Text fontSize={12} mt={2}>
-                                        Note : {purchase?.note}
+                                        Note : {purchase.note}
                                     </Text>
                                 }
                             </Box>
