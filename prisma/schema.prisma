@@ -97,7 +97,7 @@ model PurchaseShipment {
   id                String             @id @default(uuid())
   warehouseId       String
   note              String
-  received          Boolean            @default(false)
+  receivedStatus    Boolean            @default(false)
   receivedBy        String
   warehouse         Warehouse          @relation(fields: [warehouseId], references: [id])
   purchaseId        Int                @unique

@@ -20,7 +20,7 @@ import { useAuth } from "@contexts/authContext"
 interface IFormInput {
     warehouseId: string
     receivedBy: string
-    received: boolean
+    receivedStatus: boolean
     total: number
     note: string
     orders: PurchaseItemInterface[]
@@ -133,7 +133,7 @@ const CreateProductPage = () => {
         defaultValues: {
             warehouseId: 'main',
             receivedBy: 'not defined',
-            received: false,
+            receivedStatus: false,
             total: 0,
             note: '',
             orders: [],
@@ -158,7 +158,7 @@ const CreateProductPage = () => {
             emailVerified: session?.user?.identities?.[0].identity_data?.email_verified ?? false,
             image: session?.user.user_metadata.picture ?? ''
         }
-        data.received = true
+        data.receivedStatus = true
         // console.log('data: ', data)
 
         const userData = {

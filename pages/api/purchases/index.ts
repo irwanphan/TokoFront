@@ -27,7 +27,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method === 'POST') {
         console.log('post data')
         try {
-            const { warehouseId, received, receivedBy, total, note, user, orders } = req.body
+            const { warehouseId, receivedStatus, receivedBy, total, note, user, orders } = req.body
             // console.log('request body', req.body)
             const existingUser = await prisma.user.findUnique({
                 where: { email: user.email }
@@ -65,7 +65,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                 //     },
                                 // },
                                 warehouseId,
-                                received: received || false as boolean,
+                                receivedStatus,
                                 receivedBy,
                                 note: note || '' // NOTE: add note for warehouse here
                             }
