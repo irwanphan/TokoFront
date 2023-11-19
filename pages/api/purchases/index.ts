@@ -62,7 +62,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                         id: warehouseId,
                                     },
                                 },
-                                received,
+                                received: received,
                                 receivedBy,
                                 note: '' // NOTE: add note for warehouse here
                             }
