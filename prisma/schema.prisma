@@ -15,7 +15,7 @@ model Product {
   name              String
   description       String
   price             Float              @default(0)
-  lastPurchasePrice Float              @default(0)
+  lastPurchasePrice Float?             @default(0)
   currentStock      Float              @default(0)
   isActive          Boolean            @default(true)
   isTrending        Boolean            @default(false)
