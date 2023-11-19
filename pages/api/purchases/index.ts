@@ -51,18 +51,18 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         userEmail,
                         total,
                         note: note || '',
-                        // shipment: {
-                        //     create: {
-                        //         warehouse: {
-                        //             connect: {
-                        //                 id: warehouseId,
-                        //             },
-                        //         },
-                        //         receivedStatus: receivedStatus || false,
-                        //         receivedBy: receivedBy || '',
-                        //         note: note || ''
-                        //     }
-                        // },
+                        shipment: {
+                            create: {
+                                warehouse: {
+                                    connect: {
+                                        id: warehouseId,
+                                    },
+                                },
+                                receivedStatus: receivedStatus || false,
+                                receivedBy: receivedBy || '',
+                                note: note || ''
+                            }
+                        } as any,
                         detail: {
                             create: orders.map((order: any) => ({
                                     productId: order.id,
