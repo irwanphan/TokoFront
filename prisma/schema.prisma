@@ -75,8 +75,8 @@ model Purchase {
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   shipment          PurchaseShipment?
-  supplierId        String?
-  supplier          Supplier?         @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  supplierId        String?            @db.Uuid
+  supplier          Supplier?          @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   detail            PurchaseDetail[]
   user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@map("purchases")
