@@ -79,7 +79,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         where: { id: order.id },
                         data: {
                             currentStock: { increment: order.quantity },
-                            lastPurchasePrice: order.lastPurchasePrice,
+                            lastPurchasePrice: order.lastPurchasePrice || 0,
                             updatedAt: ((new Date()).toISOString())
                         },
                     });
