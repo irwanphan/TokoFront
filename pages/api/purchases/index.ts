@@ -1,3 +1,4 @@
+import { PurchaseInterface } from '@interfaces//purchases'
 import prisma from '@libs/connections/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -42,9 +43,10 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // })
                 
             if (existingUser) {
-                const purchase = await prisma.purchase.create({
+                const purchase: PurchaseInterface | any = await prisma.purchase.create({
                     include: {
-                        detail: true
+                        detail: true,
+                        shipment: true
                     },
                     data: {
                         user: {
@@ -54,7 +56,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         },
                         userEmail,
                         total,
-                        note,
+                        note: note || '',
                         shipment: {
                             create: {
                                 warehouse: {
@@ -62,13 +64,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                         id: warehouseId,
                                     },
                                 },
-                                received: req.body.received as boolean,
+                                received: received || false,
                                 receivedBy,
-                                note: '' // NOTE: add note for warehouse here
+                                note: note || '' // NOTE: add note for warehouse here
                             }
                         },
                         detail: {
-                            create: orders.map((order:any) => ({
+                            create: orders.map((order: any) => ({
                                     productId: order.id,
                                     purchasePrice: order.price,
                                     qty: order.quantity,
@@ -78,18 +80,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
                 })
-
-                // const productUpdate = orders.map((order: any) => ({
-                //     where: { id: order.id },
-                //     update: {
-                //         currentStock: { increment: order.quantity },
-                //         lastPurchasePrice: order.lastPurchasePrice,  // Update last purchase price here
-                //     },
-                // }))
-
-                // const productUpdates = await prisma.product.updateMany({
-                //     data: productUpdate
-                // })
 
                 const productUpdates = await Promise.all(orders.map(async (order: any) => {
                     const productUpdate = await prisma.product.update({

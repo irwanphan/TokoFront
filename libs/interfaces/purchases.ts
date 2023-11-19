@@ -4,8 +4,8 @@ export interface PurchaseInterface {
     userEmail: string
     total: number
     note: string
-    createdAt: string
-    updatedAt: string
+    createdAt: string | Date
+    updatedAt: string | Date
     supplierId?: string
     shipment: PurchaseShipmentInterface
     detail: PurchaseDetailInterface[]
@@ -21,7 +21,7 @@ export interface PurchaseShipmentInterface {
     warehouseId: string
     received: boolean
     receivedBy?: string
-    note?: string
+    note: string
 }
 
 export interface PurchaseDetailInterface {
