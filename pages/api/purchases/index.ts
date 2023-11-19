@@ -59,14 +59,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         note: note || '',
                         shipment: {
                             create: {
-                                receivedStatus,
-                                receivedBy,
-                                note: note || '', 
                                 warehouse: {
                                     connect: {
                                         id: warehouseId,
                                     },
                                 },
+                                receivedStatus,
+                                receivedBy,
+                                note: note || ''
                             }
                         },
                         detail: {

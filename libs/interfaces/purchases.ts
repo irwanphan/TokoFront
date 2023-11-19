@@ -19,7 +19,7 @@ export interface PurchaseShipment {
     postal: string
     purchaseId: number
     warehouseId: string
-    received: boolean
+    receivedStatus: boolean
     receivedBy?: string
     note: string
 }
