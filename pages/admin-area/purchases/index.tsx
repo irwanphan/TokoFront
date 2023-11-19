@@ -5,7 +5,7 @@ import LoadingBlock from "@elements/LoadingBlock"
 import { useFetchPurchases } from "@hooks/useFetchPurchases"
 import { PurchaseInterface } from "@interfaces//purchases"
 import MainLayout from "@layouts//MainLayout"
-import { FiBookOpen, FiFileText } from "react-icons/fi"
+import { FiBookOpen, FiBox, FiFileText } from "react-icons/fi"
 
 
 const PurchasesPage = () => {
@@ -24,6 +24,7 @@ const PurchasesPage = () => {
         <MainLayout>
             <Flex gap={2}>
                 <FormSubmitButton href="/admin-area">Dashboard</FormSubmitButton>
+                <FormSubmitButton href="/admin-area/purchases/create" buttonColor="green.100" ><Box as={FiBox} mr={0.5}/>Purchase</FormSubmitButton>
             </Flex>
             <Box mt={4} />
 

@@ -144,8 +144,8 @@ const CreateProductPage = () => {
     const createUserIfNotExist = (data:any) => axios.post('/api/users', data)
     const createPurchaseOrder = (data:IFormInput) => axios.post('/api/purchases', data);
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        setIsLoading(true)
-        setDisabled
+        // setIsLoading(true)
+        // setDisabled
         toast({title:'Submitting...'})
         data.orders = itemsPicked
         data.total = total ?? 0
@@ -173,7 +173,7 @@ const CreateProductPage = () => {
         // // 
         setIsLoading(false)
         toast({title:'Saved', status:'success'})
-        router.push(`/admin-area/purchases/${purchase.data.id}`)
+        // router.push(`/admin-area/purchases/${purchase.data.id}`)
     }
 
     if (isLoading) {
