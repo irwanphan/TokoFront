@@ -93,8 +93,10 @@ model PurchaseDetail {
 
 model PurchaseShipment {
   id                String             @id @default(uuid())
-  address           String
   warehouseId       String
+  note              String?
+  received          Boolean            @default(false)
+  receivedBy        String?
   warehouse         Warehouse          @relation(fields: [warehouseId], references: [id])
   purchaseId        Int                @unique
   purchase          Purchase           @relation(fields: [purchaseId], references: [id])

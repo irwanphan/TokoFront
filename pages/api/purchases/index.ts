@@ -27,9 +27,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         console.log('post data')
         try {
             const { warehouseId, received, receivedBy, total, note, user, orders } = req.body
-            console.log('request body', req.body)
-            // console.log(note)
-            // console.log(user)s
+            // console.log('request body', req.body)
             const existingUser = await prisma.user.findUnique({
                 where: { email: user.email }
             })
@@ -57,11 +55,18 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         userEmail,
                         total,
                         note,
-                        // shipment: {
-                        //     connect: {
-                        //         id: warehouseId
-                        //     }
-                        // },
+                        shipment: {
+                            create: {
+                                warehouse: {
+                                    connect: {
+                                        id: warehouseId,
+                                    },
+                                },
+                                received,
+                                receivedBy,
+                                note: '' // NOTE: add note for warehouse here
+                            }
+                        },
                         detail: {
                             create: orders.map((order:any) => ({
                                     productId: order.id,
@@ -74,17 +79,31 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     }
                 })
 
-                // const productUpdates = orders.map((order: any) => ({
+                // const productUpdate = orders.map((order: any) => ({
                 //     where: { id: order.id },
-                //     data: {
+                //     update: {
                 //         currentStock: { increment: order.quantity },
-                //         lastPurchasePrice: order.price,  // Update last purchase price here
+                //         lastPurchasePrice: order.lastPurchasePrice,  // Update last purchase price here
                 //     },
-                // }));
+                // }))
 
-                // const product = await prisma.product.updateMany({
-                //     data: productUpdates
+                // const productUpdates = await prisma.product.updateMany({
+                //     data: productUpdate
                 // })
+
+                const productUpdates = await Promise.all(orders.map(async (order: any) => {
+                    const productUpdate = await prisma.product.update({
+                        where: { id: order.id },
+                        data: {
+                            currentStock: { increment: order.quantity },
+                            lastPurchasePrice: order.lastPurchasePrice,
+                            updatedAt: ((new Date()).toISOString()).toLocaleString()
+                        },
+                    });
+                  
+                    return productUpdate;
+                }));
+                
                 console.log(purchase)
                 return res.status(200).json(purchase)
             }
