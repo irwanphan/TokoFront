@@ -81,7 +81,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                             currentStock: { increment: order.quantity },
                             lastPurchasePrice: order.lastPurchasePrice || 0,
                             updatedAt: ((new Date()).toISOString())
-                        },
+                        } as any,
                     });
                   
                     return productUpdate;
