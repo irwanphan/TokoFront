@@ -60,15 +60,15 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         note: note || '',
                         shipment: {
                             create: {
-                                // warehouse: {
-                                //     connect: {
-                                //         id: warehouseId,
-                                //     },
-                                // },
+                                warehouse: {
+                                    connect: {
+                                        id: warehouseId,
+                                    },
+                                },
                                 warehouseId,
-                                receivedStatus,
+                                // receivedStatus,
                                 receivedBy,
-                                note: note || '' // NOTE: add note for warehouse here
+                                note: note || ''
                             }
                         },
                         detail: {
