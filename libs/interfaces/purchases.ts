@@ -17,14 +17,14 @@ export interface PurchaseShipmentInterface {
     city: String
     province: String
     postal: String
-    saleId: number
+    purchaseId: number
 }
 
 export interface PurchaseDetailInterface {
     id: number
-    saleId: number
+    purchaseId: number
     productId: String
-    salePrice: number
+    purchasePrice: number
     qty: number
     unit: String
 }
