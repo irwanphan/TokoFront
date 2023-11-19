@@ -9,7 +9,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             const purchases = await prisma.purchase.findMany({
                 include: {
                     detail: true,
-                    // shipment: true
+                    shipment: true
                 },
                 orderBy: {
                     id: 'desc'
@@ -58,7 +58,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                         id: warehouseId,
                                     },
                                 },
-                                // warehouseId,
                                 receivedStatus: receivedStatus || false,
                                 receivedBy: receivedBy || '',
                                 note: note || ''
@@ -72,7 +71,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                     unit: 'piece'
                             })),
                         }
-                        // createdAt: ((new Date()).toISOString()).toLocaleString()
                     }
                 })
 
