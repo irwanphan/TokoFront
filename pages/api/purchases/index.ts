@@ -80,7 +80,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         data: {
                             currentStock: { increment: order.quantity },
                             lastPurchasePrice: order.lastPurchasePrice,
-                            updatedAt: ((new Date()).toISOString()).toLocaleString()
+                            updatedAt: ((new Date()).toISOString())
                         },
                     });
                   
