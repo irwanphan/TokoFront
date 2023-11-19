@@ -74,7 +74,7 @@ const PurchaseDetailViewPage = () => {
                             <Divider/>
                         </Box>
 
-                        <Text>Purchased on : {purchase.createdAt}</Text>
+                        <Text>Purchased on : {purchase.createdAt.toString()}</Text>
                         { purchase.detail.map(item => {
                             return (
                                 <Box key={item.id}

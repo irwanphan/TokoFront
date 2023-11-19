@@ -4,14 +4,14 @@ export interface PurchaseInterface {
     userEmail: string
     total: number
     note: string
-    createdAt: string
-    updatedAt: string
-    supplierId?: string
-    shipment: PurchaseShipmentInterface
+    createdAt: Date
+    updatedAt: Date
+    supplierId: string | null
+    shipment: PurchaseShipment | null
     detail: PurchaseDetailInterface[]
 } 
 
-export interface PurchaseShipmentInterface {
+export interface PurchaseShipment {
     id: number
     address: string
     city: string

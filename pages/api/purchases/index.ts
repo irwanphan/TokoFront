@@ -64,7 +64,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                                         id: warehouseId,
                                     },
                                 },
-                                received: received || false,
+                                received: received || false as boolean,
                                 receivedBy,
                                 note: note || '' // NOTE: add note for warehouse here
                             }
