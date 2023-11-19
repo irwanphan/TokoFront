@@ -41,13 +41,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             // orders.map((order:any) => {
             //     console.log(order.id)
             // })
-            console.log(receivedStatus)
+            // console.log(receivedStatus)
                 
             if (existingUser) {
                 const purchase: PurchaseInterface | any = await prisma.purchase.create({
                     include: {
-                        detail: true,
-                        shipment: true
+                        detail: true
                     },
                     data: {
                         user: {
@@ -60,15 +59,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         note: note || '',
                         shipment: {
                             create: {
+                                receivedStatus,
+                                receivedBy,
+                                note: note || '', 
                                 warehouse: {
                                     connect: {
                                         id: warehouseId,
                                     },
                                 },
-                                warehouseId,
-                                // receivedStatus,
-                                receivedBy,
-                                note: note || ''
                             }
                         },
                         detail: {
